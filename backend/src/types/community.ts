@@ -1,12 +1,12 @@
 import { Types } from "mongoose"
-import { IPost } from "../types/post"
-
 
 interface ICommunity {
     admin: Types.ObjectId,
-    members?: [Types.ObjectId],
-    posts?: [IPost],
-    createdAt: Date
+    name: string,
+    description?: string,
+    numberOfMembers?: number,
+    numberOfPosts?: number
+    createdAt?: Date
 }
 
 export { ICommunity }
