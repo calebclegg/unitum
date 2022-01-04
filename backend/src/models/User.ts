@@ -1,14 +1,43 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, Types } from "mongoose";
+import { IEducation, IProfile, IUSer } from "../types/user";
 
-export interface IUSer {
-  firstname: string;
-  lastname: string;
-  password?: string;
-  otherNames?: string;
-  email?: string;
-}
+const schoolSchema = new Schema({
+  name: String,
+  url: String
+})
 
-const userSchema = new Schema(
+const educationSchema = new Schema<IEducation>({
+  school: {
+    type: schoolSchema,
+    required: true
+  },
+  degree: String,
+
+  fieldOfStudy: {
+    type: String,
+    required: true,
+  },
+  startDate: {
+    type: Date,
+    required: true
+  },
+  endDate: Date,
+  grade: {
+    type: Number,
+  }
+
+})
+const profileSchema = new Schema<IProfile>({
+  dob: Date,
+  education: educationSchema,
+  communities: {
+    type: [Types.ObjectId],
+    ref: "Community"
+  },
+  unicoyn: Number
+})
+
+const userSchema = new Schema<IUSer>(
   {
     firstname: {
       type: String,
@@ -28,6 +57,9 @@ const userSchema = new Schema(
     otherNames: {
       type: String,
     },
+    profile: {
+      type: profileSchema
+    }
   },
   {
     timestamps: true,

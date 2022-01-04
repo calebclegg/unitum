@@ -1,4 +1,5 @@
-import User, { IUSer } from "../models/User";
+import User from "../models/User";
+import { IUSer } from "../types/user";
 import { Request, Response } from "express";
 
 export const register = async (req: Request, res: Response) => {
