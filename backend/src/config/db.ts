@@ -1,7 +1,6 @@
-import mongoose, { ConnectOptions } from "mongoose";
+import mongoose from "mongoose";
 
-type ConnectDBFunction = () => Promise<void>;
-const connectDB: ConnectDBFunction = async () => {
+const connectDB = async () => {
   const NODE_ENV = process.env.NODE_ENV;
   try {
     const conn = await mongoose.connect(
@@ -9,11 +8,7 @@ const connectDB: ConnectDBFunction = async () => {
         ? process.env.MONGO_URI!
         : NODE_ENV === "development"
         ? process.env.MONGO_DEV!
-        : process.env.MONGO_LOCAL!,
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      } as ConnectOptions
+        : process.env.MONGO_LOCAL!
     );
     console.log(`Mongodb running : ${conn.connection.host}`);
   } catch (error) {

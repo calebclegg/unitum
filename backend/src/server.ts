@@ -1,11 +1,11 @@
-import express, { Application } from "express";
+import express from "express";
 import { config as dotenv } from "dotenv";
 import connectDB from "./config/db";
 
 //dotenv conf
 dotenv();
 
-const app: Application = express();
+const app = express();
 
 connectDB();
 
