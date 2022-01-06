@@ -1,30 +1,35 @@
-import { Types } from "mongoose"
+import { Types } from "mongoose";
+
+type Role = "admin" | "active";
 
 interface IEducation {
-    school: {
-        name: string,
-        url?: string
-    }
-    degree: string,
-    fieldOfStudy: string,
-    startDate: Date,
-    endDate: Date,
-    grade: number,
+  school: {
+    name: string;
+    url?: string;
+  };
+  degree: string;
+  fieldOfStudy: string;
+  startDate: Date;
+  endDate: Date;
+  grade: number;
 }
 
 interface IProfile {
-    dob?: Date,
-    education?: IEducation,
-    communities?: Types.ObjectId[],
-    unicoyn: number,
+  dob?: Date;
+  education?: IEducation;
+  communities?: Types.ObjectId[];
+  unicoyn: number;
 }
 
 interface IUSer {
-    firstname: string;
-    lastname: string;
-    password?: string;
-    otherNames?: string;
-    email?: string;
-    profile?: IProfile
+  firstname: string;
+  lastname: string;
+  password?: string;
+  otherNames?: string;
+  role?: Role;
+  authProvider: string;
+  email?: string;
+  profile?: IProfile;
+  verifyPassword(password: string): boolean;
 }
-export { IEducation, IProfile, IUSer }
+export { IEducation, IProfile, IUSer };

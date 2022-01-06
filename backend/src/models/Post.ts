@@ -1,53 +1,58 @@
-import { Schema, model } from "mongoose"
-import { IPost, IComment } from "../types/post"
+import { Schema, model } from "mongoose";
+import { IPost, IComment } from "../types/post";
 
-
-const commentSchema = new Schema<IComment>({
+const commentSchema = new Schema<IComment>(
+  {
     userID: {
-        type: Schema.Types.ObjectId,
-        required: true,
-        ref: "User"
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "User"
     },
     postID: {
-        type: Schema.Types.ObjectId,
-        required: true,
-        ref: "Post"
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "Post"
     },
     text: {
-        type: String,
-        required: true
+      type: String,
+      required: true
     }
-}, { timestamps: true })
+  },
+  { timestamps: true }
+);
 
-export const postSchema = new Schema<IPost>({
+export const postSchema = new Schema<IPost>(
+  {
     userID: {
-        type: Schema.Types.ObjectId,
-        required: true,
-        ref: "User"
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "User"
     },
     communityID: {
-        type: Schema.Types.ObjectId,
-        ref: "Community"
+      type: Schema.Types.ObjectId,
+      ref: "Community"
     },
     text: {
-        type: String,
-        required: true,
+      type: String,
+      required: true
     },
     numberOfComments: {
-        type: Number,
-        default: 0,
+      type: Number,
+      default: 0
     },
     comments: {
-        type: [commentSchema]
+      type: [commentSchema]
     },
     upvotes: {
-        type: Number,
-        required: false,
-        default: 0
+      type: Number,
+      required: false,
+      default: 0
     }
-}, { timestamps: true })
+  },
+  { timestamps: true }
+);
 
-const PostModel = model<IPost>("Post", postSchema)
-const CommentModel = model<IComment>("Comment", commentSchema)
+const PostModel = model<IPost>("Post", postSchema);
+const CommentModel = model<IComment>("Comment", commentSchema);
 
-module.exports = { PostModel, CommentModel }
+module.exports = { PostModel, CommentModel };
