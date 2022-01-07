@@ -1,5 +1,6 @@
 import express from "express";
 import { config as dotenv } from "dotenv";
+import authRoutes from "./routes/auth";
 import userRoutes from "./routes/user";
 import morgan from "morgan";
 import connectDB from "./config/db";
@@ -23,6 +24,7 @@ app.use(
 app.use(helmet());
 app.use(morgan("dev"));
 
+app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 
 //Mount api routes here
