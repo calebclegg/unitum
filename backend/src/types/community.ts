@@ -1,9 +1,10 @@
-import { Types } from "mongoose";
-import { IPost } from "../types/post";
+import { Types } from "mongoose"
 
 export interface ICommunity {
-  admin: Types.ObjectId;
-  members?: [Types.ObjectId];
-  posts?: [IPost];
-  createdAt: Date;
+    admin: Types.ObjectId,
+    name: string,
+    description?: string,
+    numberOfMembers?: number,
+    numberOfPosts?: number
+    createdAt?: Date
 }

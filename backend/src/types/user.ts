@@ -1,6 +1,8 @@
 import { Types } from "mongoose";
 
-export interface IEducation {
+type Role = "admin" | "active";
+
+interface IEducation {
   school: {
     name: string;
     url?: string;
@@ -12,18 +14,22 @@ export interface IEducation {
   grade: number;
 }
 
-export interface IProfile {
+interface IProfile {
   dob?: Date;
   education?: IEducation;
   communities?: Types.ObjectId[];
   unicoyn: number;
 }
 
-export interface IUSer {
+interface IUSer {
   firstname: string;
   lastname: string;
   password?: string;
   otherNames?: string;
+  role?: Role;
+  authProvider: string;
   email?: string;
   profile?: IProfile;
+  verifyPassword(password: string): boolean;
 }
+export { IEducation, IProfile, IUSer };
