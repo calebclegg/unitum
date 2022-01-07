@@ -17,7 +17,7 @@ export const register = async (req: Request, res: Response) => {
         email,
         lastname,
         password,
-        otherNames,
+        otherNames
       });
       return res.status(201).json({ message: "User created" });
     }

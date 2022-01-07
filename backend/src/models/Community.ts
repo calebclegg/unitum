@@ -1,23 +1,26 @@
-import { Schema, model, Types } from "mongoose"
-import { ICommunity } from "../types/community"
-import { postSchema } from "../models/Post"
+import { Schema, model } from "mongoose";
+import { ICommunity } from "../types/community";
+import { postSchema } from "../models/Post";
 
-const communitySchema = new Schema<ICommunity>({
+const communitySchema = new Schema<ICommunity>(
+  {
     admin: {
-        type: Schema.Types.ObjectId,
-        required: true,
-        ref: "User"
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "User"
     },
     members: {
-        type: [Schema.Types.ObjectId],
-        required: false,
-        ref: "User"
+      type: [Schema.Types.ObjectId],
+      required: false,
+      ref: "User"
     },
     posts: {
-        type: [postSchema],
+      type: [postSchema]
     }
-}, { timestamps: true })
+  },
+  { timestamps: true }
+);
 
-const CommunityModel = model<ICommunity>("Community", communitySchema)
+const CommunityModel = model<ICommunity>("Community", communitySchema);
 
-export default CommunityModel
+export default CommunityModel;

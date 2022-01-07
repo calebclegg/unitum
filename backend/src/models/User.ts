@@ -4,7 +4,7 @@ import { IEducation, IProfile, IUSer } from "../types/user";
 const schoolSchema = new Schema({
   name: String,
   url: String
-})
+});
 
 const educationSchema = new Schema<IEducation>({
   school: {
@@ -15,7 +15,7 @@ const educationSchema = new Schema<IEducation>({
 
   fieldOfStudy: {
     type: String,
-    required: true,
+    required: true
   },
   startDate: {
     type: Date,
@@ -23,10 +23,9 @@ const educationSchema = new Schema<IEducation>({
   },
   endDate: Date,
   grade: {
-    type: Number,
+    type: Number
   }
-
-})
+});
 const profileSchema = new Schema<IProfile>({
   dob: Date,
   education: educationSchema,
@@ -35,34 +34,34 @@ const profileSchema = new Schema<IProfile>({
     ref: "Community"
   },
   unicoyn: Number
-})
+});
 
 const userSchema = new Schema<IUSer>(
   {
     firstname: {
       type: String,
-      required: true,
+      required: true
     },
     lastname: {
       type: String,
-      required: true,
+      required: true
     },
     password: {
-      type: String,
+      type: String
     },
     email: {
       type: String,
-      unique: true,
+      unique: true
     },
     otherNames: {
-      type: String,
+      type: String
     },
     profile: {
       type: profileSchema
     }
   },
   {
-    timestamps: true,
+    timestamps: true
   }
 );
 

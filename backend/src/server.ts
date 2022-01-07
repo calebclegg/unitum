@@ -1,7 +1,7 @@
 import express from "express";
-import { config as dotenv } from "dotenv";
+import { config as dotenv } from "dotenv-flow";
 import userRoutes from "./routes/user";
-const morgan = require("morgan")
+import morgan from "morgan";
 
 import connectDB from "./config/db";
 
@@ -14,7 +14,7 @@ connectDB();
 
 //Body parser setup
 app.use(express.json());
-app.use(morgan("dev"))
+app.use(morgan("dev"));
 
 //Mount api routes here
 app.use("/api/users", userRoutes);
