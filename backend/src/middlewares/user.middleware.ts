@@ -8,7 +8,6 @@ async function validateUserRegData(
   res: Response,
   next: NextFunction
 ) {
-  console.log(req.body);
   const valData = validateRegUser(req.body);
   if (valData.error) {
     return res

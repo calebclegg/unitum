@@ -3,10 +3,20 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { ThemeProvider } from "@mui/material";
+import { theme } from "./lib/theme";
+
+if (process.env.NODE_ENV !== "production") {
+  import("@axe-core/react").then(({ default: axe }) =>
+    axe(React, ReactDOM, 1000)
+  );
+}
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
