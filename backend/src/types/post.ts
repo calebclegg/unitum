@@ -1,4 +1,4 @@
-import { Types } from "mongoose"
+import { Types } from "mongoose";
 
 export interface IComment {
   userID: Types.ObjectId;
@@ -7,10 +7,10 @@ export interface IComment {
   createdAt?: Date;
 }
 export interface IPost {
-    userID: Types.ObjectId,
-    communityID: Types.ObjectId,
-    text: string,
-    numberOfComments?: number
-    comments?: [IComment]
-    upvotes?: Number
+  userID: Types.ObjectId;
+  communityID: Types.ObjectId;
+  text: string;
+  numberOfComments?: number;
+  comments?: [IComment];
+  upvotes?: number;
 }
