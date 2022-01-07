@@ -17,6 +17,8 @@ connectDB();
 app.use(express.json());
 app.use(
   cors({
+    origin: "*"
+  })
 );
 app.use(helmet());
 app.use(morgan("dev"));

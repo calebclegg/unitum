@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Types } from "mongoose";
 import { ICommunity } from "../types/community";
 import { postSchema } from "../models/Post";
 
