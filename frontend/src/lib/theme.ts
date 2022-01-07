@@ -29,6 +29,9 @@ export const theme = createTheme({
   customPalette: {
     navyBlue: "#2C2D4D"
   },
+  typography: {
+    fontFamily: "'Inter', sans-serif"
+  },
   components: {
     MuiButton: {
       styleOverrides: {
