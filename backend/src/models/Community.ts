@@ -8,13 +8,22 @@ const communitySchema = new Schema<ICommunity>({
         required: true,
         ref: "User"
     },
-    members: {
-        type: [Schema.Types.ObjectId],
-        required: false,
-        ref: "User"
+    name: {
+        type: String,
+        max: 30,
+        required: true,
     },
-    posts: {
-        type: [postSchema],
+    description: {
+        type: String,
+        max: 200,
+    },
+    numberOfMembers: {
+        type: Number,
+        default: 0
+    },
+    numberOfPosts: {
+        type: Number,
+        default: 0
     }
 }, { timestamps: true })
 

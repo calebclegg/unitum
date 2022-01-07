@@ -25,9 +25,17 @@ export const postSchema = new Schema<IPost>({
         required: true,
         ref: "User"
     },
+    communityID: {
+        type: Schema.Types.ObjectId,
+        ref: "Community"
+    },
     text: {
         type: String,
         required: true,
+    },
+    numberOfComments: {
+        type: Number,
+        default: 0,
     },
     comments: {
         type: [commentSchema]
