@@ -1,4 +1,4 @@
-import { createTheme } from "@mui/material/styles";
+import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 
 declare module "@mui/material/styles" {
   interface Theme {
@@ -14,31 +14,60 @@ declare module "@mui/material/styles" {
   }
 }
 
-export const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#416ECA"
+export const theme = responsiveFontSizes(
+  createTheme({
+    palette: {
+      primary: {
+        main: "#416ECA"
+      },
+      secondary: {
+        main: "#FFA014"
+      },
+      background: {
+        default: "#F0EFF5"
+      }
     },
-    secondary: {
-      main: "#FFA014"
+    customPalette: {
+      navyBlue: "#2C2D4D"
     },
-    background: {
-      default: "#F0EFF5"
+    typography: {
+      fontFamily: "'Inter', sans-serif"
+    }
+  })
+);
+
+theme.components = {
+  MuiButton: {
+    defaultProps: {
+      disableElevation: true
+    },
+    styleOverrides: {
+      root: {
+        textTransform: "none"
+      }
     }
   },
-  customPalette: {
-    navyBlue: "#2C2D4D"
+  MuiLink: {
+    defaultProps: {
+      underline: "hover"
+    }
   },
-  typography: {
-    fontFamily: "'Inter', sans-serif"
+  MuiTypography: {
+    styleOverrides: {
+      root: {
+        color: theme.customPalette.navyBlue
+      }
+    }
   },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        text: {
-          textTransform: "none"
-        }
+  MuiPaper: {
+    defaultProps: {
+      elevation: 0
+    },
+    styleOverrides: {
+      root: {
+        padding: theme.spacing(2),
+        borderRadius: 8
       }
     }
   }
-});
+};
