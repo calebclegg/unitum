@@ -1,9 +1,21 @@
 import { ArrowBack } from "@mui/icons-material";
-import { Button, Container, Paper, Typography } from "@mui/material";
+// import { ButtonUnstyled } from "@mui/base";
+import {
+  Button,
+  Container,
+  Divider,
+  IconButton,
+  Paper,
+  Stack,
+  Typography
+} from "@mui/material";
 import { Box } from "@mui/system";
 import { Form, Formik } from "formik";
 import { Link } from "react-router-dom";
 import { kebabToCapitalized } from "../utils";
+import facebook from "../images/facebook-logo.svg";
+import twitter from "../images/twitter-logo.svg";
+import google from "../images/google-logo.png";
 
 interface IProps {
   children: React.ReactNode;
@@ -52,6 +64,20 @@ const FormLayout = ({
             </Form>
           </Formik>
           <Typography>{formFooter}</Typography>
+          <Divider sx={{ mt: 4, mb: 3 }}>
+            Or {kebabToCapitalized(formType)} with
+          </Divider>
+          <Stack direction="row" spacing={5} justifyContent="center">
+            <IconButton>
+              <img src={facebook} alt="facebook" width="40" height="40" />
+            </IconButton>
+            <IconButton>
+              <img src={google} alt="google" width="40" height="40" />
+            </IconButton>
+            <IconButton>
+              <img src={twitter} alt="twitter" width="40" height="40" />
+            </IconButton>
+          </Stack>
         </Paper>
       </Container>
     </Box>

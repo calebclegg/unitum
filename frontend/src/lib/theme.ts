@@ -69,5 +69,12 @@ theme.components = {
         borderRadius: 8
       }
     }
+  },
+  MuiDivider: {
+    styleOverrides: {
+      root: {
+        color: theme.palette.text.secondary
+      }
+    }
   }
 };
