@@ -9,4 +9,7 @@ export const camelToCapitalized = (fieldName: string) =>
   );
 
 export const kebabToCapitalized = (fieldName: string) =>
-  capitalize(fieldName.replaceAll("-", " "));
+  fieldName
+    .split("-")
+    .map((part) => capitalize(part))
+    .join(" ");
