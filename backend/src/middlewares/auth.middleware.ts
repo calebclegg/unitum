@@ -1,19 +1,19 @@
 import { Response, NextFunction } from "express";
 import { validateRegUser, validateLogUser } from "../validators/user.validator";
 import User from "../models/User";
-import { CustomRequest } from "../types/request";
 
 async function validateUserRegData(
-  req: CustomRequest,
+  req: any,
   res: Response,
   next: NextFunction
 ) {
   console.log(req.body);
   const valData = validateRegUser(req.body);
   if (valData.error) {
-    return res
-      .status(400)
-      .json({ message: "Some fields are invalid/required" });
+    return res.status(400).json({
+      message: "Some fields are invalid/required",
+      error: valData.error
+    });
   }
   const user = await User.findOne({ email: valData.value.email });
 
@@ -25,7 +25,7 @@ async function validateUserRegData(
 }
 
 async function validateUserLogData(
-  req: CustomRequest,
+  req: any,
   res: Response,
   next: NextFunction
 ) {

@@ -29,7 +29,7 @@ const educationSchema = new Schema<IEducation>({
 });
 const profileSchema = new Schema<IProfile>({
   dob: Date,
-  education: educationSchema,
+  education: [educationSchema],
   communities: {
     type: [Types.ObjectId],
     ref: "Community"
