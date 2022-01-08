@@ -1,17 +1,23 @@
 import "@fontsource/inter";
 import Home from "./pages/Home";
-import Register from "./pages/Register";
 import { Route, Routes } from "react-router-dom";
 import { CssBaseline } from "@mui/material";
+import { lazy, Suspense } from "react";
+
+const Login = lazy(() => import("./pages/Login"));
+const Register = lazy(() => import("./pages/Register"));
 
 function App() {
   return (
     <>
       <CssBaseline />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="register/*" element={<Register />} />
-      </Routes>
+      <Suspense fallback="Loading">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="login/*" element={<Login />} />
+          <Route path="register/*" element={<Register />} />
+        </Routes>
+      </Suspense>
     </>
   );
 }

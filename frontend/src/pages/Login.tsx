@@ -1,30 +1,30 @@
 import { Link } from "react-router-dom";
 import { Link as MuiLink } from "@mui/material";
-import { registerValues } from "../lib";
+import { loginValues } from "../lib";
 import { camelToCapitalized } from "../utils";
 import CustomInput from "../components/CustomInput";
 import FormLayout from "../components/FormLayout";
 
-const Register = () => {
+const Login = () => {
   return (
     <FormLayout
-      initialValues={registerValues}
-      title="Create an account"
-      formType="sign-up"
+      initialValues={loginValues}
+      title="Welcome back"
+      formType="sign-in"
       formFooter={
         <>
-          Already a member?&nbsp;
-          <MuiLink component={Link} to="/login">
-            Login here
+          Don&apos;t have an account?&nbsp;
+          <MuiLink component={Link} to="/register">
+            Register here
           </MuiLink>
         </>
       }
     >
-      {Object.keys(registerValues).map((field) => (
+      {Object.keys(loginValues).map((field) => (
         <CustomInput
           key={field}
           name={field}
-          passwordType="new"
+          passwordType="current"
           label={camelToCapitalized(field)}
         />
       ))}
@@ -32,4 +32,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;
