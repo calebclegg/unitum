@@ -49,7 +49,7 @@ const AuthProviders = ({ formType }: IProps) => {
     >
       <h2>{kebabToRegular(formType)} with providers</h2>
       {laptop && (
-        <Typography align="center" color="GrayText" sx={{ mb: 2 }}>
+        <Typography align="center" color="GrayText" sx={{ my: 2 }}>
           OR
         </Typography>
       )}
@@ -61,8 +61,8 @@ const AuthProviders = ({ formType }: IProps) => {
               <img
                 src={facebook_square}
                 alt="facebook"
-                width="40"
-                height="40"
+                width="30"
+                height="30"
               />
             }
           >
@@ -71,7 +71,7 @@ const AuthProviders = ({ formType }: IProps) => {
           <Button
             variant="outlined"
             color="error"
-            startIcon={<img src={google} alt="google" width="40" height="40" />}
+            startIcon={<img src={google} alt="google" width="30" height="30" />}
           >
             {kebabToRegular(formType)} with google
           </Button>
@@ -79,7 +79,7 @@ const AuthProviders = ({ formType }: IProps) => {
             variant="contained"
             sx={{ bgcolor: "#1DA1F2" }}
             startIcon={
-              <img src={twitter_square} alt="twitter" width="40" height="40" />
+              <img src={twitter_square} alt="twitter" width="30" height="30" />
             }
           >
             {kebabToRegular(formType)} with twitter
