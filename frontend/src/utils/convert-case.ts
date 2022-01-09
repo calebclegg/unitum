@@ -8,6 +8,9 @@ export const camelToCapitalized = (fieldName: string) =>
       .join("")
   );
 
+export const kebabToRegular = (fieldName: string) =>
+  fieldName.replaceAll("-", " ");
+
 export const kebabToCapitalized = (fieldName: string) =>
   fieldName
     .split("-")
