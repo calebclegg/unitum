@@ -1,6 +1,6 @@
 import { model, Schema, Types } from "mongoose";
 import { IEducation, IProfile, IUSer } from "../types/user";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 const schoolSchema = new Schema({
   name: String,

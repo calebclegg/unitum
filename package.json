@@ -1,0 +1,16 @@
+{
+  "name": "unitum",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/jaybarnes33/unitum.git",
+  "author": "",
+  "license": "MIT",
+  "scripts": {
+    "client": "cd frontend && yarn start",
+    "server": "cd backend && yarn dev",
+    "start": "concurrently \"yarn client\" \"yarn server\""
+  },
+  "devDependencies": {
+    "concurrently": "^7.0.0"
+  }
+}

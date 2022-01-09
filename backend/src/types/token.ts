@@ -1,10 +1,10 @@
 interface TokenData {
-    token: string;
-    expiresIn: number;
+  token: string;
+  expiresIn: number;
 }
 
 interface DataStoredInToken {
-    email: string
+  email: string;
 }
 
-export {TokenData, DataStoredInToken}
+export { TokenData, DataStoredInToken };

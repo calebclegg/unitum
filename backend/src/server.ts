@@ -26,7 +26,6 @@ app.use(morgan("dev"));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
-
 //Mount api routes here
 app.listen(process.env.PORT, () => {
   console.log(`Backend server running on ${process.env.PORT}`);
