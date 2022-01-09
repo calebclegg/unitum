@@ -4,31 +4,36 @@ import { registerValues } from "../lib";
 import { camelToCapitalized } from "../utils";
 import CustomInput from "../components/CustomInput";
 import FormLayout from "../components/FormLayout";
-
+import Helmet from "react-helmet";
 const Register = () => {
   return (
-    <FormLayout
-      initialValues={registerValues}
-      title="Create an account"
-      formType="sign-up"
-      formFooter={
-        <>
-          Already a member?&nbsp;
-          <MuiLink component={Link} to="/login">
-            Login here
-          </MuiLink>
-        </>
-      }
-    >
-      {Object.keys(registerValues).map((field) => (
-        <CustomInput
-          key={field}
-          name={field}
-          passwordType="new"
-          label={camelToCapitalized(field)}
-        />
-      ))}
-    </FormLayout>
+    <>
+      <Helmet>
+        <title>Create an Account</title>
+      </Helmet>
+      <FormLayout
+        initialValues={registerValues}
+        title="Create an account"
+        formType="sign-up"
+        formFooter={
+          <>
+            Already a member?&nbsp;
+            <MuiLink component={Link} to="/login">
+              Login here
+            </MuiLink>
+          </>
+        }
+      >
+        {Object.keys(registerValues).map((field) => (
+          <CustomInput
+            key={field}
+            name={field}
+            passwordType="new"
+            label={camelToCapitalized(field)}
+          />
+        ))}
+      </FormLayout>
+    </>
   );
 };
 
