@@ -1,6 +1,6 @@
-import { DataStoredInToken, TokenData } from "../types/token";
+import { DataStoredInToken } from "../types/token";
 import { IUSer } from "../types/user";
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 
 const createToken = async function name(user: IUSer) {
   const expiresIn = process.env.JWT_EXPIRE_TIME;
@@ -8,7 +8,7 @@ const createToken = async function name(user: IUSer) {
   const dataStoredInToken: DataStoredInToken = {
     email: user.email!
   };
-  const token = jwt.sign(dataStoredInToken, secret, { expiresIn });
+  const token = jwt.sign(dataStoredInToken, secret!, { expiresIn });
   return {
     expiresIn: +expiresIn!,
     token: token
