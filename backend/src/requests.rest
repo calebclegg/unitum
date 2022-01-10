@@ -2,11 +2,32 @@ POST http://localhost:3000/api/auth/register
 Content-Type: application/json
 
 {
-    "firstname": "Kyei",
-    "lastname": "Samuel",
-    "otherNames": "Osei",
-    "email": "kyeisamuel931@gmail.com",
+    "firstname": "Rex",
+    "lastname": "Osei",
+    "email": "rexosei111@gmail.com",
     "password": "rexosei111"
+}
+###
+
+{
+    "firstname": "Oware",
+    "lastname": "Derek",
+    "email": "Dchole@gmail.com",
+    "password": "testuser",
+    "profile": {
+        "dob": "2001-05-06",
+        "education": [{
+            "school": {
+                "name": "University of Mines"
+            },
+            "degree": "Bsc. Computer Science",
+            "fieldOfStudy": "Computer Science",
+            "startDate": "2019-09-02",
+            "grade": 83
+        }],
+        "unicoyn": 21
+
+    }
 }
 
 ###
@@ -18,7 +39,7 @@ X-Auth-Provider: GOOGLE
     "given_name": "Barnes",
     "family_name": "Oduro",
     "otherNames": "Twumasi",
-    "email": "oduro123@gmail.com",
+    "email": "oduro23@gmail.com",
     "authProvider": "GOOGLE"
 }
 
@@ -41,3 +62,31 @@ Content-Type: application/json
 }
 
 ###
+
+GET http://localhost:3000/api/users/me
+Content-Type: application/json
+Authorization: Bearer <token>
+
+###
+
+PATCH http://localhost:3000/api/users/me
+Content-Type: application/json
+Authorization: Bearer <token>
+
+{
+    "firstname" : "Otwe",
+    "profile": {
+        "dob": "2001-05-06",
+        "education": [{
+            "school": {
+                "name": "University of Mines"
+            },
+            "degree": "Bsc. Computer Science",
+            "fieldOfStudy": "Computer Science",
+            "startDate": "2019-09-02",
+            "grade": 83
+        }],
+        "unicoyn": 21
+
+    }
+}
