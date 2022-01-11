@@ -9,10 +9,17 @@ const createToken = async function name(user: IUSer) {
     email: user.email!
   };
   const token = jwt.sign(dataStoredInToken, secret, { expiresIn });
-  return {
-    expiresIn: +expiresIn!,
-    token: token
-  };
+  return token
 };
 
-export { createToken };
+const createRefreshToken = async function name(user: IUSer) {
+  const expiresIn = process.env.RF_TOKEN_EX;
+  const secret = process.env.RF_TOKEN_SECRET;
+  const dataStoredInToken: DataStoredInToken = {
+    email: user.email!
+  };
+  const token = jwt.sign(dataStoredInToken, secret, { expiresIn });
+  return token
+};
+
+export { createToken, createRefreshToken };

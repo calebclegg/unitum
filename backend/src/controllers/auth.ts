@@ -1,6 +1,6 @@
 import User from "../models/User";
 import { Request, Response } from "express";
-import { createToken } from "../utils/Token";
+import { createRefreshToken, createToken } from "../utils/Token";
 import { validateEmail } from "../validators/user.validator";
 import { normalizeGoogleData } from "../utils/dataNormalizer";
 import { CustomRequest } from "../types/request";
@@ -13,10 +13,11 @@ export const register = async (req: Request, res: Response) => {
   });
   try {
     const savedUser = await newUser.save();
-    const tokenData = await createToken(savedUser);
+    const accessToken = await createToken(savedUser);
+    const refreshToken = await createRefreshToken(savedUser)
     res
       .status(201)
-      .json({ message: "User Registered Successfully", data: tokenData });
+      .json({ accessToken, refreshToken });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
   }
@@ -28,8 +29,9 @@ export const login = async (req: any, res: Response) => {
   if (!isVerified)
     return res.status(400).json({ message: "Password is incorrect" });
 
-  const tokenData = await createToken(user);
-  return res.status(200).json({ ...tokenData });
+  const accessToken = await createToken(user);
+  const refreshToken = await createRefreshToken(user);
+  return res.status(200).json({accessToken, refreshToken});
 };
 
 export const checkAuthProvider = async (req: Request, res: Response) => {
@@ -77,15 +79,16 @@ export const externalAuth = async (req: any, res: Response) => {
   } catch (error) {
     return res.status(500).json({ message: "Something went wrong" });
   }
-  let tokenData;
+  let accessToken, refreshToken;
   if (!dbUser) {
     const newUser = new User({
       ...userData
     });
     try {
       const savedUser = await newUser.save();
-      tokenData = await createToken(savedUser);
-      return res.status(201).json({ ...tokenData });
+     accessToken = await createToken(savedUser);
+     refreshToken = await createRefreshToken(savedUser) 
+      return res.status(201).json({accessToken, refreshToken});
     } catch (error) {
       return res.status(500).json({ message: "Something went wrong" });
     }
