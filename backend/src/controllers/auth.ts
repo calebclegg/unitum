@@ -3,7 +3,6 @@ import { Request, Response } from "express";
 import { createRefreshToken, createToken } from "../utils/Token";
 import { validateEmail } from "../validators/user.validator";
 import { normalizeGoogleData } from "../utils/dataNormalizer";
-import { CustomRequest } from "../types/request";
 
 export const register = async (req: Request, res: Response) => {
   const newUser = new User({
