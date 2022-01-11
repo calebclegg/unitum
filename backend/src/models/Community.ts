@@ -2,6 +2,16 @@ import { Schema, model, Types } from "mongoose";
 import { ICommunity } from "../types/community";
 import { postSchema } from "../models/Post";
 
+const membersSchema = new Schema({
+  memberID: {
+    type: Schema.Types.ObjectId,
+    ref: "User"
+  },
+  role: {
+    type: String,
+    enum: ["admin", "moderator", "member"]
+  }
+});
 const communitySchema = new Schema<ICommunity>(
   {
     admin: {
@@ -25,11 +35,13 @@ const communitySchema = new Schema<ICommunity>(
     numberOfPosts: {
       type: Number,
       default: 0
-    }
+    },
+    members: [membersSchema]
   },
   { timestamps: true }
 );
 
+communitySchema.index({ $name: "text" });
 const CommunityModel = model<ICommunity>("Community", communitySchema);
 
 export default CommunityModel;

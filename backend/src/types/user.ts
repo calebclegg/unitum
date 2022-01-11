@@ -16,7 +16,7 @@ interface IEducation {
 
 interface IProfile {
   dob?: Date;
-  education?: IEducation;
+  education?: IEducation[];
   communities?: Types.ObjectId[];
   unicoyn: number;
 }
@@ -30,6 +30,7 @@ interface IUSer {
   authProvider: string;
   email?: string;
   profile?: IProfile;
+  number?: number[];
   verifyPassword(password: string): boolean;
 }
 export { IEducation, IProfile, IUSer };
