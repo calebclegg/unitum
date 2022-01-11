@@ -13,7 +13,7 @@ export const getUser = async (req: any, res: Response, next: NextFunction) => {
   try {
     payload = await decodeToken(token!);
   } catch (error) {
-    return res.status(400).json({ message: "Invalid token" });
+    return res.sendStatus(403);
   }
   if (!payload) return res.status(400).json({ message: "Invalid jwt token" });
 
