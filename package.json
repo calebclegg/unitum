@@ -6,6 +6,9 @@
   "author": "",
   "license": "MIT",
   "scripts": {
+    "install:client": "cd frontend && yarn",
+    "install:server": "cd backend && yarn",
+    "preinstall": "concurrently \"yarn install:client\" \"yarn install:server\"",
     "client": "cd frontend && yarn start",
     "server": "cd backend && yarn dev",
     "start": "concurrently \"yarn client\" \"yarn server\""

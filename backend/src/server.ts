@@ -1,5 +1,5 @@
 import express from "express";
-import { config as dotenv } from "dotenv";
+import { config as dotenv } from "dotenv-flow";
 import authRoutes from "./routes/auth";
 import userRoutes from "./routes/user";
 import morgan from "morgan";
