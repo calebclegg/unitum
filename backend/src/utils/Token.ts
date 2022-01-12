@@ -5,17 +5,25 @@ import { JwtPayload, VerifyOptions } from "jsonwebtoken";
 
 export const createToken = async (user: IUSer) => {
   const secret = process.env.JWT_SECRET;
-  console.log(typeof secret);
   const expiresIn = process.env.JWT_EXPIRE_TIME;
   const dataStoredInToken: JwtPayload = {
     sub: user.email,
     iss: process.env.JWT_ISSUER
   };
   const token = jwt.sign(dataStoredInToken, secret!, { expiresIn: "10m" });
-  return {
-    expiresIn: +expiresIn!,
-    token: token
+  return token
+};
+
+export const createRefreshToken = async (user: IUSer) => {
+  const secret = process.env.RF_TOKEN_SECRET;
+  const expiresIn = process.env.RF_TOKEN_EX;
+  console.log(expiresIn, typeof expiresIn)
+  const dataStoredInToken: JwtPayload = {
+    sub: user.email,
+    iss: process.env.JWT_ISSUER
   };
+  const token = jwt.sign(dataStoredInToken, secret!, { expiresIn: expiresIn });
+  return token
 };
 
 export const decodeToken = async (jwtString: string) => {
@@ -26,3 +34,5 @@ export const decodeToken = async (jwtString: string) => {
   const payload = jwt.verify(jwtString, process.env.JWT_SECRET!, options);
   return payload;
 };
+
+

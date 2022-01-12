@@ -98,6 +98,8 @@ export const externalAuth = async (req: any, res: Response) => {
     });
   }
 
-  tokenData = await createToken(dbUser);
-  return res.status(200).json({ ...tokenData });
+  accessToken = await createToken(dbUser);
+  refreshToken = await createToken(dbUser);
+
+  return res.status(200).json({accessToken, refreshToken});
 };

@@ -2,16 +2,14 @@ POST http://localhost:3000/api/auth/register
 Content-Type: application/json
 
 {
-    "firstname": "Rex",
-    "lastname": "Osei",
+    "fullname": "Rex Osei",
     "email": "rexosei111@gmail.com",
     "password": "rexosei111"
 }
 ###
 
 {
-    "firstname": "Oware",
-    "lastname": "Derek",
+    "fullname": "Derek Oware",
     "email": "Dchole@gmail.com",
     "password": "testuser",
     "profile": {

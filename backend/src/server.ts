@@ -7,14 +7,12 @@ import morgan from "morgan";
 import connectDB from "./config/db";
 import helmet from "helmet";
 import cors from "cors";
-
 //dotenv conf
 dotenv();
 
 const app = express();
 
 connectDB();
-
 //Body parser setup
 app.use(express.json());
 app.use(
