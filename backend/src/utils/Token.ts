@@ -17,7 +17,7 @@ export const createToken = async (user: IUSer) => {
 export const createRefreshToken = async (user: IUSer) => {
   const secret = process.env.RF_TOKEN_SECRET;
   const expiresIn = process.env.RF_TOKEN_EX;
-  console.log(expiresIn, typeof expiresIn)
+  
   const dataStoredInToken: JwtPayload = {
     sub: user.email,
     iss: process.env.JWT_ISSUER
