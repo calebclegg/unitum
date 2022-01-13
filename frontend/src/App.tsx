@@ -1,8 +1,9 @@
 import "@fontsource/inter";
-import Home from "./pages/Home";
+import Feed from "./pages/Feed";
 import { Route, Routes } from "react-router-dom";
 import { CssBaseline } from "@mui/material";
 import { lazy, Suspense } from "react";
+import Landing from "./pages/Landing";
 
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
@@ -13,7 +14,8 @@ function App() {
       <CssBaseline />
       <Suspense fallback="Loading">
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Landing />} />
+          <Route path="feed/*" element={<Feed />} />
           <Route path="login/*" element={<Login />} />
           <Route path="register/*" element={<Register />} />
         </Routes>
