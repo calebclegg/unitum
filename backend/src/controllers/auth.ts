@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { createRefreshToken, createToken, decodeToken } from "../utils/Token";
 import { validateEmail } from "../validators/user.validator";
 import { normalizeGoogleData } from "../utils/dataNormalizer";
+import { saveRefreshToken, deleteRefreshToken } from "../utils/Token";
 
 export const register = async (req: Request, res: Response) => {
   const newUser = new User({
@@ -14,6 +15,11 @@ export const register = async (req: Request, res: Response) => {
     const savedUser = await newUser.save();
     const accessToken = await createToken(savedUser);
     const refreshToken = await createRefreshToken(savedUser)
+    try {
+      await saveRefreshToken(req.body.email, refreshToken)
+    } catch( error ) {
+      console.log("Unable to save refresh token")
+    }
     res
       .status(201)
       .json({ accessToken, refreshToken });
@@ -30,6 +36,11 @@ export const login = async (req: any, res: Response) => {
 
   const accessToken = await createToken(user);
   const refreshToken = await createRefreshToken(user);
+  try {
+    await saveRefreshToken(user.email, refreshToken)
+  } catch( error ) {
+    console.log("Unable to save refresh token")
+  }
   return res.status(200).json({accessToken, refreshToken});
 };
 
@@ -86,7 +97,12 @@ export const externalAuth = async (req: any, res: Response) => {
     try {
       const savedUser = await newUser.save();
      accessToken = await createToken(savedUser);
-     refreshToken = await createRefreshToken(savedUser) 
+     refreshToken = await createRefreshToken(savedUser)
+     try {
+      await saveRefreshToken(savedUser.email!, refreshToken)
+    } catch( error ) {
+      console.log("Unable to save refresh token")
+    }
       return res.status(201).json({accessToken, refreshToken});
     } catch (error) {
       return res.status(500).json({ message: "Something went wrong" });
@@ -100,6 +116,11 @@ export const externalAuth = async (req: any, res: Response) => {
 
   accessToken = await createToken(dbUser);
   refreshToken = await createToken(dbUser);
+  try {
+    await saveRefreshToken(dbUser.email!, refreshToken)
+  } catch( error ) {
+    console.log("Unable to save refresh token")
+  }
 
   return res.status(200).json({accessToken, refreshToken});
 };
@@ -127,4 +148,14 @@ export const getNewAccessToken = async (req: any, res: Response) => {
   const accessToken = await createToken(dbUser!)
 
   return res.status(200).json({accessToken})
+}
+
+export const logout =async (req:any, res: Response) => {
+  const user = req.user
+  try {
+    await deleteRefreshToken(user.email)
+    return res.sendStatus(200)
+  } catch(error) {
+    return res.sendStatus(500)
+  }
 }

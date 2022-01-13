@@ -2,6 +2,7 @@ import { DataStoredInToken } from "../types/token";
 import { IUSer } from "../types/user";
 import jwt from "jsonwebtoken";
 import { JwtPayload, VerifyOptions } from "jsonwebtoken";
+import { redisConnect, redisClient } from "../config/redis_connect";
 
 export const createToken = async (user: IUSer) => {
   const secret = process.env.JWT_SECRET;
@@ -40,3 +41,13 @@ export const decodeToken = async (jwtString: string, type: string) => {
 };
 
 
+export const saveRefreshToken = async (email: string, token: string) => {
+  await redisConnect()
+  await redisClient.execute(["SET", email, token])
+  await redisClient.execute(["expire", email,  691200])
+}
+
+export const deleteRefreshToken = async (email: string) => {
+  await redisConnect()
+  await redisClient.execute(["DEL", email])
+}

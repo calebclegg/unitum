@@ -18,4 +18,6 @@ router.post("/oauth", controller.externalAuth);
 
 router.get("/token", getUser, controller.getNewAccessToken)
 
+router.get("/logout", getUser, controller.logout)
+
 export default router;
