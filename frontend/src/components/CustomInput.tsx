@@ -82,7 +82,12 @@ const CustomInput = ({ name, label, passwordType }: IProps) => {
             }}
           />
           {touched && error && (
-            <FormHelperText id={`${name}-error`}>{error}</FormHelperText>
+            <FormHelperText
+              id={`${name}-error`}
+              sx={{ color: ({ palette }) => palette.error.main }}
+            >
+              {error}
+            </FormHelperText>
           )}
         </FormControl>
       )}
