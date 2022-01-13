@@ -7,6 +7,8 @@ Content-Type: application/json
     "password": "rexosei111"
 }
 ###
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
 
 {
     "fullname": "Derek Oware",
@@ -46,7 +48,8 @@ POST  http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
-   
+   "email": "rexosei111@gmail.com",
+   "password": "rexosei111"
 }
 
 ###
@@ -62,7 +65,7 @@ Content-Type: application/json
 
 GET http://localhost:3000/api/users/me
 Content-Type: application/json
-Authorization: Bearer <token>
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjA2OTgwMCwiZXhwIjoxNjQyMDcwNDAwfQ.DsgecpKkZeVRjtYxKEpDfnD5648dVR-YL4mjCfr8LYc
 
 ###
 
@@ -86,6 +89,15 @@ Authorization: Bearer <token>
         "unicoyn": 21
 
     }
+}
+
+###
+GET http://localhost:3000/api/auth/token
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEY2hvbGVAZ21haWwuY29tIiwiaXNzIjoidW5pdHVtOnBsYXRmb3JtIiwiaWF0IjoxNjQyMDcwOTI1LCJleHAiOjE2NDIwNzE1MjV9._b30bCTy3SpbivVvnimKjtHp9kg_tUeMKvQttN-voBk
+
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjA3MDcwNiwiZXhwIjoxNjQyNjc1NTA2fQ.sCcQ1VBRnqPSM4oSBJcSvHZtxyzUdw6bI8WUMp49TD8"
 }
 
 ###

@@ -11,7 +11,7 @@ export const getUser = async (req: any, res: Response, next: NextFunction) => {
 
   let payload: JwtPayload | string;
   try {
-    payload = await decodeToken(token!);
+    payload = await decodeToken(token!, "access");
   } catch (error) {
     return res.sendStatus(403);
   }

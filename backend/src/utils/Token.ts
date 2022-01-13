@@ -26,12 +26,16 @@ export const createRefreshToken = async (user: IUSer) => {
   return token
 };
 
-export const decodeToken = async (jwtString: string) => {
+export const decodeToken = async (jwtString: string, type: string) => {
+  const tokenTypes:Record<string,Record<string, string>> = {
+    "access": {"secret": process.env.JWT_SECRET||"", "maxAge": process.env.JWT_EXPIRE_TIME || ""},
+    "refresh": {"secret": process.env.RF_TOKEN_SECRET||"", "maxAge": process.env.RF_EXPIRE_TIME || ""}
+  }
   const options: VerifyOptions = {
     issuer: process.env.JWT_ISSUER,
-    maxAge: "10m"
+    maxAge: tokenTypes[type].maxAge || "15m"
   };
-  const payload = jwt.verify(jwtString, process.env.JWT_SECRET!, options);
+  const payload = jwt.verify(jwtString, tokenTypes[type].secret, options);
   return payload;
 };
 

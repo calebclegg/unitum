@@ -1,6 +1,6 @@
 import User from "../models/User";
 import { Request, Response } from "express";
-import { createRefreshToken, createToken } from "../utils/Token";
+import { createRefreshToken, createToken, decodeToken } from "../utils/Token";
 import { validateEmail } from "../validators/user.validator";
 import { normalizeGoogleData } from "../utils/dataNormalizer";
 
@@ -103,3 +103,28 @@ export const externalAuth = async (req: any, res: Response) => {
 
   return res.status(200).json({accessToken, refreshToken});
 };
+
+export const getNewAccessToken = async (req: any, res: Response) => {
+  const user = req.user
+  const refreshToken = req.body.refreshToken 
+  if(!refreshToken) return res.status(400).json({message: "refresh Token required"})
+  let tokenData;
+  try {
+    tokenData = await decodeToken(refreshToken, "refresh")
+  } catch (error) {
+    return res.status(400).json({message: "Invalid Token"})
+  }
+  if (tokenData.sub !== user.email) return res.sendStatus(401)
+
+  let dbUser;
+  try {
+    dbUser = await User.findOne({ email: tokenData.sub }).select(
+      ["+authProvider", "+password"]
+    );
+  } catch (error) {
+    return res.status(500).json({ message: "Something went wrong" });
+  }
+  const accessToken = await createToken(dbUser!)
+
+  return res.status(200).json({accessToken})
+}
