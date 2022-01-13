@@ -33,10 +33,10 @@ const AuthProviders = ({ formType }: IProps) => {
           pl: 1,
           textTransform: "capitalize",
           justifyContent: "flex-start",
-          "&:not(first-child)": {
+          "&:not(:first-of-type)": {
             py: 0.5
           },
-          "&:first-child": {
+          "&:first-of-type": {
             pt: 0.65,
             pb: 0.3
           },

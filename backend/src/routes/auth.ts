@@ -1,12 +1,14 @@
 import { Router } from "express";
 import * as controller from "../controllers/auth";
+
 import { getUser } from "../middlewares/user.middleware";
 
-const router = Router();
 import {
   validateUserRegData,
   validateUserLogData
 } from "../middlewares/auth.middleware";
+
+const router = Router();
 //set route and it's controller
 router.post("/register", validateUserRegData, controller.register);
 

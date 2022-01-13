@@ -9,10 +9,17 @@ import {
   useMediaQuery,
   useTheme
 } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 import { Box } from "@mui/system";
 import { visuallyHidden } from "@mui/utils";
-import { Form, Formik } from "formik";
+import { Form, Formik, FormikHelpers } from "formik";
 import { Link } from "react-router-dom";
+import {
+  TLoginSchema,
+  TLoginValues,
+  TRegisterSchema,
+  TRegisterValues
+} from "../lib";
 import { kebabToCapitalized } from "../utils";
 import AuthProviders from "./AuthProviders";
 
@@ -20,16 +27,25 @@ interface IProps {
   children: React.ReactNode;
   formType: "sign-up" | "sign-in";
   formFooter: React.ReactNode;
-  initialValues: Record<string, string>;
+  handleSubmit: (
+    values: Partial<TRegisterValues>,
+    actions: FormikHelpers<Partial<TRegisterValues>>
+  ) => void;
+  loadingIndicator: string;
+  initialValues: TLoginValues | TRegisterValues;
+  validationSchema: TLoginSchema | TRegisterSchema;
   title: string;
 }
 
 const FormLayout = ({
+  title,
   children,
   formType,
   formFooter,
+  handleSubmit,
   initialValues,
-  title
+  validationSchema,
+  loadingIndicator
 }: IProps) => {
   const { breakpoints } = useTheme();
   const laptop = useMediaQuery(breakpoints.up("md"));
@@ -79,13 +95,28 @@ const FormLayout = ({
           <Stack direction={laptop ? "row" : "column"} justifyContent="center">
             <section id="auth-form">
               <h2>{kebabToCapitalized(formType)} with email</h2>
-              <Formik initialValues={initialValues} onSubmit={
-                <Form id={`${formType}-form`} name={formType}>
-                  {children}
-                  <Button variant="contained" fullWidth sx={{ my: 2 }}>
-                    {kebabToCapitalized(formType)}
-                  </Button>
-                </Form>
+
+              <Formik
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                onSubmit={handleSubmit}
+              >
+                {({ isSubmitting }) => (
+                  <Form id={`${formType}-form`} name={formType}>
+                    {children}
+                    <LoadingButton
+                      type="submit"
+                      variant="contained"
+                      loading={isSubmitting}
+                      loadingIndicator={loadingIndicator}
+                      fullWidth
+                      sx={{ my: 2 }}
+                    >
+                      {kebabToCapitalized(formType)}
+                    </LoadingButton>
+                  </Form>
+                )}
+
               </Formik>
             <Typography>{formFooter}</Typography>
           </section>
