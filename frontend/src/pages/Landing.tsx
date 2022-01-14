@@ -7,10 +7,14 @@ import MuiLink from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import Box from "@mui/system/Box";
+import { styled } from "@mui/material/styles";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import logo from "../images/logo.png";
+import wave from "../images/wave-bg.svg";
 import Hero from "../components/Hero";
+import About from "../components/About";
 
 const navLinks = [
   {
@@ -23,6 +27,12 @@ const navLinks = [
   }
 ];
 
+const Image = styled("img")`
+  width: 65%;
+  position: absolute;
+  right: 0;
+`;
+
 export const Landing = () => {
   return (
     <>
@@ -33,7 +43,7 @@ export const Landing = () => {
         />
         <title>Unitum</title>
       </Helmet>
-      <AppBar elevation={0} color="transparent">
+      <AppBar position="absolute" elevation={0} color="transparent">
         <Container>
           <Toolbar
             variant="dense"
@@ -80,7 +90,13 @@ export const Landing = () => {
           </Toolbar>
         </Container>
       </AppBar>
-      <Hero />
+      <Box width="100%" position="absolute" zIndex={-1}>
+        <Image src={wave} alt="" loading="lazy" />
+      </Box>
+      <Container>
+        <Hero />
+        <About />
+      </Container>
     </>
   );
 };

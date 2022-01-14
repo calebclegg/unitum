@@ -4,25 +4,14 @@ import Container from "@mui/material/Container";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import Box from "@mui/system/Box";
-import { lighten, styled } from "@mui/material/styles";
+import { lighten } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import { socialLinks } from "./link-lists";
-import wave from "../../images/wave-bg.svg";
 import hero from "../../images/hero-image.svg";
-
-const Image = styled("img")`
-  width: 65%;
-  position: absolute;
-  right: 0;
-`;
 
 export const Hero = () => {
   return (
     <>
-      <Box width="100%" position="fixed" zIndex={-1}>
-        <Image src={wave} alt="" loading="lazy" />
-      </Box>
       <Container component="main">
         <Stack
           direction="row"
