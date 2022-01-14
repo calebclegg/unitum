@@ -8,6 +8,8 @@ import connectDB from "./config/db";
 import helmet from "helmet";
 import cors from "cors";
 import { redisConnect } from "./config/redis_connect"
+import { runSeeder } from "./seeder"
+
 //dotenv conf
 dotenv();
 
@@ -15,6 +17,8 @@ const app = express();
 
 connectDB();
 redisConnect()
+runSeeder()
+
 //Body parser setup
 app.use(express.json());
 app.use(

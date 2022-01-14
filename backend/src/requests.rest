@@ -71,10 +71,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 
 PATCH http://localhost:3000/api/users/me
 Content-Type: application/json
-Authorization: Bearer <token>
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjA4MzQ3NCwiZXhwIjoxNjQyMDg0MDc0fQ.ZQB3xHPHQazlkICyqvinN7KeyV_1pDecloaIuNiGzGE
 
 {
-    "firstname" : "Otwe",
+    "fullname" : "Otwe",
     "profile": {
         "dob": "2001-05-06",
         "education": [{
@@ -134,3 +134,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJvZHVybzIzQ
 ###
 GET http://localhost:3000/api/community/ HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJvZHVybzIzQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MTkwNzU4MCwiZXhwIjoxNjQxOTA4MTgwfQ.FG2_bGOZOktR2kvdwZ0PkrQwomU69CTsV3dzhqUZ6hY
+
+###
+
+GET http://localhost:3000/api/auth/logout
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjA4MzQ3NCwiZXhwIjoxNjQyMDg0MDc0fQ.ZQB3xHPHQazlkICyqvinN7KeyV_1pDecloaIuNiGzGE
