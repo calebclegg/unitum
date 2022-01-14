@@ -12,9 +12,11 @@ import { styled } from "@mui/material/styles";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import logo from "../images/logo.png";
-import wave from "../images/wave-bg.svg";
+import topWave from "../images/wave-bg.svg";
 import Hero from "../components/Hero";
 import About from "../components/About";
+import Contact from "../components/Contact";
+import bottomWave from "../images/bottom-wave.svg";
 
 const navLinks = [
   {
@@ -27,10 +29,18 @@ const navLinks = [
   }
 ];
 
-const Image = styled("img")`
+const TopWave = styled("img")`
   width: 65%;
   position: absolute;
   right: 0;
+  z-index: -1;
+`;
+
+const BottomWave = styled("img")`
+  width: 40%;
+  position: absolute;
+  bottom: 0;
+  z-index: -1;
 `;
 
 export const Landing = () => {
@@ -90,13 +100,17 @@ export const Landing = () => {
           </Toolbar>
         </Container>
       </AppBar>
-      <Box width="100%" position="absolute" zIndex={-1}>
-        <Image src={wave} alt="" loading="lazy" />
+      <Box width="100%" position="absolute">
+        <TopWave src={topWave} alt="" loading="lazy" />
       </Box>
       <Container id="main-content" component="main">
         <Hero />
         <About />
+        <Contact />
       </Container>
+      <Box position="relative">
+        <BottomWave src={bottomWave} alt="" loading="lazy" />
+      </Box>
     </>
   );
 };
