@@ -62,6 +62,7 @@ const FormLayout = ({
       <Container maxWidth="md">
         <nav>
           <Button
+            variant="text"
             component={Link}
             to="/"
             startIcon={<ArrowBack />}
@@ -105,7 +106,6 @@ const FormLayout = ({
                     {children}
                     <LoadingButton
                       type="submit"
-                      variant="contained"
                       loading={isSubmitting}
                       loadingIndicator={loadingIndicator}
                       fullWidth

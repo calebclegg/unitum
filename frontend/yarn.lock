@@ -1227,6 +1227,11 @@
   resolved "https://registry.yarnpkg.com/@fontsource/inter/-/inter-4.5.1.tgz#058d8a02354f3c78e369d452c15d33557ec1b705"
   integrity sha512-mvtOvXNNVLlF1p/UbLgLrmz2RCOl6Ow+TqyiK10SosoLKX7edsXYiHFHb7XIZdjII6F2sJVPPsJXWhBnbXT2DQ==
 
+"@fontsource/merriweather@^4.5.3":
+  version "4.5.3"
+  resolved "https://registry.yarnpkg.com/@fontsource/merriweather/-/merriweather-4.5.3.tgz#a3a5b23130828d5e1d968cb63125649e1ff7534a"
+  integrity sha512-R56u/DD82mA/dGdDcGcWhG2eMdsOtgE1RUro3Tx5tRBqYOcDR62nOXkNGvatPv9ItV8wGmAQiarDf56NnfSm0A==
+
 "@humanwhocodes/config-array@^0.9.2":
   version "0.9.2"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.9.2.tgz#68be55c737023009dfc5fe245d51181bb6476914"

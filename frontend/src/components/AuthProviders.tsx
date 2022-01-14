@@ -56,7 +56,6 @@ const AuthProviders = ({ formType }: IProps) => {
       {tablet ? (
         <Stack spacing={2}>
           <Button
-            variant="contained"
             startIcon={
               <img
                 src={facebook_square}
@@ -76,7 +75,6 @@ const AuthProviders = ({ formType }: IProps) => {
             {kebabToRegular(formType)} with google
           </Button>
           <Button
-            variant="contained"
             sx={{ bgcolor: "#1DA1F2" }}
             startIcon={
               <img src={twitter_square} alt="twitter" width="30" height="30" />
