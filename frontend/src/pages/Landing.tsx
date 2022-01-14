@@ -93,7 +93,7 @@ export const Landing = () => {
       <Box width="100%" position="absolute" zIndex={-1}>
         <Image src={wave} alt="" loading="lazy" />
       </Box>
-      <Container>
+      <Container id="main-content" component="main">
         <Hero />
         <About />
       </Container>

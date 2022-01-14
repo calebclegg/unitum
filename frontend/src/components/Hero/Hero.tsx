@@ -12,8 +12,10 @@ import hero from "../../images/hero-image.svg";
 export const Hero = () => {
   return (
     <>
-      <Container component="main">
+      <Container>
         <Stack
+          component="section"
+          id="hero"
           direction="row"
           alignItems="center"
           justifyContent="space-between"
