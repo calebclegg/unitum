@@ -3,11 +3,31 @@ import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, FormikHelpers } from "formik";
 import { TextField } from "formik-mui";
 import chat from "../images/chat.svg";
+import {
+  API,
+  contactSchema,
+  initialContactDetails,
+  TContactDetails
+} from "../lib";
 
 const Contact = () => {
+  const handleSubmit = async (
+    values: TContactDetails,
+    { setSubmitting }: FormikHelpers<TContactDetails>
+  ) => {
+    try {
+      const data = await API.post("contact", values);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <Stack
       id="contact-us"
@@ -42,7 +62,11 @@ const Contact = () => {
           >
             Enter your details
           </Typography>
-          <Formik initialValues={{}} onSubmit={console.log}>
+          <Formik
+            initialValues={initialContactDetails}
+            validationSchema={contactSchema}
+            onSubmit={handleSubmit}
+          >
             {({ isSubmitting }) => (
               <Form>
                 <Stack direction="row" mb={4} spacing={4}>
@@ -106,7 +130,7 @@ const Contact = () => {
           </Formik>
         </Paper>
       </Stack>
-      <img src={chat} alt="" width="400" />
+      <img src={chat} alt="" width="400" loading="lazy" />
     </Stack>
   );
 };
