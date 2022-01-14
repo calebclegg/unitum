@@ -105,6 +105,7 @@ const FormLayout = ({
                   <Form id={`${formType}-form`} name={formType}>
                     {children}
                     <LoadingButton
+                      variant="contained"
                       type="submit"
                       loading={isSubmitting}
                       loadingIndicator={loadingIndicator}
