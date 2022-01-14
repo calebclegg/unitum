@@ -56,8 +56,9 @@ export const Hero = () => {
               {socialLinks.map(({ icon, href, label }) => (
                 <IconButton
                   key={href}
-                  to={href}
-                  component={Link}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   aria-label={label}
                   sx={{
                     color: "grey.200",
