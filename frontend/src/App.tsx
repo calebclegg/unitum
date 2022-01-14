@@ -1,10 +1,10 @@
 import "@fontsource/inter";
-import Feed from "./pages/Feed";
-import { Route, Routes } from "react-router-dom";
-import { CssBaseline } from "@mui/material";
+import CssBaseline from "@mui/material/CssBaseline";
 import { lazy, Suspense } from "react";
+import { Route, Routes } from "react-router-dom";
 import Landing from "./pages/Landing";
 
+const Feed = lazy(() => import("./pages/Feed"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 

@@ -1,14 +1,11 @@
 import "@fontsource/merriweather/400.css";
-import {
-  Button,
-  Container,
-  IconButton,
-  lighten,
-  Stack,
-  styled,
-  Typography
-} from "@mui/material";
-import { Box } from "@mui/system";
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import IconButton from "@mui/material/IconButton";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/system/Box";
+import { lighten, styled } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import { socialLinks } from "./link-lists";
 import wave from "../../images/wave-bg.svg";

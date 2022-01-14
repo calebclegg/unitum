@@ -1,18 +1,16 @@
-import {
-  Button,
-  IconButton,
-  Stack,
-  Typography,
-  useMediaQuery,
-  useTheme
-} from "@mui/material";
-import { kebabToRegular } from "../utils";
+import { useTheme } from "@mui/material/styles";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import Box from "@mui/system/Box";
 import facebook_square from "../images/facebook-logo_square.svg";
 import facebook from "../images/facebook-logo.svg";
 import twitter_square from "../images/twitter-logo_square.svg";
 import twitter from "../images/twitter-logo.svg";
 import google from "../images/google-logo.png";
-import { Box } from "@mui/system";
+import { kebabToRegular } from "../utils";
 
 interface IProps {
   formType: string;

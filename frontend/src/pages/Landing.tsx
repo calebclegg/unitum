@@ -1,14 +1,12 @@
 import "@fontsource/merriweather/400.css";
-import { Person } from "@mui/icons-material";
-import {
-  AppBar,
-  Button,
-  Container,
-  Link as MuiLink,
-  Stack,
-  Toolbar,
-  Typography
-} from "@mui/material";
+import Person from "@mui/icons-material/Person";
+import AppBar from "@mui/material/AppBar";
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import MuiLink from "@mui/material/Link";
+import Stack from "@mui/material/Stack";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import logo from "../images/logo.png";
