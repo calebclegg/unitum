@@ -6,17 +6,17 @@ import Container from "@mui/material/Container";
 import MuiLink from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/system/Box";
 import { styled } from "@mui/material/styles";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
-import logo from "../images/logo.png";
 import topWave from "../images/wave-bg.svg";
 import Hero from "../components/Hero";
 import About from "../components/About";
 import Contact from "../components/Contact";
 import bottomWave from "../images/bottom-wave.svg";
+import Logo from "../components/Logo";
+import Footer from "../components/Footer";
 
 const navLinks = [
   {
@@ -59,24 +59,7 @@ export const Landing = () => {
             variant="dense"
             sx={{ px: "0 !important", justifyContent: "space-between" }}
           >
-            <Stack
-              px={1.6}
-              spacing={0.5}
-              direction="row"
-              alignItems="center"
-              borderRadius={1}
-              bgcolor={({ customPalette }) => customPalette.navyBlue}
-            >
-              <img src={logo} alt="" width="30" height="40" loading="lazy" />
-              <Typography
-                color="grey.100"
-                variant="h6"
-                component="span"
-                fontFamily="'Merriweather', Times new Roman"
-              >
-                UNITUM
-              </Typography>
-            </Stack>
+            <Logo />
             <Stack spacing={5} direction="row" alignItems="center">
               {navLinks.map(({ label, path }) => (
                 <MuiLink
@@ -111,6 +94,7 @@ export const Landing = () => {
       <Box position="relative">
         <BottomWave src={bottomWave} alt="" loading="lazy" />
       </Box>
+      <Footer />
     </>
   );
 };
