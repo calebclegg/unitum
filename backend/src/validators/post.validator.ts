@@ -22,3 +22,10 @@ export const validatePostEditData = async (data: IPost) => {
   });
   return Schema.validate(data);
 };
+
+export const validateCommentCreateData = async (data: IComment) => {
+  const Schema = Joi.object<IComment>({
+    text: Joi.string().required()
+  });
+  return Schema.validate(data);
+};

@@ -1,7 +1,8 @@
 import { Response } from "express";
 import { Types } from "mongoose";
-import { PostModel } from "../models/Post";
+import { CommentModel, PostModel } from "../models/Post";
 import {
+  validateCommentCreateData,
   validatePostCreateData,
   validatePostEditData
 } from "../validators/post.validator";
@@ -121,6 +122,53 @@ export const updatePost = async (req: any, res: Response) => {
     );
     if (!updatedPost) return res.sendStatus(404);
     return res.status(200).json(updatedPost);
+  } catch (error) {
+    return res.sendStatus(500);
+  }
+};
+
+export const getPostComments = async (req: any, res: Response) => {
+  const user = req.user;
+  const postID = new Types.ObjectId(req.params.postID);
+  try {
+    const comments = CommentModel.find({ postID: postID })
+      .select(["-__v"])
+      .sort(-1);
+    return res.status(200).json(comments);
+  } catch (error) {
+    return res.sendStatus(500);
+  }
+};
+
+export const addPostComment = async (req: any, res: Response) => {
+  const postID = new Types.ObjectId(req.params.postID);
+  const valData = await validateCommentCreateData(req.body);
+  const post = await PostModel.findOne({ postID: postID });
+  if (!post) return res.status(404).json({ message: "Post not found" });
+  if (post.communityID) {
+    const userCommunities = req.user.communities.map(
+      (commID: Types.ObjectId) => {
+        return commID.toString();
+      }
+    );
+    if (!userCommunities.includes(post.communityID.toString))
+      return res.status(401).json({ message: "Cannot comment on this post" });
+  }
+
+  let errors;
+  if (valData.error) {
+    errors = valData.error.details.map((error) => ({
+      label: error.context?.label,
+      message: error.message
+    }));
+    return res
+      .status(400)
+      .json({ message: "Some fields are invalid/required", errors: errors });
+  }
+  try {
+    const newComment = await new CommentModel(valData.value).save();
+    post.comments?.push(newComment._id);
+    post.save();
   } catch (error) {
     return res.sendStatus(500);
   }

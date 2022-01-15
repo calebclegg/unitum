@@ -13,7 +13,7 @@ export interface IPost {
   body: string;
   media: string[];
   numberOfComments?: number;
-  comments?: [Types.ObjectId];
+  comments?: Types.ObjectId[];
   upvotes?: number;
   createdAt?: Date;
   updatedAt?: Date;
