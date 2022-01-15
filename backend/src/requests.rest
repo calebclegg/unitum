@@ -140,3 +140,47 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJvZHVybzIzQ
 GET http://localhost:3000/api/auth/logout
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjA4MzQ3NCwiZXhwIjoxNjQyMDg0MDc0fQ.ZQB3xHPHQazlkICyqvinN7KeyV_1pDecloaIuNiGzGE
+
+###
+
+GET http://localhost:3000/api/posts
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjI1MjUwNCwiZXhwIjoxNjQyMjUzMTA0fQ.rJrQHNZZnB8_I1KzPpLrz8-aXmfBZpue5-3n1U0ZvvQ
+
+###
+
+POST http://localhost:3000/api/posts
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjI2MjQzNSwiZXhwIjoxNjQyMjYzMDM1fQ.tWWoDx4cDs2LmMwZguK_vc-mvE2smzUFjaQ8k3Mz1RQ
+
+{
+    "body": "Post about Django"
+}
+
+###
+
+PATCH http://localhost:3000/api/posts/61e2e5732109548feff1ca36
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjI1OTc5MiwiZXhwIjoxNjQyMjYwMzkyfQ.r0BSgxcHHrR-OQ7hudJ-EnY0p5dvvOcizh8FTcmalpw
+
+{
+    "body": "This is the first post for testing"
+}
+
+####
+
+GET http://localhost:3000/api/posts
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjI1OTc5MiwiZXhwIjoxNjQyMjYwMzkyfQ.r0BSgxcHHrR-OQ7hudJ-EnY0p5dvvOcizh8FTcmalpw
+
+###
+
+GET http://localhost:3000/api/posts/61e2e5732109548feff1ca36
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjI2MDU3NCwiZXhwIjoxNjQyMjYxMTc0fQ.boJSuIGrhvAf8FKWIgsBCqLb49GVtMq6J_pL66J_97g
+
+###
+
+DELETE http://localhost:3000/api/posts/61e2f0779424a1f0e1c5e348
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjI2MjQzNSwiZXhwIjoxNjQyMjYzMDM1fQ.tWWoDx4cDs2LmMwZguK_vc-mvE2smzUFjaQ8k3Mz1RQ

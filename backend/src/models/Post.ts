@@ -3,7 +3,7 @@ import { IPost, IComment } from "../types/post";
 
 const commentSchema = new Schema<IComment>(
   {
-    userID: {
+    author: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: "User"
@@ -23,7 +23,7 @@ const commentSchema = new Schema<IComment>(
 
 export const postSchema = new Schema<IPost>(
   {
-    userID: {
+    author: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: "User"
@@ -32,16 +32,20 @@ export const postSchema = new Schema<IPost>(
       type: Schema.Types.ObjectId,
       ref: "Community"
     },
-    text: {
+    body: {
       type: String,
       required: true
+    },
+    media: {
+      type: [String]
     },
     numberOfComments: {
       type: Number,
       default: 0
     },
     comments: {
-      type: [commentSchema]
+      type: [Schema.Types.ObjectId],
+      ref: "Comment"
     },
     upvotes: {
       type: Number,

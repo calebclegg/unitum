@@ -1,16 +1,20 @@
 import { Types } from "mongoose";
 
 export interface IComment {
-  userID: Types.ObjectId;
+  author: Types.ObjectId;
   postID: Types.ObjectId;
   text: string;
   createdAt?: Date;
+  updatedAt?: Date;
 }
 export interface IPost {
-  userID: Types.ObjectId;
+  author: Types.ObjectId;
   communityID: Types.ObjectId;
-  text: string;
+  body: string;
+  media: string[];
   numberOfComments?: number;
-  comments?: [IComment];
+  comments?: [Types.ObjectId];
   upvotes?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
