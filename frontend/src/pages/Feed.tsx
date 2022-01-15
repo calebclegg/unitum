@@ -1,7 +1,9 @@
+import TopBar from "../components/TopBar";
+
 const Feed = () => {
   return (
     <>
-      <h1>Feed</h1>
+      <TopBar />
     </>
   );
 };

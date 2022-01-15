@@ -82,3 +82,13 @@ theme.components = {
     }
   }
 };
+
+export const darkTheme = createTheme(theme, {
+  palette: {
+    mode: "dark",
+    text: {
+      primary: theme.palette.grey[100],
+      secondary: theme.palette.grey[300]
+    }
+  }
+});
