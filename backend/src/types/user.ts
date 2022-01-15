@@ -15,6 +15,8 @@ interface IEducation {
 }
 
 interface IProfile {
+  fullname?: string;
+  picture?: string;
   dob?: Date;
   education?: IEducation[];
   communities?: Types.ObjectId[];
@@ -22,9 +24,10 @@ interface IProfile {
 }
 
 interface IUSer {
-  fullname: string,
+  fullname: string;
   password?: string;
   role?: Role;
+  picture?: string;
   authProvider: string;
   email?: string;
   profile?: IProfile;
