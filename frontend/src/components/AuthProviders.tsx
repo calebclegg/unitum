@@ -1,27 +1,23 @@
-import {
-  Button,
-  IconButton,
-  Stack,
-  Typography,
-  useMediaQuery,
-  useTheme
-} from "@mui/material";
-import { kebabToRegular } from "../utils";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/system/Box";
 import facebook_square from "../images/facebook-logo_square.svg";
 import facebook from "../images/facebook-logo.svg";
 import twitter_square from "../images/twitter-logo_square.svg";
 import twitter from "../images/twitter-logo.svg";
 import google from "../images/google-logo.png";
-import { Box } from "@mui/system";
+import { kebabToRegular } from "../utils";
+import { useDisplaySize } from "../hooks";
 
 interface IProps {
   formType: string;
 }
 
 const AuthProviders = ({ formType }: IProps) => {
-  const { breakpoints } = useTheme();
-  const tablet = useMediaQuery(breakpoints.up("sm"));
-  const laptop = useMediaQuery(breakpoints.up("md"));
+  const tabletUp = useDisplaySize("sm");
+  const laptopUp = useDisplaySize("md");
 
   return (
     <Box
@@ -48,15 +44,14 @@ const AuthProviders = ({ formType }: IProps) => {
       }}
     >
       <h2>{kebabToRegular(formType)} with providers</h2>
-      {laptop && (
+      {laptopUp && (
         <Typography align="center" color="GrayText" sx={{ my: 2 }}>
           OR
         </Typography>
       )}
-      {tablet ? (
+      {tabletUp ? (
         <Stack spacing={2}>
           <Button
-            variant="contained"
             startIcon={
               <img
                 src={facebook_square}
@@ -76,7 +71,6 @@ const AuthProviders = ({ formType }: IProps) => {
             {kebabToRegular(formType)} with google
           </Button>
           <Button
-            variant="contained"
             sx={{ bgcolor: "#1DA1F2" }}
             startIcon={
               <img src={twitter_square} alt="twitter" width="30" height="30" />
