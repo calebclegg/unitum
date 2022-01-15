@@ -6,7 +6,11 @@ import { communities } from "./data/community";
 import User from "./models/User"
 import CommunityModel from "./models/Community";
 import { PostModel } from "./models/Post"
-import connectDB from "./config/db.js";
+import connectDB from "./config/db";
+import { config } from "dotenv-flow";
+
+config()
+const db = connectDB()
 
 export const importData = async () => {
   console.log("Importing data ...")
@@ -28,8 +32,12 @@ export const importData = async () => {
 
 
     console.log("Data Imported!");
+    (await db).connection.close()
+    process.exit()
   } catch (error) {
     console.error(`${error}`);
+    (await db).connection.close()
+    process.exit(1)
   }
 };
 
@@ -40,8 +48,12 @@ export const destroyData = async () => {
     await PostModel.deleteMany();
 
     console.log("Data Destroyed!");
+    (await db).connection.close()
+    process.exit()
   } catch (error) {
     console.error(`${error}`);
+    (await db).connection.close()
+    process.exit(1)
   }
 };
 
@@ -50,8 +62,8 @@ export const runSeeder = async () => {
     await importData()
   }
 }
-// if (process.argv[2] === "-d") {
-//   destroyData();
-// } else {
-//   importData();
-// }
+if (process.argv[2] === "-d") {
+  destroyData();
+} else {
+  importData();
+}
