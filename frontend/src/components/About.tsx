@@ -3,7 +3,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import { useDisplaySize } from "../hooks";
-import discussing from "../images/Image.svg";
+import discussing from "../images/Image.png";
 
 const Image = styled("img")(({ theme }) => ({
   width: "100%",

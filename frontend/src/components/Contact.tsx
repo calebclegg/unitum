@@ -92,10 +92,10 @@ const Contact = () => {
                 >
                   <Field
                     component={TextField}
-                    margin="normal"
                     name="fullName"
                     type="fullName"
                     label="Full Name"
+                    margin="normal"
                     variant="standard"
                     placeholder="John Doe"
                     fullWidth
@@ -106,6 +106,7 @@ const Contact = () => {
                     name="email"
                     type="email"
                     label="Email Address"
+                    margin="normal"
                     variant="standard"
                     fullWidth
                     required
