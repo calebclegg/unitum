@@ -3,6 +3,7 @@ import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import LoadingButton from "@mui/lab/LoadingButton";
+import { styled } from "@mui/material/styles";
 import { Formik, Form, Field, FormikHelpers } from "formik";
 import { TextField } from "formik-mui";
 import chat from "../images/chat.svg";
@@ -12,6 +13,10 @@ import {
   initialContactDetails,
   TContactDetails
 } from "../lib";
+
+const ChatImage = styled("img")`
+  width: 40%;
+`;
 
 const Contact = () => {
   const handleSubmit = async (
@@ -34,11 +39,11 @@ const Contact = () => {
       component="section"
       aria-labelledby="contact-us-heading"
       direction="row"
-      alignItems="center"
+      alignItems="flex-end"
       justifyContent="space-between"
       minHeight="100vh"
     >
-      <Stack spacing={3}>
+      <Stack gap={2}>
         <Typography
           id="contact-us-heading"
           variant="h3"
@@ -52,12 +57,13 @@ const Contact = () => {
         </Typography>
         <Paper
           variant="outlined"
-          sx={{ p: 8, mt: 3, borderColor: "secondary.main" }}
+          sx={{ p: 6, mt: 3, mb: 5, borderColor: "secondary.main" }}
         >
           <Typography
             color="secondary"
             variant="h4"
             component="h3"
+            fontWeight={500}
             sx={{ mb: 2 }}
           >
             Enter your details
@@ -113,7 +119,7 @@ const Contact = () => {
                   required
                   fullWidth
                 />
-                <Stack direction="row" justifyContent="flex-end" mt={3}>
+                <Stack direction="row" justifyContent="flex-end" mt={4}>
                   <LoadingButton
                     type="submit"
                     color="secondary"
@@ -130,7 +136,7 @@ const Contact = () => {
           </Formik>
         </Paper>
       </Stack>
-      <img src={chat} alt="" width="400" loading="lazy" />
+      <ChatImage src={chat} alt="" width="500" loading="lazy" />
     </Stack>
   );
 };

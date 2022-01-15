@@ -13,7 +13,7 @@ const Footer = () => {
   const { customPalette } = useTheme();
 
   return (
-    <Box py={5} component="footer" bgcolor={customPalette.navyBlue}>
+    <Box py={8} component="footer" bgcolor={customPalette.navyBlue}>
       <Container>
         <Stack
           direction="row"
