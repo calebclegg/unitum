@@ -1,8 +1,9 @@
 import User from "../models/User";
 import { Request, Response } from "express";
-import { createToken } from "../utils/Token";
+import { createRefreshToken, createToken, decodeToken } from "../utils/Token";
 import { validateEmail } from "../validators/user.validator";
 import { normalizeGoogleData } from "../utils/dataNormalizer";
+import { saveRefreshToken, deleteRefreshToken } from "../utils/Token";
 
 export const register = async (req: Request, res: Response) => {
   const newUser = new User({
@@ -12,10 +13,16 @@ export const register = async (req: Request, res: Response) => {
   });
   try {
     const savedUser = await newUser.save();
-    const tokenData = await createToken(savedUser);
+    const accessToken = await createToken(savedUser);
+    const refreshToken = await createRefreshToken(savedUser)
+    try {
+      await saveRefreshToken(req.body.email, refreshToken)
+    } catch( error ) {
+      console.log("Unable to save refresh token")
+    }
     res
       .status(201)
-      .json({ message: "User Registered Successfully", data: tokenData });
+      .json({ accessToken, refreshToken });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
   }
@@ -27,8 +34,14 @@ export const login = async (req: any, res: Response) => {
   if (!isVerified)
     return res.status(400).json({ message: "Password is incorrect" });
 
-  const tokenData = await createToken(user);
-  return res.status(200).json({ ...tokenData });
+  const accessToken = await createToken(user);
+  const refreshToken = await createRefreshToken(user);
+  try {
+    await saveRefreshToken(user.email, refreshToken)
+  } catch( error ) {
+    console.log("Unable to save refresh token")
+  }
+  return res.status(200).json({accessToken, refreshToken});
 };
 
 export const checkAuthProvider = async (req: Request, res: Response) => {
@@ -76,15 +89,21 @@ export const externalAuth = async (req: any, res: Response) => {
   } catch (error) {
     return res.status(500).json({ message: "Something went wrong" });
   }
-  let tokenData;
+  let accessToken, refreshToken;
   if (!dbUser) {
     const newUser = new User({
       ...userData
     });
     try {
       const savedUser = await newUser.save();
-      tokenData = await createToken(savedUser);
-      return res.status(201).json({ ...tokenData });
+     accessToken = await createToken(savedUser);
+     refreshToken = await createRefreshToken(savedUser)
+     try {
+      await saveRefreshToken(savedUser.email!, refreshToken)
+    } catch( error ) {
+      console.log("Unable to save refresh token")
+    }
+      return res.status(201).json({accessToken, refreshToken});
     } catch (error) {
       return res.status(500).json({ message: "Something went wrong" });
     }
@@ -95,6 +114,48 @@ export const externalAuth = async (req: any, res: Response) => {
     });
   }
 
-  tokenData = await createToken(dbUser);
-  return res.status(200).json({ ...tokenData });
+  accessToken = await createToken(dbUser);
+  refreshToken = await createToken(dbUser);
+  try {
+    await saveRefreshToken(dbUser.email!, refreshToken)
+  } catch( error ) {
+    console.log("Unable to save refresh token")
+  }
+
+  return res.status(200).json({accessToken, refreshToken});
 };
+
+export const getNewAccessToken = async (req: any, res: Response) => {
+  const user = req.user
+  const refreshToken = req.body.refreshToken 
+  if(!refreshToken) return res.status(400).json({message: "refresh Token required"})
+  let tokenData;
+  try {
+    tokenData = await decodeToken(refreshToken, "refresh")
+  } catch (error) {
+    return res.status(400).json({message: "Invalid Token"})
+  }
+  if (tokenData.sub !== user.email) return res.sendStatus(401)
+
+  let dbUser;
+  try {
+    dbUser = await User.findOne({ email: tokenData.sub }).select(
+      ["+authProvider", "+password"]
+    );
+  } catch (error) {
+    return res.status(500).json({ message: "Something went wrong" });
+  }
+  const accessToken = await createToken(dbUser!)
+
+  return res.status(200).json({accessToken})
+}
+
+export const logout =async (req:any, res: Response) => {
+  const user = req.user
+  try {
+    await deleteRefreshToken(user.email)
+    return res.sendStatus(200)
+  } catch(error) {
+    return res.sendStatus(500)
+  }
+}

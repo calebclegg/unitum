@@ -7,14 +7,14 @@ import morgan from "morgan";
 import connectDB from "./config/db";
 import helmet from "helmet";
 import cors from "cors";
-
+import { redisConnect } from "./config/redis_connect"
 //dotenv conf
 dotenv();
 
 const app = express();
 
 connectDB();
-
+redisConnect()
 //Body parser setup
 app.use(express.json());
 app.use(

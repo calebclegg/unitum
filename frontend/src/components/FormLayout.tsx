@@ -96,6 +96,7 @@ const FormLayout = ({
           >
             <section id="auth-form">
               <h2>{kebabToCapitalized(formType)} with email</h2>
+
               <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}

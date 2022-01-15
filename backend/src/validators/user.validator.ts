@@ -23,9 +23,7 @@ const profileSchema = Joi.object({
 
 function validateRegUser(data: IUSer) {
   const userSchema = Joi.object({
-    firstname: Joi.string().min(2).max(20).required(),
-    lastname: Joi.string().min(2).max(20).required(),
-    otherNames: Joi.string().min(2).max(20),
+    fullname: Joi.string().min(2).max(20),
     email: Joi.string().email().required(),
     password: Joi.string().min(6).required(),
     profile: profileSchema
@@ -52,9 +50,7 @@ const validateEmail = (data: { email: string }) => {
 
 export const validateUserUpdate = async (data: IUSer) => {
   const userUpdateSchema = Joi.object({
-    firstname: Joi.string(),
-    lastname: Joi.string(),
-    otherNames: Joi.string(),
+    fullname: Joi.string(),
     profile: profileSchema
   }).options({ abortEarly: false });
 
