@@ -54,7 +54,7 @@ export const editCommunity = async (req: any, res: Response) => {
   try {
     const updatedCommunity = await CommunityModel.findByIdAndUpdate(
       { _id: commID },
-      valData.value
+      valData.value, {new: true}
     );
     return res.status(200).json(updatedCommunity);
   } catch (error) {

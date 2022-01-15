@@ -20,7 +20,7 @@ export const updateUserInfo = async (req: any, res: Response) => {
   }
   const updatedUser = await User.findOneAndUpdate(
     { email: user.email },
-    valData.value
+    valData.value, {new: true}
   );
-  return res.send("done ...");
+  return res.send(updatedUser);
 };
