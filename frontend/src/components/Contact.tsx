@@ -93,9 +93,7 @@ const Contact = () => {
                   <Field
                     component={TextField}
                     name="fullName"
-                    type="fullName"
                     label="Full Name"
-                    margin="normal"
                     variant="standard"
                     placeholder="John Doe"
                     fullWidth
@@ -106,7 +104,6 @@ const Contact = () => {
                     name="email"
                     type="email"
                     label="Email Address"
-                    margin="normal"
                     variant="standard"
                     fullWidth
                     required
@@ -115,7 +112,6 @@ const Contact = () => {
                 <Field
                   component={TextField}
                   name="message"
-                  type="message"
                   label={tabletUp ? "Type your message here" : "Message"}
                   margin="normal"
                   variant="standard"
