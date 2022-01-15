@@ -2,27 +2,52 @@ import { DataStoredInToken } from "../types/token";
 import { IUSer } from "../types/user";
 import jwt from "jsonwebtoken";
 import { JwtPayload, VerifyOptions } from "jsonwebtoken";
+import { redisConnect, redisClient } from "../config/redis_connect";
 
 export const createToken = async (user: IUSer) => {
   const secret = process.env.JWT_SECRET;
-  console.log(typeof secret);
   const expiresIn = process.env.JWT_EXPIRE_TIME;
   const dataStoredInToken: JwtPayload = {
     sub: user.email,
     iss: process.env.JWT_ISSUER
   };
   const token = jwt.sign(dataStoredInToken, secret!, { expiresIn: "10m" });
-  return {
-    expiresIn: +expiresIn!,
-    token: token
-  };
+  return token
 };
 
-export const decodeToken = async (jwtString: string) => {
+export const createRefreshToken = async (user: IUSer) => {
+  const secret = process.env.RF_TOKEN_SECRET;
+  const expiresIn = process.env.RF_TOKEN_EX;
+  
+  const dataStoredInToken: JwtPayload = {
+    sub: user.email,
+    iss: process.env.JWT_ISSUER
+  };
+  const token = jwt.sign(dataStoredInToken, secret!, { expiresIn: expiresIn });
+  return token
+};
+
+export const decodeToken = async (jwtString: string, type: string) => {
+  const tokenTypes:Record<string,Record<string, string>> = {
+    "access": {"secret": process.env.JWT_SECRET||"", "maxAge": process.env.JWT_EXPIRE_TIME || ""},
+    "refresh": {"secret": process.env.RF_TOKEN_SECRET||"", "maxAge": process.env.RF_EXPIRE_TIME || ""}
+  }
   const options: VerifyOptions = {
     issuer: process.env.JWT_ISSUER,
-    maxAge: "10m"
+    maxAge: tokenTypes[type].maxAge || "15m"
   };
-  const payload = jwt.verify(jwtString, process.env.JWT_SECRET!, options);
+  const payload = jwt.verify(jwtString, tokenTypes[type].secret, options);
   return payload;
 };
+
+
+export const saveRefreshToken = async (email: string, token: string) => {
+  await redisConnect()
+  await redisClient.execute(["SET", email, token])
+  await redisClient.execute(["expire", email,  691200])
+}
+
+export const deleteRefreshToken = async (email: string) => {
+  await redisConnect()
+  await redisClient.execute(["DEL", email])
+}

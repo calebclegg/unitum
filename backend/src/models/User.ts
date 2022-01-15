@@ -39,14 +39,9 @@ const profileSchema = new Schema<IProfile>({
 
 const userSchema = new Schema<IUSer>(
   {
-    firstname: {
-      type: String,
-      required: true
-    },
-    lastname: {
-      type: String,
-      required: true
-    },
+   fullname: {
+     type: String,
+   },
     password: {
       type: String,
       select: false
@@ -54,9 +49,6 @@ const userSchema = new Schema<IUSer>(
     email: {
       type: String,
       unique: true
-    },
-    otherNames: {
-      type: String
     },
     authProvider: {
       type: String,

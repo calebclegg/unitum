@@ -95,6 +95,7 @@ const FormLayout = ({
           <Stack direction={laptop ? "row" : "column"} justifyContent="center">
             <section id="auth-form">
               <h2>{kebabToCapitalized(formType)} with email</h2>
+
               <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
@@ -115,24 +116,25 @@ const FormLayout = ({
                     </LoadingButton>
                   </Form>
                 )}
+
               </Formik>
-              <Typography>{formFooter}</Typography>
-            </section>
-            {laptop ? (
-              <Divider
-                sx={{ mx: 5, height: "inherit" }}
-                orientation="vertical"
-              />
-            ) : (
-              <Divider sx={{ mt: 4, mb: 3 }}>
-                Or {kebabToCapitalized(formType)} with
-              </Divider>
-            )}
-            <AuthProviders formType={formType} />
-          </Stack>
-        </Paper>
-      </Container>
-    </Box>
+            <Typography>{formFooter}</Typography>
+          </section>
+          {laptop ? (
+            <Divider
+              sx={{ mx: 5, height: "inherit" }}
+              orientation="vertical"
+            />
+          ) : (
+            <Divider sx={{ mt: 4, mb: 3 }}>
+              Or {kebabToCapitalized(formType)} with
+            </Divider>
+          )}
+          <AuthProviders formType={formType} />
+        </Stack>
+      </Paper>
+    </Container>
+    </Box >
   );
 };
 

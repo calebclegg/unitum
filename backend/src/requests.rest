@@ -2,16 +2,16 @@ POST http://localhost:3000/api/auth/register
 Content-Type: application/json
 
 {
-    "firstname": "Rex",
-    "lastname": "Osei",
+    "fullname": "Rex Osei",
     "email": "rexosei111@gmail.com",
     "password": "rexosei111"
 }
 ###
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
 
 {
-    "firstname": "Oware",
-    "lastname": "Derek",
+    "fullname": "Derek Oware",
     "email": "Dchole@gmail.com",
     "password": "testuser",
     "profile": {
@@ -48,8 +48,8 @@ POST  http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "rexosei111@gmail.com",
-    "password": "rexosei111"
+   "email": "rexosei111@gmail.com",
+   "password": "rexosei111"
 }
 
 ###
@@ -65,7 +65,7 @@ Content-Type: application/json
 
 GET http://localhost:3000/api/users/me
 Content-Type: application/json
-Authorization: Bearer <token>
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjA2OTgwMCwiZXhwIjoxNjQyMDcwNDAwfQ.DsgecpKkZeVRjtYxKEpDfnD5648dVR-YL4mjCfr8LYc
 
 ###
 
@@ -89,6 +89,15 @@ Authorization: Bearer <token>
         "unicoyn": 21
 
     }
+}
+
+###
+GET http://localhost:3000/api/auth/token
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjA4MDkzNywiZXhwIjoxNjQyMDgxNTM3fQ.YH2WYVDdOMbCvtwzxg1wP-qN221Mp4vkTfuvWthCbH8
+
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjA4MDkzNywiZXhwIjoxNjQyNjg1NzM3fQ.6b_Eusnmt8RWssAu0j3KxMUAY9N-_26CFJwGMIBXiGo"
 }
 
 ###

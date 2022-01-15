@@ -22,10 +22,8 @@ interface IProfile {
 }
 
 interface IUSer {
-  firstname: string;
-  lastname: string;
+  fullname: string,
   password?: string;
-  otherNames?: string;
   role?: Role;
   authProvider: string;
   email?: string;
