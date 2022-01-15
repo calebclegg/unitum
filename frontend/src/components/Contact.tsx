@@ -6,19 +6,22 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { styled } from "@mui/material/styles";
 import { Formik, Form, Field, FormikHelpers } from "formik";
 import { TextField } from "formik-mui";
-import chat from "../images/chat.svg";
 import {
   API,
   contactSchema,
   initialContactDetails,
   TContactDetails
 } from "../lib";
+import { useDisplaySize } from "../hooks";
+import chat from "../images/chat.svg";
 
 const ChatImage = styled("img")`
   width: 40%;
 `;
 
 const Contact = () => {
+  const tabletUp = useDisplaySize("sm");
+
   const handleSubmit = async (
     values: TContactDetails,
     { setSubmitting }: FormikHelpers<TContactDetails>
@@ -43,16 +46,22 @@ const Contact = () => {
       justifyContent="space-between"
       minHeight="100vh"
     >
-      <Stack gap={2}>
+      <Stack gap={2} width={tabletUp ? "52%" : "100%"}>
         <Typography
           id="contact-us-heading"
           variant="h3"
           component="h2"
           fontWeight={600}
+          align={tabletUp ? undefined : "center"}
         >
           Contact Us
         </Typography>
-        <Typography color="secondary" variant="h6" component="p">
+        <Typography
+          color="secondary"
+          variant="h6"
+          component="p"
+          align={tabletUp ? undefined : "center"}
+        >
           Get In Touch
         </Typography>
         <Paper
@@ -64,6 +73,7 @@ const Contact = () => {
             variant="h4"
             component="h3"
             fontWeight={500}
+            align={tabletUp ? undefined : "center"}
             sx={{ mb: 2 }}
           >
             Enter your details
@@ -75,31 +85,21 @@ const Contact = () => {
           >
             {({ isSubmitting }) => (
               <Form>
-                <Stack direction="row" mb={4} spacing={4}>
+                <Stack
+                  direction={tabletUp ? "row" : "column"}
+                  alignItems="center"
+                  spacing={4}
+                >
                   <Field
                     component={TextField}
-                    name="firstName"
-                    type="firstName"
-                    label="First Name"
+                    margin="normal"
+                    name="fullName"
+                    type="fullName"
+                    label="Full Name"
                     variant="standard"
+                    placeholder="John Doe"
+                    fullWidth
                     required
-                  />
-                  <Field
-                    component={TextField}
-                    name="lastName"
-                    type="lastName"
-                    label="Last Name"
-                    variant="standard"
-                    required
-                  />
-                </Stack>
-                <Stack direction="row" mb={4} spacing={4}>
-                  <Field
-                    component={TextField}
-                    name="phone"
-                    type="phone"
-                    label="Phone"
-                    variant="standard"
                   />
                   <Field
                     component={TextField}
@@ -107,6 +107,7 @@ const Contact = () => {
                     type="email"
                     label="Email Address"
                     variant="standard"
+                    fullWidth
                     required
                   />
                 </Stack>
@@ -114,12 +115,19 @@ const Contact = () => {
                   component={TextField}
                   name="message"
                   type="message"
-                  label="Type your message here"
+                  label={tabletUp ? "Type your message here" : "Message"}
+                  margin="normal"
                   variant="standard"
+                  rows={3}
                   required
+                  multiline
                   fullWidth
                 />
-                <Stack direction="row" justifyContent="flex-end" mt={4}>
+                <Stack
+                  direction="row"
+                  justifyContent={tabletUp ? "flex-end" : "center"}
+                  mt={4}
+                >
                   <LoadingButton
                     type="submit"
                     color="secondary"
@@ -136,7 +144,7 @@ const Contact = () => {
           </Formik>
         </Paper>
       </Stack>
-      <ChatImage src={chat} alt="" width="500" loading="lazy" />
+      {tabletUp && <ChatImage src={chat} alt="" width="500" loading="lazy" />}
     </Stack>
   );
 };

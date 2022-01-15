@@ -6,8 +6,9 @@ import Container from "@mui/material/Container";
 import MuiLink from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import Box from "@mui/system/Box";
-import { styled } from "@mui/material/styles";
+import { styled, Theme } from "@mui/material/styles";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import topWave from "../images/wave-bg.svg";
@@ -44,6 +45,11 @@ const BottomWave = styled("img")`
 `;
 
 export const Landing = () => {
+  const xlUp = useMediaQuery("@media(min-width: 425px)");
+  const tabletUp = useMediaQuery(({ breakpoints }: Theme) =>
+    breakpoints.up("sm")
+  );
+
   return (
     <>
       <Helmet>
@@ -59,23 +65,29 @@ export const Landing = () => {
             variant="dense"
             sx={{ px: "0 !important", justifyContent: "space-between" }}
           >
-            <Logo />
-            <Stack spacing={5} direction="row" alignItems="center">
-              {navLinks.map(({ label, path }) => (
-                <MuiLink
-                  key={label}
-                  color={({ customPalette }) => customPalette.navyBlue}
-                  component={Link}
-                  to={path}
-                >
-                  {label}
-                </MuiLink>
-              ))}
+            <Logo full={tabletUp} />
+            <Stack
+              spacing={tabletUp ? 5 : 2}
+              direction="row"
+              alignItems="center"
+            >
+              {xlUp &&
+                navLinks.map(({ label, path }) => (
+                  <MuiLink
+                    key={label}
+                    color={({ customPalette }) => customPalette.navyBlue}
+                    component={Link}
+                    to={path}
+                    fontSize={tabletUp ? undefined : 14}
+                  >
+                    {label}
+                  </MuiLink>
+                ))}
               <Button
                 to="/login"
                 color="secondary"
                 component={Link}
-                startIcon={<Person />}
+                startIcon={tabletUp ? <Person /> : undefined}
               >
                 Login
               </Button>
@@ -83,7 +95,7 @@ export const Landing = () => {
           </Toolbar>
         </Container>
       </AppBar>
-      <Box width="100%" position="absolute">
+      <Box width="100%" position="absolute" aria-hidden>
         <TopWave src={topWave} alt="" loading="lazy" />
       </Box>
       <Container id="main-content" component="main">
@@ -91,7 +103,7 @@ export const Landing = () => {
         <About />
         <Contact />
       </Container>
-      <Box position="relative">
+      <Box position="relative" aria-hidden>
         <BottomWave src={bottomWave} alt="" loading="lazy" />
       </Box>
       <Footer />

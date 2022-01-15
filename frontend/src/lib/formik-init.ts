@@ -28,18 +28,14 @@ export type TLoginSchema = typeof loginSchema;
 export type TRegisterSchema = typeof registerSchema;
 
 export const initialContactDetails = {
-  firstName: "",
-  lastName: "",
+  fullName: "",
   email: "",
-  phone: "",
   message: ""
 };
 
 export const contactSchema = Yup.object({
-  firstName: Yup.string().required().label("First Name"),
-  lastName: Yup.string().required().label("Last Name"),
+  fullName: Yup.string().required().label("Full Name"),
   email: Yup.string().email().required().label("Email"),
-  phone: Yup.string().label("Phone"),
   message: Yup.string().required().label("Message")
 });
 

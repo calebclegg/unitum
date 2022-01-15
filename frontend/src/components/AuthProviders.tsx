@@ -1,9 +1,7 @@
-import { useTheme } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import Box from "@mui/system/Box";
 import facebook_square from "../images/facebook-logo_square.svg";
 import facebook from "../images/facebook-logo.svg";
@@ -11,15 +9,15 @@ import twitter_square from "../images/twitter-logo_square.svg";
 import twitter from "../images/twitter-logo.svg";
 import google from "../images/google-logo.png";
 import { kebabToRegular } from "../utils";
+import { useDisplaySize } from "../hooks";
 
 interface IProps {
   formType: string;
 }
 
 const AuthProviders = ({ formType }: IProps) => {
-  const { breakpoints } = useTheme();
-  const tablet = useMediaQuery(breakpoints.up("sm"));
-  const laptop = useMediaQuery(breakpoints.up("md"));
+  const tabletUp = useDisplaySize("sm");
+  const laptopUp = useDisplaySize("md");
 
   return (
     <Box
@@ -46,12 +44,12 @@ const AuthProviders = ({ formType }: IProps) => {
       }}
     >
       <h2>{kebabToRegular(formType)} with providers</h2>
-      {laptop && (
+      {laptopUp && (
         <Typography align="center" color="GrayText" sx={{ my: 2 }}>
           OR
         </Typography>
       )}
-      {tablet ? (
+      {tabletUp ? (
         <Stack spacing={2}>
           <Button
             startIcon={

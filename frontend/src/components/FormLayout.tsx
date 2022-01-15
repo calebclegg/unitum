@@ -6,9 +6,7 @@ import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import Box from "@mui/system/Box";
-import { useTheme } from "@mui/material/styles";
 import { visuallyHidden } from "@mui/utils";
 import { Form, Formik, FormikHelpers } from "formik";
 import { Link } from "react-router-dom";
@@ -19,6 +17,7 @@ import {
   TRegisterValues
 } from "../lib";
 import { kebabToCapitalized } from "../utils";
+import { useDisplaySize } from "../hooks";
 import AuthProviders from "./AuthProviders";
 
 interface IProps {
@@ -45,16 +44,15 @@ const FormLayout = ({
   validationSchema,
   loadingIndicator
 }: IProps) => {
-  const { breakpoints } = useTheme();
-  const laptop = useMediaQuery(breakpoints.up("md"));
+  const laptopUp = useDisplaySize("md");
 
   return (
     <Box
       py={2}
-      bgcolor={laptop ? undefined : "#fff"}
+      bgcolor={laptopUp ? undefined : "#fff"}
       minHeight="100vh"
       display="flex"
-      alignItems={laptop ? "center" : undefined}
+      alignItems={laptopUp ? "center" : undefined}
       justifyContent="center"
     >
       <Container maxWidth="md">
@@ -64,12 +62,13 @@ const FormLayout = ({
             component={Link}
             to="/"
             startIcon={<ArrowBack />}
-            sx={{
+            sx={({ breakpoints }) => ({
               mb: 2,
+
               [breakpoints.up("md")]: {
                 transform: "translateY(-30px)"
               }
-            }}
+            })}
           >
             Go back home
           </Button>
@@ -77,8 +76,8 @@ const FormLayout = ({
         <Paper
           component="main"
           sx={{
-            py: laptop ? 6 : undefined,
-            px: laptop ? 8 : undefined,
+            py: laptopUp ? 6 : undefined,
+            px: laptopUp ? 8 : undefined,
             "& h2": visuallyHidden
           }}
         >
@@ -87,11 +86,14 @@ const FormLayout = ({
             variant="h4"
             align="center"
             fontWeight={500}
-            sx={{ mb: laptop ? 4 : 3 }}
+            sx={{ mb: laptopUp ? 4 : 3 }}
           >
             {title}
           </Typography>
-          <Stack direction={laptop ? "row" : "column"} justifyContent="center">
+          <Stack
+            direction={laptopUp ? "row" : "column"}
+            justifyContent="center"
+          >
             <section id="auth-form">
               <h2>{kebabToCapitalized(formType)} with email</h2>
               <Formik
@@ -117,7 +119,7 @@ const FormLayout = ({
               </Formik>
               <Typography>{formFooter}</Typography>
             </section>
-            {laptop ? (
+            {laptopUp ? (
               <Divider
                 sx={{ mx: 5, height: "inherit" }}
                 orientation="vertical"

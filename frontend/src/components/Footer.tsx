@@ -1,28 +1,31 @@
-import { Link } from "react-router-dom";
-import { useTheme } from "@mui/material/styles";
 import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MuiLink from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/system/Box";
-import Logo from "./Logo";
+import { Link } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
 import { socialLinks } from "./Hero/link-lists";
+import { useDisplaySize } from "../hooks";
+import Logo from "./Logo";
 
 const Footer = () => {
   const { customPalette } = useTheme();
+  const tabletUp = useDisplaySize("sm");
 
   return (
     <Box py={8} component="footer" bgcolor={customPalette.navyBlue}>
       <Container>
         <Stack
-          direction="row"
+          spacing={tabletUp ? undefined : 8}
+          direction={tabletUp ? "row" : "column"}
           alignItems="center"
           justifyContent="space-between"
         >
-          <Logo />
+          <Logo full />
           <Stack alignItems="center" spacing={4}>
-            <Stack direction="row" gap={4}>
+            <Stack direction="row" gap={tabletUp ? 4 : 2}>
               <MuiLink
                 component={Link}
                 to="/about"
@@ -45,12 +48,12 @@ const Footer = () => {
                 Contact Us
               </MuiLink>
             </Stack>
-            <Stack direction="row" gap={4}>
+            <Stack direction="row" gap={tabletUp ? 4 : 2}>
               <MuiLink component={Link} to="/about" sx={{ color: "grey.300" }}>
                 &copy; UNITUM
               </MuiLink>
               <MuiLink component={Link} to="/terms" sx={{ color: "grey.300" }}>
-                Terms & conditions
+                Terms
               </MuiLink>
               <MuiLink
                 component={Link}
