@@ -1,6 +1,3 @@
-import mongoose from "mongoose";
-import dotenv from "dotenv";
-import colors from "colors";
 import users from "./data/users";
 import { communities } from "./data/community";
 import User from "./models/User"
