@@ -71,11 +71,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 
 PATCH http://localhost:3000/api/users/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjA4MzQ3NCwiZXhwIjoxNjQyMDg0MDc0fQ.ZQB3xHPHQazlkICyqvinN7KeyV_1pDecloaIuNiGzGE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjI2Njk1MCwiZXhwIjoxNjQyMjY3NTUwfQ.Ag1bIQEl4NVx_TSIm_1T4Of3cW8Rvlm0H5SL8wR0uCo
 
 {
-    "fullname" : "Otwe",
     "profile": {
+        "fullname" : "Otwe",
         "dob": "2001-05-06",
         "education": [{
             "school": {
@@ -151,7 +151,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 
 POST http://localhost:3000/api/posts
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjI2MjQzNSwiZXhwIjoxNjQyMjYzMDM1fQ.tWWoDx4cDs2LmMwZguK_vc-mvE2smzUFjaQ8k3Mz1RQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjI2NjU3MywiZXhwIjoxNjQyMjY3MTczfQ.aA3OYm5Vq6U8GLpRVCyarBIUsWajluqaYcjSNFqgS3o
 
 {
     "body": "Post about Django"
@@ -159,7 +159,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 
 ###
 
-PATCH http://localhost:3000/api/posts/61e2e5732109548feff1ca36
+PATCH http://localhost:3000/api/posts/61e3001c3d621515b840717e
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjI1OTc5MiwiZXhwIjoxNjQyMjYwMzkyfQ.r0BSgxcHHrR-OQ7hudJ-EnY0p5dvvOcizh8FTcmalpw
 
@@ -171,13 +171,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 
 GET http://localhost:3000/api/posts
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjI1OTc5MiwiZXhwIjoxNjQyMjYwMzkyfQ.r0BSgxcHHrR-OQ7hudJ-EnY0p5dvvOcizh8FTcmalpw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjI2NjU3MywiZXhwIjoxNjQyMjY3MTczfQ.aA3OYm5Vq6U8GLpRVCyarBIUsWajluqaYcjSNFqgS3o
 
 ###
 
-GET http://localhost:3000/api/posts/61e2e5732109548feff1ca36
+GET http://localhost:3000/api/posts/61e3001c3d621515b840717e
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjI2MDU3NCwiZXhwIjoxNjQyMjYxMTc0fQ.boJSuIGrhvAf8FKWIgsBCqLb49GVtMq6J_pL66J_97g
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjI2NjU3MywiZXhwIjoxNjQyMjY3MTczfQ.aA3OYm5Vq6U8GLpRVCyarBIUsWajluqaYcjSNFqgS3o
 
 ###
 

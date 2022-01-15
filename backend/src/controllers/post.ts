@@ -44,14 +44,14 @@ export const getPosts = async (req: any, res: Response) => {
       dbPosts = await PostModel.find({ communityID: communityID })
         .sort("createdAt")
         .select("-comments")
-        .populate("author")
+        .populate({ path: "author", select: "profile.fullname" })
         .skip(skip)
         .limit(limit);
     } else {
       dbPosts = await PostModel.find({})
         .sort("createdAt")
         .select("-comments")
-        .populate({ path: "author", select: "fullname" })
+        .populate({ path: "author", select: "profile.fullname" })
         .skip(skip)
         .limit(limit);
     }
@@ -67,7 +67,7 @@ export const getPostDetails = async (req: any, res: Response) => {
   try {
     const post = await PostModel.findOne({ _id: postID }).populate({
       path: "author",
-      select: "fullname",
+      select: "profile.fullname",
       options: { limit: 20 }
     });
     if (!post) return res.sendStatus(404);
