@@ -39,7 +39,8 @@ export const contactSchema = Yup.object({
   firstName: Yup.string().required().label("First Name"),
   lastName: Yup.string().required().label("Last Name"),
   email: Yup.string().email().required().label("Email"),
-  phone: Yup.string().required().label("Phone")
+  phone: Yup.string().label("Phone"),
+  message: Yup.string().required().label("Message")
 });
 
 export type TContactDetails = typeof initialContactDetails;
