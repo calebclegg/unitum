@@ -16,6 +16,9 @@ import { darkTheme } from "../lib";
 import { useDisplaySize } from "../hooks";
 import { Link } from "react-router-dom";
 import { Email } from "@mui/icons-material";
+import { lazy, Suspense, useState } from "react";
+
+const MenuOptions = lazy(() => import("./MenuOptions"));
 
 const MenuButton = styled("button")(({ theme }) => ({
   padding: theme.spacing(0.4, 1),
@@ -32,6 +35,12 @@ const MenuButton = styled("button")(({ theme }) => ({
 
 const TopBar = () => {
   const tabletUp = useDisplaySize("sm");
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
+  const handleOpen = (event: React.MouseEvent<HTMLButtonElement>) =>
+    setAnchorEl(event.currentTarget);
+
+  const handleClose = () => setAnchorEl(null);
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -70,7 +79,7 @@ const TopBar = () => {
                 <IconButton
                   aria-label="messages"
                   component={Link}
-                  to={tabletUp ? "#notifications" : "/notifications"}
+                  to={tabletUp ? "#messages" : "/messages"}
                   sx={{ color: "text.secondary" }}
                 >
                   <Badge
@@ -84,7 +93,7 @@ const TopBar = () => {
                 </IconButton>
               )}
               {tabletUp ? (
-                <ButtonUnstyled component={MenuButton}>
+                <ButtonUnstyled component={MenuButton} onClick={handleOpen}>
                   <Grid container spacing={1} alignItems="center">
                     <Grid item>
                       <Avatar sx={{ width: 50, height: 50 }}>U</Avatar>
@@ -112,13 +121,16 @@ const TopBar = () => {
                   </Grid>
                 </ButtonUnstyled>
               ) : (
-                <IconButton>
+                <IconButton aria-label="menu" onClick={handleOpen}>
                   <Avatar sx={{ width: 50, height: 50 }}>U</Avatar>
                 </IconButton>
               )}
             </Stack>
           </Toolbar>
         </Container>
+        <Suspense fallback={<div />}>
+          <MenuOptions anchorEl={anchorEl} handleClose={handleClose} />
+        </Suspense>
       </AppBar>
     </ThemeProvider>
   );
