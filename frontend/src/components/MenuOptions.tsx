@@ -1,5 +1,5 @@
 import Person from "@mui/icons-material/Person";
-import Settings from "@mui/icons-material/Settings";
+import ManageAccounts from "@mui/icons-material/ManageAccounts";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemText from "@mui/material/ListItemText";
@@ -15,7 +15,7 @@ const menuItems = [
   {
     path: "/account-setting",
     label: "Account Setting",
-    icon: <Settings />
+    icon: <ManageAccounts />
   }
 ];
 
@@ -33,6 +33,17 @@ const MenuOptions = ({ anchorEl, handleClose }: IProps) => {
       transformOrigin={{ vertical: "top", horizontal: "right" }}
       onClose={handleClose}
       PaperProps={{ sx: { p: 0 } }}
+      sx={{
+        "& .MuiMenuItem-gutters": {
+          px: 1,
+          mx: 1,
+          borderRadius: 1,
+
+          "&:not(:last-child)": {
+            mb: 1
+          }
+        }
+      }}
     >
       {menuItems.map(({ path, label, icon }) => (
         <MenuItem key={path} component={Link} to={path}>
