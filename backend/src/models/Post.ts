@@ -10,7 +10,6 @@ const commentSchema = new Schema<IComment>(
     },
     postID: {
       type: Schema.Types.ObjectId,
-      required: true,
       ref: "Post"
     },
     text: {
@@ -51,6 +50,10 @@ export const postSchema = new Schema<IPost>(
       type: Number,
       required: false,
       default: 0
+    },
+    upvoteBy: {
+      type: [Schema.Types.ObjectId],
+      ref: "User"
     }
   },
   { timestamps: true }

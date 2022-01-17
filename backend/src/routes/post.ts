@@ -17,4 +17,12 @@ router.delete("/:postID", getUser, controller.deletePost);
 
 // update a post
 router.patch("/:postID", getUser, controller.updatePost);
+
+router.get("/:postID/comments", getUser, controller.getPostComments);
+
+router.post("/:postID/comments", getUser, controller.addPostComment);
+
+router.patch("/:postID/upvote", getUser, controller.postLikes);
+router.delete("/comments/:commentID", getUser, controller.deleteComment);
+
 export default router;

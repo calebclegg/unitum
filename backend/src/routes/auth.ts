@@ -18,11 +18,7 @@ router.post("/authProvider", controller.checkAuthProvider);
 
 router.post("/oauth", controller.externalAuth);
 
-<<<<<<< HEAD
-router.get("/token", getUser, controller.getNewAccessToken);
-=======
 router.get("/token", controller.getNewAccessToken);
->>>>>>> feature/refreshToken
 
 router.get("/logout", getUser, controller.logout);
 

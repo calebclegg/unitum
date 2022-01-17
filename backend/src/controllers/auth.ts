@@ -27,6 +27,7 @@ export const register = async (req: Request, res: Response) => {
     }
     res.status(201).json({ accessToken, refreshToken });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Something went wrong" });
   }
 };

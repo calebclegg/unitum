@@ -2,7 +2,7 @@ import { Types } from "mongoose";
 
 export interface IComment {
   author: Types.ObjectId;
-  postID: Types.ObjectId;
+  postID?: Types.ObjectId;
   text: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -15,6 +15,7 @@ export interface IPost {
   numberOfComments?: number;
   comments?: Types.ObjectId[];
   upvotes?: number;
+  upvoteBy?: Types.ObjectId[];
   createdAt?: Date;
   updatedAt?: Date;
 }

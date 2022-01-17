@@ -82,9 +82,7 @@ userSchema.pre("save", async function (next) {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 
-  if (this.profile.fullname === undefined) {
-    this.profile.fullname = this.fullname;
-  }
+  this.profile = { fullname: this.fullname };
 });
 
 userSchema.methods.verifyPassword = async function (enteredPassword) {
