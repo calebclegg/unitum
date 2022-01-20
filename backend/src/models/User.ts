@@ -14,7 +14,10 @@ const educationSchema = new Schema<IEducation>({
     required: true
   },
   degree: String,
-
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User"
+  },
   fieldOfStudy: {
     type: String,
     required: true
@@ -32,7 +35,10 @@ const profileSchema = new Schema<IProfile>({
   fullname: String,
   picture: String,
   dob: Date,
-  education: [educationSchema],
+  education: {
+    type: [Schema.Types.ObjectId],
+    ref: "Education"
+  },
   communities: {
     type: [Types.ObjectId],
     ref: "Community"
@@ -90,5 +96,7 @@ userSchema.methods.verifyPassword = async function (enteredPassword) {
 };
 
 const User = model("User", userSchema);
+
+export const Education = model("Education", educationSchema);
 
 export default User;

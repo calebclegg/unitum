@@ -44,7 +44,7 @@ X-Auth-Provider: GOOGLE
 }
 
 ###
-POST  http://localhost:3000/api/auth/login
+POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
@@ -65,30 +65,29 @@ Content-Type: application/json
 
 GET http://localhost:3000/api/users/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjQyNTQwNywiZXhwIjoxNjQyNDI2MDA3fQ.IdzLBG9UUbVZkndvSJvShxtTmp3apOhn2LAn1cIA8Vo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjUyNzQyMCwiZXhwIjoxNjQyNTI4MDIwfQ.ym2cCG3DBAoyFbu8-JPKWzKicoDRpE_IE0caLAu5_x8
 
 ###
 
-PATCH http://localhost:3000/api/users/me
+PATCH http://localhost:3000/api/users/me/education/61e6a359030e9778c7a10e3c
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjI2Njk1MCwiZXhwIjoxNjQyMjY3NTUwfQ.Ag1bIQEl4NVx_TSIm_1T4Of3cW8Rvlm0H5SL8wR0uCo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjUwNTM4MiwiZXhwIjoxNjQyNTA1OTgyfQ.BYhTaRycJfcZYe8PZSstE1TyoLco_SUUSkqT4xzvwFI
 
 {
-    "profile": {
-        "fullname" : "Otwe",
-        "dob": "2001-05-06",
-        "education": [{
-            "school": {
-                "name": "University of Mines"
-            },
-            "degree": "Bsc. Computer Science",
-            "fieldOfStudy": "Computer Science",
-            "startDate": "2019-09-02",
-            "grade": 83
-        }],
-        "unicoyn": 21
+   "fieldOfStudy": "Mechanical Engineering"
+}
 
-    }
+###
+POST http://localhost:3000/api/users/me/education
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjUwNDY3NCwiZXhwIjoxNjQyNTA1Mjc0fQ.LpDYC0SwRVIssQt8CSw4ckCggIHR3O_u83iELCGDRJU
+
+{
+    "school": {
+        "name": "University of mines and technology"
+    },
+    "startDate": "2001-05-06",
+    "fieldOfStudy": "Computer Science"
 }
 
 ###
@@ -121,19 +120,48 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 }
 
 ###
-DELETE http://localhost:3000/api/community/61dd56400490b314f131119d
+DELETE http://localhost:3000/api/community/61e6a1cdf0702f0c7e9fecba
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MTkwMzI0OCwiZXhwIjoxNjQxOTAzODQ4fQ.j0BP61tb_zr9aMSf1ndu08KKfIHnEq4aJWg3Dyd8TU8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJvaGVuZXNldHd1bWFzaUBnbWFpbC5jb20iLCJpc3MiOiJ1bml0dW06cGxhdGZvcm0iLCJpYXQiOjE2NDI1MDgxNTcsImV4cCI6MTY0MjUwODc1N30.naLT3rn8y58dgryVEKtb7Em7E0hDA1DQko8Ex0kYexM
 
+###
+GET http://localhost:3000/api/community/61e6a1cdf0702f0c7e9fecba
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjU4NTIwNCwiZXhwIjoxNjQyNTg1ODA0fQ.DvwuSU7yoZnumcQxPb2hXfUagCahSbGnYfaQeFniPbQ
+
+###
+
+DELETE http://localhost:3000/api/community/61e6a1cdf0702f0c7e9fecba/leave
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjU4NTIwNCwiZXhwIjoxNjQyNTg1ODA0fQ.DvwuSU7yoZnumcQxPb2hXfUagCahSbGnYfaQeFniPbQ
+
+###
+
+DELETE http://localhost:3000/api/community/61e6a1cdf0702f0c7e9fecba/remove
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJvaGVuZXNldHd1bWFzaUBnbWFpbC5jb20iLCJpc3MiOiJ1bml0dW06cGxhdGZvcm0iLCJpYXQiOjE2NDI1ODUwOTksImV4cCI6MTY0MjU4NTY5OX0.r2b7uUX7bqsPOsvramgs8eIekEIH37uc59axGnEFT2Q
+
+{ 
+    "userID": "61e6a1caf0702f0c7e9fecae"
+}
 
 ###
 GET http://localhost:3000/api/community/?search=channel1 HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJvZHVybzIzQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MTkwNzU4MCwiZXhwIjoxNjQxOTA4MTgwfQ.FG2_bGOZOktR2kvdwZ0PkrQwomU69CTsV3dzhqUZ6hY
 
 ###
-GET http://localhost:3000/api/community/ HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjM2MjMwOCwiZXhwIjoxNjQyMzYyOTA4fQ.5lKreBtEMl-5bM13pJNlWZt32uHFLWlAkylpVvnfJ48
+GET http://localhost:3000/api/community/?search=Django HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjUwNjE0MiwiZXhwIjoxNjQyNTA2NzQyfQ.sqV_Ti94CoBZ8CeSAItM0toYiFZANu1Gd0wQxmFVZjI
 
+###
+
+POST http://localhost:3000/api/community/61e6a1cdf0702f0c7e9fecba/add
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJvaGVuZXNldHd1bWFzaUBnbWFpbC5jb20iLCJpc3MiOiJ1bml0dW06cGxhdGZvcm0iLCJpYXQiOjE2NDI1ODUwOTksImV4cCI6MTY0MjU4NTY5OX0.r2b7uUX7bqsPOsvramgs8eIekEIH37uc59axGnEFT2Q
+
+{
+    "userID": "61e6a1caf0702f0c7e9fecb2"
+}
 ###
 
 GET http://localhost:3000/api/auth/logout

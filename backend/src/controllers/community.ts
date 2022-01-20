@@ -6,6 +6,7 @@ import {
 import CommunityModel from "../models/Community";
 import { Types } from "mongoose";
 import { ICommunity } from "../types/community";
+import User from "../models/User";
 
 export const createCommunity = async (req: any, res: Response) => {
   const user = req.user;
@@ -70,7 +71,7 @@ export const editCommunity = async (req: any, res: Response) => {
 export const viewCommunity = async (req: any, res: Response) => {
   const commID = new Types.ObjectId(req.params.commID);
   const dbCommunity = await CommunityModel.findById(commID)
-    .select(["-members"])
+    .select(["members"])
     .populate({
       path: "admin",
       select: ["profile.fullname", "email", "profile.picture"]
@@ -127,4 +128,133 @@ export const searchCommunity = async (req: any, res: Response) => {
 
   if (!communities) return res.sendStatus(404);
   return res.status(200).json(communities);
+};
+
+export const addMember = async (req: any, res: Response) => {
+  const commID = req.params.commID;
+  const userID = req.body.userID;
+  if (!userID) {
+    return res.status(400).json({ message: "userID is required" });
+  }
+
+  const user = await User.findOne({ _id: userID });
+  if (!user)
+    return res.status(404).json({ message: "User with this Id not found" });
+
+  const community = await CommunityModel.findOne({ _id: commID });
+  if (!community)
+    return res.status(404).json({ message: "Community not found" });
+
+  if (community.admin.toString() !== req.user._id.toString())
+    return res
+      .status(401)
+      .json({ message: "You are unauthorized to add user to this community" });
+
+  const isMember = community.members?.some((member) => {
+    return member?.memberID?.equals(userID);
+  });
+
+  if (isMember)
+    return res
+      .status(200)
+      .json({ message: "User is already a member of this community" });
+
+  user.profile?.communities?.push(community._id);
+  community.members?.push({ memberID: userID });
+  community.numberOfMembers! += 1;
+  try {
+    user.save();
+    community.save();
+    return res
+      .status(200)
+      .json({ message: "New Member has been added successfully" });
+  } catch (error) {
+    return res.sendStatus(500);
+  }
+};
+
+export const removeMember = async (req: any, res: Response) => {
+  const commID = req.params.commID;
+  const userID = req.body.userID;
+  if (!userID) return res.status(400).json({ message: "userID is required" });
+
+  const user = await User.findOne({ _id: userID });
+
+  const community = await CommunityModel.findOne({ _id: commID });
+  if (!community)
+    return res.status(404).json({ message: "Community not found" });
+
+  if (!(community.admin._id.toString() === req.user._id.toString()))
+    return res.status(401).json({
+      message: "You are unauthorized to remove a member from this community"
+    });
+  const isMember = community.members?.some((member) => {
+    return member?.memberID?.equals(user?._id);
+  });
+
+  if (!isMember)
+    return res
+      .status(400)
+      .json({ message: "User is not a member of this community" });
+
+  const newMemberList = community.members?.filter((member) => {
+    member?.memberID?.toString() !== user?._id.toString();
+  });
+
+  const newCommunityList = user?.profile?.communities?.filter((comm) => {
+    comm._id.toString() !== community._id.toString();
+  });
+  community.members = newMemberList;
+  if (user?.profile?.communities) {
+    user.profile.communities = newCommunityList;
+  }
+  try {
+    community.save();
+    user!.save();
+    return res.sendStatus(200);
+  } catch (error) {
+    return res.sendStatus(500);
+  }
+};
+
+export const leaveCommunity = async (req: any, res: Response) => {
+  const commID = req.params.commID;
+  const userID = req.user._id;
+  const user = await User.findOne({ _id: userID });
+
+  const community = await CommunityModel.findOne({ _id: commID });
+  if (!community)
+    return res.status(404).json({ message: "Community not found" });
+
+  const isMember = community.members?.some((member) => {
+    console.log(member.memberID, user?._id);
+    console.log(member);
+    return member?.memberID?.equals(user?._id.toString());
+  });
+
+  if (!isMember)
+    return res
+      .status(400)
+      .json({ message: "You are not a member of this community" });
+
+  const newMemberList = community.members?.filter((member) => {
+    console.log(member.memberID.toString(), user?._id.toString());
+    member.memberID.toString() !== user?._id.toString();
+  });
+  console.log(newMemberList);
+  const newCommunityList = user?.profile?.communities?.filter((comm) => {
+    console.log(comm._id.toString(), community._id.toString());
+    comm._id.toString() !== community._id.toString();
+  });
+  community.members = newMemberList;
+  if (user?.profile?.communities) {
+    user.profile.communities = newCommunityList;
+  }
+  try {
+    community.save();
+    user!.save();
+    return res.sendStatus(200);
+  } catch (error) {
+    return res.sendStatus(500);
+  }
 };

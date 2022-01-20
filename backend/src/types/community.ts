@@ -2,7 +2,7 @@ import { Types } from "mongoose";
 
 interface IMembers {
   memberID: Types.ObjectId;
-  role: "admin" | "moderator" | "member";
+  role?: "admin" | "moderator" | "member";
 }
 interface ICommunity {
   admin: Types.ObjectId;
