@@ -1,18 +1,39 @@
+import Helmet from "react-helmet";
+import axios from "axios";
+import MuiLink from "@mui/material/Link";
 import { Link } from "react-router-dom";
-import { Link as MuiLink } from "@mui/material";
-import { registerValues } from "../lib";
+import { FormikHelpers } from "formik";
+import { API, registerSchema, registerValues, TRegisterValues } from "../lib";
 import { camelToCapitalized } from "../utils";
 import CustomInput from "../components/CustomInput";
 import FormLayout from "../components/FormLayout";
-import Helmet from "react-helmet";
+
 const Register = () => {
+  const handleSubmit = async (
+    values: Partial<TRegisterValues>,
+    { setSubmitting }: FormikHelpers<Partial<TRegisterValues>>
+  ) => {
+    try {
+      await API.post("auth/register", values);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error.response);
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <>
       <Helmet>
         <title>Create an Account</title>
       </Helmet>
       <FormLayout
+        loadingIndicator="Creating your account..."
+        handleSubmit={handleSubmit}
         initialValues={registerValues}
+        validationSchema={registerSchema}
         title="Create an account"
         formType="sign-up"
         formFooter={

@@ -1,18 +1,40 @@
+import Helmet from "react-helmet";
+import axios from "axios";
+import MuiLink from "@mui/material/Link";
 import { Link } from "react-router-dom";
-import { Link as MuiLink } from "@mui/material";
-import { loginValues } from "../lib";
+import { FormikHelpers } from "formik";
+import { API, loginSchema, loginValues, TLoginValues } from "../lib";
 import { camelToCapitalized } from "../utils";
 import CustomInput from "../components/CustomInput";
 import FormLayout from "../components/FormLayout";
-import Helmet from "react-helmet";
+
 const Login = () => {
+  const handleSubmit = async (
+    values: Partial<TLoginValues>,
+    { setSubmitting }: FormikHelpers<Partial<TLoginValues>>
+  ) => {
+    try {
+      const { data } = await API.post("auth/login", values);
+      console.log(data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error.response);
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <>
       <Helmet>
         <title>Login to your Account</title>
       </Helmet>
       <FormLayout
+        loadingIndicator="Fetching your account..."
         initialValues={loginValues}
+        validationSchema={loginSchema}
+        handleSubmit={handleSubmit}
         title="Welcome back"
         formType="sign-in"
         formFooter={

@@ -1,6 +1,7 @@
 import { model, Schema, Types } from "mongoose";
 import { IEducation, IProfile, IUSer } from "../types/user";
 import bcrypt from "bcryptjs";
+import { string } from "joi";
 
 const schoolSchema = new Schema({
   name: String,
@@ -28,8 +29,10 @@ const educationSchema = new Schema<IEducation>({
   }
 });
 const profileSchema = new Schema<IProfile>({
+  fullname: String,
+  picture: String,
   dob: Date,
-  education: educationSchema,
+  education: [educationSchema],
   communities: {
     type: [Types.ObjectId],
     ref: "Community"
@@ -39,13 +42,8 @@ const profileSchema = new Schema<IProfile>({
 
 const userSchema = new Schema<IUSer>(
   {
-    firstname: {
-      type: String,
-      required: true
-    },
-    lastname: {
-      type: String,
-      required: true
+    fullname: {
+      type: String
     },
     password: {
       type: String,
@@ -55,9 +53,7 @@ const userSchema = new Schema<IUSer>(
       type: String,
       unique: true
     },
-    otherNames: {
-      type: String
-    },
+    picture: String,
     authProvider: {
       type: String,
       enum: ["LOCAL", "GOOGLE", "FACEBOOK", "TWITTER"],
@@ -85,6 +81,8 @@ userSchema.pre("save", async function (next) {
 
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
+
+  this.profile = { fullname: this.fullname };
 });
 
 userSchema.methods.verifyPassword = async function (enteredPassword) {

@@ -15,21 +15,23 @@ interface IEducation {
 }
 
 interface IProfile {
+  fullname?: string;
+  picture?: string;
   dob?: Date;
-  education?: IEducation;
+  education?: IEducation[];
   communities?: Types.ObjectId[];
   unicoyn: number;
 }
 
 interface IUSer {
-  firstname: string;
-  lastname: string;
+  fullname: string;
   password?: string;
-  otherNames?: string;
   role?: Role;
+  picture?: string;
   authProvider: string;
   email?: string;
   profile?: IProfile;
+  number?: number[];
   verifyPassword(password: string): boolean;
 }
 export { IEducation, IProfile, IUSer };

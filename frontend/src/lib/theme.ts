@@ -25,6 +25,9 @@ export const theme = responsiveFontSizes(
       },
       background: {
         default: "#F0EFF5"
+      },
+      text: {
+        primary: "#2C2D4D"
       }
     },
     customPalette: {
@@ -39,6 +42,7 @@ export const theme = responsiveFontSizes(
 theme.components = {
   MuiButton: {
     defaultProps: {
+      variant: "contained",
       disableElevation: true
     },
     styleOverrides: {

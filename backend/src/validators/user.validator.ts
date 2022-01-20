@@ -1,13 +1,34 @@
 import Joi from "joi";
 import { IUSer } from "../types/user";
 
+const educationSchema = Joi.array().items(
+  Joi.object({
+    school: Joi.object({
+      name: Joi.string().required(),
+      url: Joi.string()
+    }),
+    degree: Joi.string(),
+    fieldOfStudy: Joi.string().required(),
+    startDate: Joi.date().required(),
+    grade: Joi.number()
+  })
+);
+
+const profileSchema = Joi.object({
+  fullname: Joi.string().min(2).max(20),
+  picture: Joi.string(),
+  dob: Joi.date(),
+  education: educationSchema,
+  communities: Joi.array(),
+  unicoyn: Joi.number()
+});
+
 function validateRegUser(data: IUSer) {
   const userSchema = Joi.object({
-    firstname: Joi.string().min(2).max(20).required(),
-    lastname: Joi.string().min(2).max(20).required(),
-    otherNames: Joi.string().min(2).max(20),
+    fullname: Joi.string().min(2).max(20),
     email: Joi.string().email().required(),
-    password: Joi.string().min(6).required()
+    password: Joi.string().min(6).required(),
+    profile: profileSchema
   }).options({ abortEarly: false });
 
   return userSchema.validate(data);
@@ -27,6 +48,14 @@ const validateEmail = (data: { email: string }) => {
     email: Joi.string().min(6).required().email()
   });
   return EmailSchema.validate(data);
+};
+
+export const validateUserUpdate = async (data: IUSer) => {
+  const userUpdateSchema = Joi.object({
+    profile: profileSchema
+  }).options({ abortEarly: false });
+
+  return userUpdateSchema.validate(data);
 };
 
 export { validateRegUser, validateLogUser, validateEmail };

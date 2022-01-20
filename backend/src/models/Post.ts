@@ -3,14 +3,13 @@ import { IPost, IComment } from "../types/post";
 
 const commentSchema = new Schema<IComment>(
   {
-    userID: {
+    author: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: "User"
     },
     postID: {
       type: Schema.Types.ObjectId,
-      required: true,
       ref: "Post"
     },
     text: {
@@ -23,7 +22,7 @@ const commentSchema = new Schema<IComment>(
 
 export const postSchema = new Schema<IPost>(
   {
-    userID: {
+    author: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: "User"
@@ -32,27 +31,33 @@ export const postSchema = new Schema<IPost>(
       type: Schema.Types.ObjectId,
       ref: "Community"
     },
-    text: {
+    body: {
       type: String,
       required: true
+    },
+    media: {
+      type: [String]
     },
     numberOfComments: {
       type: Number,
       default: 0
     },
     comments: {
-      type: [commentSchema]
+      type: [Schema.Types.ObjectId],
+      ref: "Comment"
     },
     upvotes: {
       type: Number,
       required: false,
       default: 0
+    },
+    upvoteBy: {
+      type: [Schema.Types.ObjectId],
+      ref: "User"
     }
   },
   { timestamps: true }
 );
 
-const PostModel = model<IPost>("Post", postSchema);
-const CommentModel = model<IComment>("Comment", commentSchema);
-
-module.exports = { PostModel, CommentModel };
+export const PostModel = model<IPost>("Post", postSchema);
+export const CommentModel = model<IComment>("Comment", commentSchema);

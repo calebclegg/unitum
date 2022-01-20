@@ -1,5 +1,4 @@
-import mongoose from "mongoose";
-
+import mongoose, { connection } from "mongoose";
 const connectDB = async () => {
   const NODE_ENV = process.env.NODE_ENV;
   try {
@@ -11,6 +10,7 @@ const connectDB = async () => {
         : process.env.MONGO_LOCAL!
     );
     console.log(`Mongodb running : ${conn.connection.host}`);
+    return conn
   } catch (error) {
     console.log(error);
     process.exit(1);

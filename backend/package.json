@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "tsc & node /dist/server.js",
     "dev": "nodemon src/server.ts",
+    "seeder": "ts-node src/seeder.ts",
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
@@ -23,7 +24,8 @@
     "joi": "^17.5.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.1.4",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "redis-om": "^0.1.7"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",

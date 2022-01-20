@@ -1,5 +1,5 @@
 const normalizeGoogleData = async (data: any) => {
-  console.log(data);
+  
   return {
     email: data.email,
     firstname: data.given_name,

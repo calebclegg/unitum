@@ -1,11 +1,14 @@
 import express from "express";
-import { config as dotenv } from "dotenv";
+import { config as dotenv } from "dotenv-flow";
 import authRoutes from "./routes/auth";
 import userRoutes from "./routes/user";
+import communityRoutes from "./routes/community";
+import postRoutes from "./routes/post";
 import morgan from "morgan";
 import connectDB from "./config/db";
 import helmet from "helmet";
 import cors from "cors";
+import { redisConnect } from "./config/redis_connect";
 
 //dotenv conf
 dotenv();
@@ -13,6 +16,7 @@ dotenv();
 const app = express();
 
 connectDB();
+redisConnect();
 
 //Body parser setup
 app.use(express.json());
@@ -26,6 +30,8 @@ app.use(morgan("dev"));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/community", communityRoutes);
+app.use("/api/posts", postRoutes);
 //Mount api routes here
 app.listen(process.env.PORT, () => {
   console.log(`Backend server running on ${process.env.PORT}`);

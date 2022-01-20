@@ -1,11 +1,10 @@
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import {
-  FormControl,
-  FormHelperText,
-  IconButton,
-  InputAdornment,
-  OutlinedInput
-} from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import FormControl from "@mui/material/FormControl";
+import FormHelperText from "@mui/material/FormHelperText";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import OutlinedInput from "@mui/material/OutlinedInput";
 import { FastFieldProps, Field } from "formik";
 import { useState } from "react";
 import { TRegisterValues } from "../lib/formik-init";
@@ -82,7 +81,12 @@ const CustomInput = ({ name, label, passwordType }: IProps) => {
             }}
           />
           {touched && error && (
-            <FormHelperText id={`${name}-error`}>{error}</FormHelperText>
+            <FormHelperText
+              id={`${name}-error`}
+              sx={{ color: ({ palette }) => palette.error.main }}
+            >
+              {error}
+            </FormHelperText>
           )}
         </FormControl>
       )}
