@@ -9,8 +9,7 @@ const membersSchema = new Schema({
   },
   role: {
     type: String,
-    enum: ["admin", "moderator", "member"],
-    default: "member"
+    enum: ["admin", "moderator", "member"]
   }
 });
 const communitySchema = new Schema<ICommunity>(
@@ -42,7 +41,7 @@ const communitySchema = new Schema<ICommunity>(
   { timestamps: true }
 );
 
-communitySchema.index({ name: "text" });
+communitySchema.index({ $name: "text" });
 const CommunityModel = model<ICommunity>("Community", communitySchema);
 
 export default CommunityModel;
