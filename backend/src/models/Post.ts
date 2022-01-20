@@ -59,5 +59,6 @@ export const postSchema = new Schema<IPost>(
   { timestamps: true }
 );
 
+postSchema.index({ author: "text" });
 export const PostModel = model<IPost>("Post", postSchema);
 export const CommentModel = model<IComment>("Comment", commentSchema);

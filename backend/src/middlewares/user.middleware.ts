@@ -18,13 +18,15 @@ export const getUser = async (req: any, res: Response, next: NextFunction) => {
   if (!payload) return res.status(400).json({ message: "Invalid jwt token" });
 
   try {
-    const user = await User.findOne({ email: payload.sub }).select([
-      "-createdAt",
-      "-updatedAt",
-      "-role",
-      "-__v",
-      "+profile"
-    ]);
+    const user = await User.findOne({ email: payload.sub })
+      .select(["-createdAt", "-updatedAt", "-role", "-__v", "+profile"])
+      .populate([
+        { path: "profile.education", select: "-user -__v" },
+        {
+          path: "profile.communities",
+          select: "-admin -members -__v -createdAt -updatedAt"
+        }
+      ]);
     if (!user) return res.status(400).json({ message: "User does not exist" });
     req.user = user;
     next();

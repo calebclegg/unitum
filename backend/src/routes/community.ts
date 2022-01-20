@@ -14,6 +14,12 @@ router.patch("/:commID", getUser, controller.editCommunity);
 // create a community
 router.post("/", getUser, controller.createCommunity);
 
+router.post("/:commID/add", getUser, controller.addMember);
+
+router.delete("/:commID/remove", getUser, controller.removeMember);
+
+router.delete("/:commID/leave", getUser, controller.leaveCommunity);
+
 // delete a community
 router.delete("/:commID", getUser, controller.deleteCommunity);
 
