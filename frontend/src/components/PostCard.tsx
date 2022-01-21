@@ -26,7 +26,7 @@ export interface IProps {
   publishedDate?: string;
 }
 
-const Post = ({
+const PostCard = ({
   id,
   author,
   upvotes,
@@ -139,4 +139,4 @@ const Post = ({
   );
 };
 
-export default Post;
+export default PostCard;

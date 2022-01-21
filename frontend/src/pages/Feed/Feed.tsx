@@ -1,21 +1,16 @@
 import { lazy, Suspense, useEffect, useState } from "react";
+import useSWR from "swr";
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import BottomNav from "../components/BottomNav";
-import TopBar from "../components/TopBar";
-import { useDisplaySize } from "../hooks";
-import Post, { IProps } from "../components/Post";
-import useSWR from "swr";
-import axios from "axios";
+import BottomNav from "../../components/BottomNav";
+import TopBar from "../../components/TopBar";
+import PostCard, { IProps } from "../../components/PostCard";
+import { useDisplaySize } from "../../hooks";
+import { fetcher } from "../../utils";
 
-const fetcher = async (endpoint: string) =>
-  await (
-    await axios.get(`https://jsonplaceholder.typicode.com/${endpoint}`)
-  ).data;
-
-const Sidebar = lazy(() => import("../components/Sidebar"));
+const Sidebar = lazy(() => import("../../components/Sidebar"));
 
 interface IPost {
   id: number;
@@ -93,14 +88,14 @@ const Feed = () => {
             spacing={2}
             maxWidth={700}
             sx={{
-              "& .MuiPaper-rounded:first-child": {
+              "& .MuiPaper-rounded:first-of-type": {
                 borderTopLeftRadius: 0,
                 borderTopRightRadius: 0
               }
             }}
           >
             {userPosts?.map((post) => (
-              <Post key={post.id} {...post} />
+              <PostCard key={post.id} {...post} />
             ))}
           </Stack>
         </Container>

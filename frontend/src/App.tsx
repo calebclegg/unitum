@@ -7,6 +7,7 @@ import { Route, Routes } from "react-router-dom";
 import Landing from "./pages/Landing";
 
 const Feed = lazy(() => import("./pages/Feed"));
+const Post = lazy(() => import("./pages/Feed/Post"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 
@@ -39,7 +40,10 @@ function App() {
       <Suspense fallback="Loading">
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="feed/*" element={<Feed />} />
+          <Route path="feed">
+            <Route index element={<Feed />} />
+            <Route path=":id" element={<Post />} />
+          </Route>
           <Route path="login/*" element={<Login />} />
           <Route path="register/*" element={<Register />} />
         </Routes>
