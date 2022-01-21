@@ -69,7 +69,9 @@ theme.components = {
     },
     styleOverrides: {
       root: {
-        padding: theme.spacing(2),
+        padding: theme.spacing(2)
+      },
+      rounded: {
         borderRadius: 8
       }
     }
