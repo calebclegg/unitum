@@ -18,8 +18,8 @@ router.post("/authProvider", controller.checkAuthProvider);
 
 router.post("/oauth", controller.externalAuth);
 
-router.get("/token", getUser, controller.getNewAccessToken)
+router.get("/token", controller.getNewAccessToken);
 
-router.get("/logout", getUser, controller.logout)
+router.get("/logout", getUser, controller.logout);
 
 export default router;

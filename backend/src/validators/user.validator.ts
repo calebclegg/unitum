@@ -15,6 +15,8 @@ const educationSchema = Joi.array().items(
 );
 
 const profileSchema = Joi.object({
+  fullname: Joi.string().min(2).max(20),
+  picture: Joi.string(),
   dob: Joi.date(),
   education: educationSchema,
   communities: Joi.array(),
@@ -50,7 +52,6 @@ const validateEmail = (data: { email: string }) => {
 
 export const validateUserUpdate = async (data: IUSer) => {
   const userUpdateSchema = Joi.object({
-    fullname: Joi.string(),
     profile: profileSchema
   }).options({ abortEarly: false });
 
