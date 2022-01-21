@@ -18,11 +18,11 @@ const Feed = () => {
   return (
     <>
       <TopBar openDrawer={openDrawer} />
-      <Stack direction="row" spacing={2}>
+      <Stack direction="row" spacing={4}>
         <Suspense fallback={<div />}>
           <Sidebar open={isDrawerOpened} handleClose={closeDrawer} />
         </Suspense>
-        <Container disableGutters={desktopUp} maxWidth="md">
+        <Container disableGutters={desktopUp} maxWidth="md" sx={{ pt: 11 }}>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium
           veritatis nulla velit, dolores, a accusamus illo natus quam officiis
           eaque earum, dicta rerum cumque provident enim aperiam nisi in iste.
