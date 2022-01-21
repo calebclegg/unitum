@@ -7,12 +7,17 @@ import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
+import MuiLink from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { Theme } from "@mui/material/styles";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export interface IProps {
+  id?: number;
   upvotes?: number;
   comments?: number;
   community?: string;
@@ -22,6 +27,7 @@ export interface IProps {
 }
 
 const Post = ({
+  id,
   author,
   upvotes,
   content,
@@ -29,6 +35,9 @@ const Post = ({
   community,
   publishedDate
 }: IProps) => {
+  const tabletUp = useMediaQuery(({ breakpoints }: Theme) =>
+    breakpoints.up("sm")
+  );
   const [saved, setSaved] = useState(false);
   const [vote, setVote] = useState({ upVote: false, downVote: false });
 
@@ -48,11 +57,11 @@ const Post = ({
   };
 
   return (
-    <Card variant="outlined" sx={{ p: 0 }}>
+    <Card variant="outlined" sx={{ p: tabletUp ? 1 : 0 }}>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: "rgb(255, 0, 0)" }} aria-label="recipe">
-            R
+            {community?.charAt(0).toUpperCase()}
           </Avatar>
         }
         action={
@@ -68,12 +77,16 @@ const Post = ({
         subheader={
           <>
             <span
-              style={{
-                width: 80,
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis"
-              }}
+              style={
+                tabletUp
+                  ? undefined
+                  : {
+                      width: 80,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis"
+                    }
+              }
             >
               {author}
             </span>
@@ -106,10 +119,19 @@ const Post = ({
         </Stack>
         <div>
           <CardContent sx={{ pt: 0.5 }}>
-            <Typography color="textSecondary">{content}</Typography>
+            <MuiLink
+              component={Link}
+              to={`/feed/${id}`}
+              color="textSecondary"
+              underline="none"
+            >
+              {content}
+            </MuiLink>
           </CardContent>
           <CardActions>
-            <Button variant="text">Comments ({comments})</Button>
+            <Button variant="text" component={Link} to={`/feed/${id}#comments`}>
+              {comments ? <>Comments ({comments})</> : <>No comments yet</>}
+            </Button>
           </CardActions>
         </div>
       </Stack>

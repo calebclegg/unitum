@@ -99,8 +99,8 @@ const Feed = () => {
               }
             }}
           >
-            {userPosts?.map(({ id, ...post }) => (
-              <Post key={id} {...post} />
+            {userPosts?.map((post) => (
+              <Post key={post.id} {...post} />
             ))}
           </Stack>
         </Container>
