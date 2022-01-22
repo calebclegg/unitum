@@ -23,6 +23,11 @@ io.on("connection", (socket) => {
   cors: {
     origin: "*";
   }
+  console.log("A user Connected", socket.id);
+
+  socket.on("disconnect", () => {
+    console.log("A user disconnected", socket.id);
+  });
 });
 
 connectDB();
