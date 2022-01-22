@@ -11,7 +11,6 @@ import cors from "cors";
 import { redisConnect } from "./config/redis_connect";
 import { createServer } from "http";
 import { Server } from "socket.io";
-// import { getUser } from "./eventHandlers/token.middleware";
 
 //dotenv conf
 dotenv();
@@ -19,8 +18,6 @@ dotenv();
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer);
-
-// io.use(getUser);
 
 io.on("connection", (socket) => {
   cors: {

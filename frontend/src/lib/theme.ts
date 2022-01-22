@@ -25,6 +25,9 @@ export const theme = responsiveFontSizes(
       },
       background: {
         default: "#F0EFF5"
+      },
+      text: {
+        primary: "#2C2D4D"
       }
     },
     customPalette: {
@@ -39,6 +42,7 @@ export const theme = responsiveFontSizes(
 theme.components = {
   MuiButton: {
     defaultProps: {
+      variant: "contained",
       disableElevation: true
     },
     styleOverrides: {
@@ -65,7 +69,9 @@ theme.components = {
     },
     styleOverrides: {
       root: {
-        padding: theme.spacing(2),
+        padding: theme.spacing(2)
+      },
+      rounded: {
         borderRadius: 8
       }
     }
@@ -78,3 +84,13 @@ theme.components = {
     }
   }
 };
+
+export const darkTheme = createTheme(theme, {
+  palette: {
+    mode: "dark",
+    text: {
+      primary: theme.palette.grey[100],
+      secondary: theme.palette.grey[300]
+    }
+  }
+});

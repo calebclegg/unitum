@@ -1,14 +1,13 @@
-import { Document, Types } from "mongoose";
+import { Types } from "mongoose";
 
 type Role = "admin" | "active";
 
-interface IEducation extends Document {
+interface IEducation {
   school: {
     name: string;
     url?: string;
   };
   degree: string;
-  user: Types.ObjectId;
   fieldOfStudy: string;
   startDate: Date;
   endDate: Date;
@@ -19,7 +18,7 @@ interface IProfile {
   fullname?: string;
   picture?: string;
   dob?: Date;
-  education?: Types.ObjectId[];
+  education?: IEducation[];
   communities?: Types.ObjectId[];
   unicoyn: number;
 }

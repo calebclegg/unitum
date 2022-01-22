@@ -1,44 +1,27 @@
 import Joi from "joi";
-import { IUSer, IEducation } from "../types/user";
+import { IUSer } from "../types/user";
 
-export const educationSchema = Joi.object({
-  school: Joi.object({
-    name: Joi.string().required(),
-    url: Joi.string()
-  }),
-  degree: Joi.string(),
-  fieldOfStudy: Joi.string().required(),
-  startDate: Joi.date().required(),
-  grade: Joi.number()
-}).options({ abortEarly: false });
+const educationSchema = Joi.array().items(
+  Joi.object({
+    school: Joi.object({
+      name: Joi.string().required(),
+      url: Joi.string()
+    }),
+    degree: Joi.string(),
+    fieldOfStudy: Joi.string().required(),
+    startDate: Joi.date().required(),
+    grade: Joi.number()
+  })
+);
 
-export const educationEditSchema = Joi.object({
-  school: Joi.object({
-    name: Joi.string(),
-    url: Joi.string()
-  }),
-  degree: Joi.string(),
-  fieldOfStudy: Joi.string(),
-  startDate: Joi.date(),
-  grade: Joi.number()
-}).options({ abortEarly: false });
-
-export const profileSchema = Joi.object({
+const profileSchema = Joi.object({
   fullname: Joi.string().min(2).max(20),
   picture: Joi.string(),
   dob: Joi.date(),
-  education: Joi.array().items(Joi.string().max(24)),
+  education: educationSchema,
   communities: Joi.array(),
   unicoyn: Joi.number()
 });
-
-export function validateEductionData(data: IEducation) {
-  return educationSchema.validate(data);
-}
-
-export function validateEductionEditData(data: IEducation) {
-  return educationEditSchema.validate(data);
-}
 
 function validateRegUser(data: IUSer) {
   const userSchema = Joi.object({

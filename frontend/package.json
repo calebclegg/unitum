@@ -7,6 +7,7 @@
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@fontsource/inter": "^4.5.1",
+    "@fontsource/merriweather": "^4.5.3",
     "@mui/icons-material": "^5.2.5",
     "@mui/lab": "^5.0.0-alpha.64",
     "@mui/material": "^5.2.7",
@@ -27,6 +28,7 @@
     "react-helmet": "^6.1.0",
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
+    "swr": "^1.1.2",
     "typescript": "^4.4.2",
     "web-vitals": "^2.1.0",
     "yup": "^0.32.11"
