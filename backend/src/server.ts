@@ -9,11 +9,21 @@ import connectDB from "./config/db";
 import helmet from "helmet";
 import cors from "cors";
 import { redisConnect } from "./config/redis_connect";
+import { createServer } from "http";
+import { Server } from "socket.io";
 
 //dotenv conf
 dotenv();
 
 const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer);
+
+io.on("connection", (socket) => {
+  cors: {
+    origin: "*";
+  }
+});
 
 connectDB();
 redisConnect();
@@ -33,6 +43,10 @@ app.use("/api/users", userRoutes);
 app.use("/api/community", communityRoutes);
 app.use("/api/posts", postRoutes);
 //Mount api routes here
-app.listen(process.env.PORT, () => {
+// app.listen(process.env.PORT, () => {
+//   console.log(`Backend server running on ${process.env.PORT}`);
+// });
+
+httpServer.listen(process.env.PORT, () => {
   console.log(`Backend server running on ${process.env.PORT}`);
 });
