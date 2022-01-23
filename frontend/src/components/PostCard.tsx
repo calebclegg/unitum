@@ -43,7 +43,7 @@ const PostCard = ({
 
   const toggleSaved = () => setSaved(!saved);
 
-  const addVote = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const toggleVote = (event: React.MouseEvent<HTMLButtonElement>) => {
     const { vote }: { vote?: "upVote" | "downVote" } =
       event.currentTarget.dataset;
 
@@ -98,21 +98,23 @@ const PostCard = ({
         subheaderTypographyProps={{ sx: { display: "flex", gap: 1 } }}
       />
       <Stack direction="row" ml={2}>
-        <Stack alignItems="center" spacing={1}>
+        <Stack alignItems="center">
           <IconButton
+            size="small"
             color={vote.upVote ? "secondary" : "default"}
             aria-label="up vote"
             data-vote="upVote"
-            onClick={addVote}
+            onClick={toggleVote}
           >
             <Forward transform="rotate(-90)" />
           </IconButton>
-          <Typography variant="body1">{upvotes}</Typography>
+          <Typography>{upvotes}</Typography>
           <IconButton
+            size="small"
             color={vote.downVote ? "secondary" : "default"}
             aria-label="down vote"
             data-vote="downVote"
-            onClick={addVote}
+            onClick={toggleVote}
           >
             <Forward transform="rotate(90)" />
           </IconButton>
