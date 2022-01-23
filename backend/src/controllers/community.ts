@@ -12,11 +12,13 @@ export const createCommunity = async (req: any, res: Response) => {
   const valData = await validateCommCreateData(req.body);
   let errors;
   if (valData.error) {
-    errors = valData.error.details.map(error => ( {label:error.context?.label,message:error.message}
-    ))
+    errors = valData.error.details.map((error) => ({
+      label: error.context?.label,
+      message: error.message
+    }));
     return res
       .status(400)
-      .json({ message: "Some fields are invalid/required", errors: errors});
+      .json({ message: "Some fields are invalid/required", errors: errors });
   }
   const newCommunity = new CommunityModel({
     admin: user._id,
@@ -36,7 +38,7 @@ export const editCommunity = async (req: any, res: Response) => {
   const dbCommunity = await CommunityModel.findById({
     _id: commID
   });
-  
+
   if (!dbCommunity)
     return res.status(404).json({ message: "Community not found" });
 
@@ -45,16 +47,19 @@ export const editCommunity = async (req: any, res: Response) => {
   const valData = await validateCommEditData(req.body);
   let errors;
   if (valData.error) {
-    errors = valData.error.details.map(error => ( {label:error.context?.label,message:error.message}
-    ))
+    errors = valData.error.details.map((error) => ({
+      label: error.context?.label,
+      message: error.message
+    }));
     return res
       .status(400)
-      .json({ message: "Some fields are invalid/required", errors: errors});
+      .json({ message: "Some fields are invalid/required", errors: errors });
   }
   try {
     const updatedCommunity = await CommunityModel.findByIdAndUpdate(
       { _id: commID },
-      valData.value, {new: true}
+      valData.value,
+      { new: true }
     );
     return res.status(200).json(updatedCommunity);
   } catch (error) {
@@ -64,9 +69,13 @@ export const editCommunity = async (req: any, res: Response) => {
 
 export const viewCommunity = async (req: any, res: Response) => {
   const commID = new Types.ObjectId(req.params.commID);
-  const dbCommunity = await CommunityModel.findById(commID).select([
-    "-members"
-  ]);
+  const dbCommunity = await CommunityModel.findById(commID)
+    .select(["-members"])
+    .populate({
+      path: "admin",
+      select: ["profile.fullname", "email", "profile.picture"]
+    })
+    .select("-members -__v -updatedAt");
   if (!dbCommunity)
     return res.status(404).json({ message: "Community not found" });
 
@@ -76,7 +85,7 @@ export const viewCommunity = async (req: any, res: Response) => {
 export const deleteCommunity = async (req: any, res: Response) => {
   const commID = new Types.ObjectId(req.params.commID);
   const community = await CommunityModel.findById(commID);
-  
+
   if (!community) return res.sendStatus(404);
   if (community && community._id.toString() !== req.user._id.toString())
     return res.sendStatus(403);
@@ -92,19 +101,30 @@ export const searchCommunity = async (req: any, res: Response) => {
   const communityName = req.query.search;
   const limit = req.query.limit || 10;
   const skip = req.query.offset || 0;
-  
+
   let communities;
   if (!communityName) {
-    communities = await CommunityModel.find({}).skip(skip).limit(limit);
+    communities = await CommunityModel.find({})
+      .skip(skip)
+      .limit(limit)
+      .populate({
+        path: "admin",
+        select: ["profile.fullname", "email", "profile.picture"]
+      })
+      .select("-members -__v -updatedAt");
   } else {
     communities = await CommunityModel.find({
       $text: { $search: communityName }
     })
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .populate({
+        path: "admin",
+        select: ["profile.fullname", "email", "profile.picture"]
+      })
+      .select("-members -__v -updatedAt");
   }
 
-  
   if (!communities) return res.sendStatus(404);
   return res.status(200).json(communities);
 };
