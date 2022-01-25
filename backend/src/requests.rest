@@ -44,7 +44,7 @@ X-Auth-Provider: GOOGLE
 }
 
 ###
-POST  http://localhost:3000/api/auth/login
+POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
@@ -101,6 +101,11 @@ Content-Type: application/json
 
 ###
 
+GET http://localhost:3000/api/search/?search=n
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzEyOTYyOSwiZXhwIjoxNjQzMTMwMjI5fQ.zXR_KvSYZe4IHbk4oypUZU86J-vzfbTZ9XOg4myFuGo
+###
+
 POST http://localhost:3000/api/community/ HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjM1OTM3MSwiZXhwIjoxNjQyMzU5OTcxfQ.TtdHky97xJnxVjEiCmnskHW8HdKsBG7GmJfYz0JB0YU
@@ -128,7 +133,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 
 ###
 GET http://localhost:3000/api/community/?search=channel1 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJvZHVybzIzQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MTkwNzU4MCwiZXhwIjoxNjQxOTA4MTgwfQ.FG2_bGOZOktR2kvdwZ0PkrQwomU69CTsV3dzhqUZ6hY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzEyMDcwMiwiZXhwIjoxNjQzMTIxMzAyfQ.xSqpNJpajgC-Sn709VVpreTVNnm8aa8JaKK7sNRyWzU
 
 ###
 GET http://localhost:3000/api/community/ HTTP/1.1
