@@ -13,6 +13,7 @@ import { createServer } from "http";
 import { Server, Socket } from "socket.io";
 import { getUser } from "./eventHandlers/token.middleware";
 import { Notification } from "./models/Notification";
+import { notificationHandler } from "./eventHandlers/notification";
 //dotenv conf
 dotenv();
 
@@ -24,7 +25,7 @@ const io = new Server(httpServer, {
   }
 });
 io.use(getUser);
-io.on("connection", async (socket: any) => {
+const onConnection = async (socket: any) => {
   console.log("A user Connected", socket.id);
 
   socket.join(socket.user._id);
@@ -44,28 +45,20 @@ io.on("connection", async (socket: any) => {
 
   socket.to(socket.user._id).emit("Notification:get", notifications);
 
-  socket.on("Notification:read", async (notificationID: String) => {
-    try {
-      await Notification.findOneAndDelete({ _id: notificationID });
-    } catch (e) {
-      console.log(e);
-    }
-  });
-
+  notificationHandler(io, socket);
   socket.on("disconnect", () => {
     console.log("A user disconnected", socket.id);
   });
-});
+};
+
+io.on("connection", onConnection);
 
 connectDB();
 redisConnect();
 
 //Body parser setup
 app.use(express.json());
-// app.use((req: any, res, next) => {
-//   req.io = io;
-//   next();
-// });
+
 app.use(
   cors({
     origin: "*"
@@ -79,9 +72,6 @@ app.use("/api/users", userRoutes);
 app.use("/api/community", communityRoutes);
 app.use("/api/posts", postRoutes);
 //Mount api routes here
-// app.listen(process.env.PORT, () => {
-//   console.log(`Backend server running on ${process.env.PORT}`);
-// });
 
 httpServer.listen(process.env.PORT, () => {
   console.log(`Backend server running on ${process.env.PORT}`);
