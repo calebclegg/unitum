@@ -11,6 +11,7 @@ import cors from "cors";
 import { redisConnect } from "./config/redis_connect";
 import { createServer } from "http";
 import { Server } from "socket.io";
+import searchRouter from "./routes/search";
 
 //dotenv conf
 dotenv();
@@ -48,6 +49,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/community", communityRoutes);
 app.use("/api/posts", postRoutes);
+app.use("/api", searchRouter);
 //Mount api routes here
 // app.listen(process.env.PORT, () => {
 //   console.log(`Backend server running on ${process.env.PORT}`);

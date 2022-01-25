@@ -7,6 +7,7 @@ interface IMembers {
 interface ICommunity {
   admin: Types.ObjectId;
   name: string;
+  picture: string;
   description?: string;
   numberOfMembers?: number;
   numberOfPosts?: number;
