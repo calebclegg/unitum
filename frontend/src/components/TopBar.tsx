@@ -19,8 +19,8 @@ import { darkTheme } from "../lib";
 import { useDisplaySize } from "../hooks";
 import { Link } from "react-router-dom";
 import { lazy, Suspense, useState } from "react";
-import Search from "./Search";
 
+const Search = lazy(() => import("./Search"));
 const MenuOptions = lazy(() => import("./MenuOptions"));
 
 const MenuButton = styled("button")(({ theme }) => ({
@@ -78,7 +78,9 @@ const TopBar = ({ openDrawer }: IProps) => {
                 )}
                 <Logo full />
               </Stack>
-              <Search />
+              <Suspense fallback={<div />}>
+                <Search />
+              </Suspense>
               <Stack
                 direction="row"
                 spacing={tabletUp ? 2 : 1}
