@@ -3,7 +3,7 @@ import { Socket } from "socket.io";
 import User from "../models/User";
 import { decodeToken } from "../utils/Token";
 
-export const getUser = async (socket: Socket, next: any) => {
+export const getUser = async (socket: any, next: any) => {
   const token = socket.handshake.auth.token;
   if (token === null) next(new Error("Bad request"));
 

@@ -5,8 +5,9 @@ import {
 } from "../validators/community.validator";
 import CommunityModel from "../models/Community";
 import { Types } from "mongoose";
-import { ICommunity } from "../types/community";
 import User from "../models/User";
+import { notification } from "../types/notification";
+import { sendNotification } from "../utils/notification";
 
 export const createCommunity = async (req: any, res: Response) => {
   const user = req.user;
@@ -38,7 +39,7 @@ export const editCommunity = async (req: any, res: Response) => {
   const commID = new Types.ObjectId(req.params.commID);
   const dbCommunity = await CommunityModel.findById({
     _id: commID
-  });
+  }).populate({ path: "admin", select: "profile.fullname" });
 
   if (!dbCommunity)
     return res.status(404).json({ message: "Community not found" });
@@ -62,7 +63,17 @@ export const editCommunity = async (req: any, res: Response) => {
       valData.value,
       { new: true }
     );
-    return res.status(200).json(updatedCommunity);
+    res.status(200).json(updatedCommunity);
+    const admin = await User.findOne({ _id: dbCommunity.admin._id }).select(
+      "profile.fullname"
+    );
+    const notification: notification = {
+      message: `${admin?.profile?.fullname} updated ${dbCommunity.name} community`,
+      type: "community",
+      user: dbCommunity.admin._id,
+      communityID: dbCommunity._id
+    };
+    await sendNotification(req.socket, notification, dbCommunity._id);
   } catch (error) {
     return res.sendStatus(500);
   }
@@ -165,9 +176,19 @@ export const addMember = async (req: any, res: Response) => {
   try {
     user.save();
     community.save();
-    return res
-      .status(200)
-      .json({ message: "New Member has been added successfully" });
+    res.status(200).json({ message: "New Member has been added successfully" });
+
+    const admin = await User.findOne({ _id: community.admin._id }).select(
+      "profile.fullname"
+    );
+    const notification: notification = {
+      message: `${admin?.profile?.fullname} added you to ${community.name}`,
+      type: "community",
+      user: community.admin._id,
+      communityID: community._id,
+      userID: user._id
+    };
+    await sendNotification(req.socket, notification, user._id);
   } catch (error) {
     return res.sendStatus(500);
   }

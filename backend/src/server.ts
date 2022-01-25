@@ -10,20 +10,47 @@ import helmet from "helmet";
 import cors from "cors";
 import { redisConnect } from "./config/redis_connect";
 import { createServer } from "http";
-import { Server } from "socket.io";
-
+import { Server, Socket } from "socket.io";
+import { getUser } from "./eventHandlers/token.middleware";
+import { Notification } from "./models/Notification";
 //dotenv conf
 dotenv();
 
 const app = express();
 const httpServer = createServer(app);
-const io = new Server(httpServer);
-
-io.on("connection", (socket) => {
+const io = new Server(httpServer, {
   cors: {
-    origin: "*";
+    origin: "*"
   }
+});
+io.use(getUser);
+io.on("connection", async (socket: any) => {
   console.log("A user Connected", socket.id);
+
+  socket.join(socket.user._id);
+  socket.user.profile.communities.forEach((comm: String) => {
+    socket.join(comm);
+  });
+
+  app.use((req: any, res, next) => {
+    req.io = io;
+    req.socket = socket;
+    next();
+  });
+
+  const notifications = await Notification.find({
+    userID: socket.user._id
+  }).select("-__v -updatedAt");
+
+  socket.to(socket.user._id).emit("Notification:get", notifications);
+
+  socket.on("Notification:read", async (notificationID: String) => {
+    try {
+      await Notification.findOneAndDelete({ _id: notificationID });
+    } catch (e) {
+      console.log(e);
+    }
+  });
 
   socket.on("disconnect", () => {
     console.log("A user disconnected", socket.id);
@@ -35,6 +62,10 @@ redisConnect();
 
 //Body parser setup
 app.use(express.json());
+// app.use((req: any, res, next) => {
+//   req.io = io;
+//   next();
+// });
 app.use(
   cors({
     origin: "*"
