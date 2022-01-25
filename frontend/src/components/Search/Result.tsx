@@ -11,6 +11,26 @@ import { useTheme } from "@mui/material/styles";
 import { useEffect, useRef, useState } from "react";
 import Tag from "../Tag";
 
+interface IType {
+  type: "post" | "user" | "community";
+  color: "primary" | "success" | "error";
+}
+
+const resultTypes: IType[] = [
+  {
+    type: "post",
+    color: "primary"
+  },
+  {
+    type: "user",
+    color: "error"
+  },
+  {
+    type: "community",
+    color: "success"
+  }
+];
+
 interface IProps {
   anchorEl: HTMLDivElement | null;
 }
@@ -73,11 +93,11 @@ const Result = ({ anchorEl }: IProps) => {
         }}
       >
         <Stack direction="row" spacing={1.5}>
-          {["posts", "users", "communities"].map((type) => (
+          {resultTypes.map(({ type, color }) => (
             <Chip
               key={type}
               label={type}
-              color="primary"
+              color={color}
               variant={filters.includes(type) ? "filled" : "outlined"}
               onClick={toggleFilter}
               sx={{
