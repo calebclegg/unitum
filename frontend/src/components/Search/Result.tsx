@@ -1,4 +1,5 @@
 import Chip from "@mui/material/Chip";
+import Collapse from "@mui/material/Collapse";
 import LinearProgress from "@mui/material/LinearProgress";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -7,9 +8,16 @@ import Popper from "@mui/material/Popper";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { useTheme } from "@mui/material/styles";
-import { useEffect, useRef, useState } from "react";
 import Tag from "../Tag";
+import useSWR from "swr";
+import Highlight from "./Highlight";
+import { useTheme } from "@mui/material/styles";
+import { createElement, useEffect, useRef, useState } from "react";
+import { fetcher } from "../../utils/fetcher";
+import Empty from "./Empty";
+import Failure from "./Failure";
+
+const content = "...ipsum dolor sit amet consectetur adipisicing elit...";
 
 interface IType {
   type: "post" | "user" | "community";
@@ -33,13 +41,38 @@ const resultTypes: IType[] = [
 
 interface IProps {
   anchorEl: HTMLDivElement | null;
+  query: string;
 }
 
-const Result = ({ anchorEl }: IProps) => {
+const Result = ({ anchorEl, query }: IProps) => {
   const { transitions, zIndex } = useTheme();
   const paperRef = useRef<HTMLDivElement>(null);
   const open = Boolean(anchorEl);
   const [filters, setFilters] = useState<string[]>([]);
+  const [result, setResult] = useState<string>(content);
+  const { data, error, isValidating } = useSWR(
+    () => {
+      if (query) {
+        const params = new URLSearchParams();
+        params.set("query", query);
+
+        filters.forEach((type) => {
+          params.set(type, "1");
+        });
+
+        return "search?" + params.toString();
+      }
+
+      return null;
+    },
+    fetcher,
+    {
+      shouldRetryOnError: false,
+      onError: (error) => {
+        console.log(error);
+      }
+    }
+  );
 
   useEffect(() => {
     if (paperRef.current) {
@@ -52,6 +85,16 @@ const Result = ({ anchorEl }: IProps) => {
       }
     }
   }, [open]);
+
+  useEffect(() => {
+    if (query) {
+      const resultPlaceholder = content.replaceAll(
+        query,
+        `<mark>${query}</mark>`
+      );
+      setResult(resultPlaceholder);
+    }
+  }, [query]);
 
   const toggleFilter = (event: React.MouseEvent<HTMLDivElement>) => {
     const filter = event.currentTarget.textContent;
@@ -107,22 +150,32 @@ const Result = ({ anchorEl }: IProps) => {
             />
           ))}
         </Stack>
-        <LinearProgress sx={{ my: 1.5 }} />
-        <List role="listbox">
-          {[1, 2, 3, 4].map((i) => (
-            <ListItem key={i} role="option" id={`item-${i}`} button>
-              <ListItemText
-                primary={
-                  <Typography>
-                    ...ipsum dolor sit amet consectetur adipisicing elit...
-                  </Typography>
-                }
-                secondary={<Tag />}
-                disableTypography
-              />
-            </ListItem>
-          ))}
-        </List>
+        <Collapse in={isValidating}>
+          <LinearProgress sx={{ my: 1.5 }} />
+        </Collapse>
+        <Empty hasInput={!!query} />
+        <Failure
+          errorMessage={error?.message}
+          errorStatus={error?.response.status}
+        />
+        {query && !error ? (
+          <List role="listbox">
+            {[1, 2, 3, 4].map((i) => (
+              <ListItem key={i} role="option" id={`item-${i}`} button>
+                <ListItemText
+                  primary={
+                    <Typography
+                      dangerouslySetInnerHTML={{ __html: result }}
+                      color={isValidating ? "grey.500" : "text.primary"}
+                    />
+                  }
+                  secondary={<Tag />}
+                  disableTypography
+                />
+              </ListItem>
+            ))}
+          </List>
+        ) : null}
       </Paper>
     </Popper>
   );
