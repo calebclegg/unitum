@@ -42,6 +42,7 @@ interface IProps {
 
 const TopBar = ({ openDrawer }: IProps) => {
   const tabletUp = useDisplaySize("sm");
+  const laptopUp = useDisplaySize("md");
   const tabletLaptop = useMediaQuery(({ breakpoints }: Theme) =>
     breakpoints.between("sm", "lg")
   );
@@ -78,9 +79,11 @@ const TopBar = ({ openDrawer }: IProps) => {
                 )}
                 <Logo full />
               </Stack>
-              <Suspense fallback={<div />}>
-                <Search />
-              </Suspense>
+              {laptopUp && (
+                <Suspense fallback={<div />}>
+                  <Search />
+                </Suspense>
+              )}
               <Stack
                 direction="row"
                 spacing={tabletUp ? 2 : 1}
