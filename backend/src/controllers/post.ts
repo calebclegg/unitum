@@ -210,6 +210,7 @@ export const addPostComment = async (req: any, res: Response) => {
       .json({ message: "Some fields are invalid/required", errors: errors });
   }
   try {
+    console.log("new Post");
     const newComment = await new CommentModel({
       ...valData.value,
       postID: postID,
@@ -294,7 +295,6 @@ export const postLikes = async (req: any, res: Response) => {
 export const deleteComment = async (req: any, res: Response) => {
   const commentID = new Types.ObjectId(req.params.commentID);
   const comment = await CommentModel.findOne({ _id: commentID });
-  const post = await PostModel.findOne({ _id: comment?.postID });
   if (!comment) return res.status(400).json({ message: "Comment not found" });
   if (comment.author.toString() !== req.user._id.toString())
     return res
@@ -302,9 +302,6 @@ export const deleteComment = async (req: any, res: Response) => {
       .json({ message: "You are unauthorized to delete this comment" });
   try {
     await comment.delete();
-    if (post?.numberOfComments) {
-      post.numberOfComments -= 1;
-    }
     return res.sendStatus(200);
   } catch (error) {
     return res.sendStatus(500);

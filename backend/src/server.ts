@@ -14,6 +14,8 @@ import { Server, Socket } from "socket.io";
 import { getUser } from "./eventHandlers/token.middleware";
 import { Notification } from "./models/Notification";
 import { notificationHandler } from "./eventHandlers/notification";
+import { Server } from "socket.io";
+import searchRouter from "./routes/search";
 //dotenv conf
 dotenv();
 
@@ -23,6 +25,12 @@ const io = new Server(httpServer, {
   cors: {
     origin: "*"
   }
+
+  console.log("A user Connected", socket.id);
+
+  socket.on("disconnect", () => {
+    console.log("A user disconnected", socket.id);
+  });
 });
 io.use(getUser);
 const onConnection = async (socket: any) => {
@@ -71,6 +79,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/community", communityRoutes);
 app.use("/api/posts", postRoutes);
+app.use("/api", searchRouter);
 //Mount api routes here
 
 httpServer.listen(process.env.PORT, () => {

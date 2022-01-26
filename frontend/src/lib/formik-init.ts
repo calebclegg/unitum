@@ -26,3 +26,17 @@ export const registerSchema = Yup.object({
 
 export type TLoginSchema = typeof loginSchema;
 export type TRegisterSchema = typeof registerSchema;
+
+export const initialContactDetails = {
+  fullName: "",
+  email: "",
+  message: ""
+};
+
+export const contactSchema = Yup.object({
+  fullName: Yup.string().required().label("Full Name"),
+  email: Yup.string().email().required().label("Email"),
+  message: Yup.string().required().label("Message")
+});
+
+export type TContactDetails = typeof initialContactDetails;

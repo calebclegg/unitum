@@ -8,6 +8,7 @@ import { Types } from "mongoose";
 import User from "../models/User";
 import { notification } from "../types/notification";
 import { sendNotification } from "../utils/notification";
+import { ICommunity } from "../types/community";
 
 export const createCommunity = async (req: any, res: Response) => {
   const user = req.user;
@@ -82,7 +83,7 @@ export const editCommunity = async (req: any, res: Response) => {
 export const viewCommunity = async (req: any, res: Response) => {
   const commID = new Types.ObjectId(req.params.commID);
   const dbCommunity = await CommunityModel.findById(commID)
-    .select(["members"])
+    .select(["-members"])
     .populate({
       path: "admin",
       select: ["profile.fullname", "email", "profile.picture"]
@@ -140,6 +141,7 @@ export const searchCommunity = async (req: any, res: Response) => {
   if (!communities) return res.sendStatus(404);
   return res.status(200).json(communities);
 };
+feature/chat
 
 export const addMember = async (req: any, res: Response) => {
   const commID = req.params.commID;
@@ -279,3 +281,4 @@ export const leaveCommunity = async (req: any, res: Response) => {
     return res.sendStatus(500);
   }
 };
+develop
