@@ -1,4 +1,5 @@
 import { styled, Theme, ThemeProvider } from "@mui/material/styles";
+import SearchIcon from "@mui/icons-material/Search";
 import Email from "@mui/icons-material/Email";
 import ButtonUnstyled from "@mui/base/ButtonUnstyled";
 import Menu from "@mui/icons-material/Menu";
@@ -89,6 +90,16 @@ const TopBar = ({ openDrawer }: IProps) => {
                 spacing={tabletUp ? 2 : 1}
                 alignItems="center"
               >
+                {!laptopUp && (
+                  <IconButton
+                    component={Link}
+                    aria-label="search"
+                    to="/search"
+                    sx={{ color: "text.secondary" }}
+                  >
+                    <SearchIcon />
+                  </IconButton>
+                )}
                 <IconButton
                   component={Link}
                   aria-label="notifications"

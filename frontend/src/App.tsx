@@ -5,6 +5,7 @@ import { visuallyHidden } from "@mui/utils";
 import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import Landing from "./pages/Landing";
+import Layout from "./components/Layout";
 
 const Feed = lazy(() => import("./pages/Feed"));
 const Login = lazy(() => import("./pages/Login"));
@@ -37,9 +38,13 @@ function App() {
         Skip to main content
       </Link>
       <Suspense fallback="Loading">
+        <Layout>
+          <Routes>
+            <Route path="feed/*" element={<Feed />} />
+          </Routes>
+        </Layout>
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="feed/*" element={<Feed />} />
           <Route path="login/*" element={<Login />} />
           <Route path="register/*" element={<Register />} />
         </Routes>
