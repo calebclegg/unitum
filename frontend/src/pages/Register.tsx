@@ -1,7 +1,7 @@
 import Helmet from "react-helmet";
 import axios from "axios";
+import MuiLink from "@mui/material/Link";
 import { Link } from "react-router-dom";
-import { Link as MuiLink } from "@mui/material";
 import { FormikHelpers } from "formik";
 import { API, registerSchema, registerValues, TRegisterValues } from "../lib";
 import { camelToCapitalized } from "../utils";

@@ -14,10 +14,7 @@ const educationSchema = new Schema<IEducation>({
     required: true
   },
   degree: String,
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: "User"
-  },
+
   fieldOfStudy: {
     type: String,
     required: true
@@ -35,10 +32,7 @@ const profileSchema = new Schema<IProfile>({
   fullname: String,
   picture: String,
   dob: Date,
-  education: {
-    type: [Schema.Types.ObjectId],
-    ref: "Education"
-  },
+  education: [educationSchema],
   communities: {
     type: [Types.ObjectId],
     ref: "Community"
@@ -88,7 +82,7 @@ userSchema.pre("save", async function (next) {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 
-  this.profile = { fullname: this.fullname };
+  this.profile = { fullname: this.fullname, picture: this.picture };
 });
 
 userSchema.methods.verifyPassword = async function (enteredPassword) {
@@ -96,7 +90,5 @@ userSchema.methods.verifyPassword = async function (enteredPassword) {
 };
 
 const User = model("User", userSchema);
-
-export const Education = model("Education", educationSchema);
 
 export default User;

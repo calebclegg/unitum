@@ -42,7 +42,17 @@ const users = [
     profile: {
       fullname: "Derek Oware",
       dob: "2001-05-06",
-      education: [],
+      education: [
+        {
+          school: {
+            name: "University of Mines"
+          },
+          degree: "Bsc. Computer Science",
+          fieldOfStudy: "Computer Science",
+          startDate: "2019-09-02",
+          grade: 83
+        }
+      ],
       unicoyn: 21
     }
   }

@@ -15,7 +15,7 @@ import { getUser } from "./eventHandlers/token.middleware";
 import { Notification } from "./models/Notification";
 import { notificationHandler } from "./eventHandlers/notification";
 import { chatHandler } from "./eventHandlers/chat";
-
+import searchRouter from "./routes/search";
 //dotenv conf
 dotenv();
 
@@ -78,6 +78,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/community", communityRoutes);
 app.use("/api/posts", postRoutes);
+app.use("/api", searchRouter);
 //Mount api routes here
 
 httpServer.listen(process.env.PORT, () => {
