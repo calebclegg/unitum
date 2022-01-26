@@ -14,9 +14,13 @@ import { Server, Socket } from "socket.io";
 import { getUser } from "./eventHandlers/token.middleware";
 import { Notification } from "./models/Notification";
 import { notificationHandler } from "./eventHandlers/notification";
+import { chatHandler } from "./eventHandlers/chat";
+
 //dotenv conf
 dotenv();
 
+const wrap = (middleware: any) => (socket: Socket, next: any) =>
+  middleware(socket.request, {}, next);
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
@@ -24,7 +28,9 @@ const io = new Server(httpServer, {
     origin: "*"
   }
 });
+
 io.use(getUser);
+io.use(wrap(express.json()));
 const onConnection = async (socket: any) => {
   console.log("A user Connected", socket.id);
 
@@ -46,6 +52,7 @@ const onConnection = async (socket: any) => {
   socket.to(socket.user._id).emit("Notification:get", notifications);
 
   notificationHandler(io, socket);
+  chatHandler(io, socket);
   socket.on("disconnect", () => {
     console.log("A user disconnected", socket.id);
   });

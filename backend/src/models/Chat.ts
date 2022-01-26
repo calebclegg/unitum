@@ -5,13 +5,16 @@ import { IMessage } from "../types/message";
 const messageSchema = new Schema<IMessage>(
   {
     chatID: {
-      type: Schema.Types.ObjectId
+      type: Schema.Types.ObjectId,
+      ref: "Chat"
     },
     from: {
-      type: Schema.Types.ObjectId
+      type: Schema.Types.ObjectId,
+      ref: "User"
     },
     to: {
-      type: Schema.Types.ObjectId
+      type: Schema.Types.ObjectId,
+      ref: "User"
     },
     text: {
       type: String

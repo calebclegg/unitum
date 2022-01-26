@@ -7,30 +7,29 @@ import { notification } from "../types/notification";
 import { validateMessageData } from "../validators/message.validator";
 
 export const chatHandler = async (io: Server, socket: any) => {
-  const sendMessage = async (message: IMessage) => {
+  const sendMessage = async (msg: any) => {
+    const message = JSON.parse(msg);
     const valData = await validateMessageData(message);
     let errors;
     if (valData.error) {
+      console.log(valData.error);
       errors = valData.error.details.map((error) => ({
         label: error.context?.label,
         message: error.message
       }));
       console.log(errors);
     }
-    if (!(valData?.value?.text && valData?.value?.text)) {
-      console.log("message has neither text nor media..");
-    }
     try {
-      const message = await new Message(valData.value).save();
-      socket.to(message.chatID).emit(
-        "new message",
-        message.populate({
-          path: "from",
-          select: "profile.fullname profile.picture"
-        })
-      );
+      const newMessage = await (
+        await new Message({ ...valData.value }).save()
+      ).populate({
+        path: "from",
+        select: "profile.fullname profile.picture"
+      });
+
+      socket.emit("new message", newMessage);
     } catch (error) {
-      console.log(error);
+      console.log(error, "hello");
     }
   };
 
@@ -107,5 +106,6 @@ export const chatHandler = async (io: Server, socket: any) => {
   socket.on("chat:delete", deleteChat);
   socket.on("chat:join", joinChat);
   socket.on("chat:read", getChatMessages);
+  socket.on("chat:all", getallChats);
   socket.on("message:delete", deleteMessage);
 };

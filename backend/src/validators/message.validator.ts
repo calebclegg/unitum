@@ -7,7 +7,7 @@ export const validateMessageData = async (data: IMessage) => {
     to: Joi.string().required(),
     text: Joi.string(),
     media: Joi.string(),
-    chat: Joi.string().required()
+    chatID: Joi.string()
   }).options({ abortEarly: false });
   return schema.validate(data);
 };
