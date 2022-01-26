@@ -4,7 +4,7 @@ import { IMessage } from "../types/message";
 
 const messageSchema = new Schema<IMessage>(
   {
-    chat: {
+    chatID: {
       type: Schema.Types.ObjectId
     },
     from: {
