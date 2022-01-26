@@ -12,15 +12,18 @@ export const updateUserInfo = async (req: any, res: Response) => {
   const valData = await validateUserUpdate(req.body);
   let errors;
   if (valData.error) {
-    errors = valData.error.details.map(error => ( {label:error.context?.label,message:error.message}
-    ))
+    errors = valData.error.details.map((error) => ({
+      label: error.context?.label,
+      message: error.message
+    }));
     return res
       .status(400)
-      .json({ message: "Some fields are invalid/required", errors: errors});
+      .json({ message: "Some fields are invalid/required", errors: errors });
   }
   const updatedUser = await User.findOneAndUpdate(
-    { email: user.email },
-    valData.value, {new: true}
+    { email: user._id },
+    valData.value,
+    { new: true }
   );
   return res.send(updatedUser);
 };
