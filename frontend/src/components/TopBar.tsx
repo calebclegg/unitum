@@ -94,7 +94,7 @@ const TopBar = ({ openDrawer }: IProps) => {
                 </Stack>
               )}
               {!searchMode && (
-                <Box pl={4}>
+                <>
                   {laptopUp && (
                     <Suspense fallback={<div />}>
                       <Search />
@@ -183,7 +183,7 @@ const TopBar = ({ openDrawer }: IProps) => {
                       </IconButton>
                     )}
                   </Stack>
-                </Box>
+                </>
               )}
               {searchMode && (
                 <Suspense fallback={<div />}>
