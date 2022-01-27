@@ -1,6 +1,9 @@
 import { Response } from "express";
 import { Types } from "mongoose";
+import CommunityModel from "../models/Community";
 import { CommentModel, PostModel } from "../models/Post";
+import { notification } from "../types/notification";
+import { sendNotification } from "../utils/notification";
 import {
   validateCommentCreateData,
   validatePostCreateData,
@@ -21,12 +24,37 @@ export const createPost = async (req: any, res: Response) => {
       .status(400)
       .json({ message: "Some fields are invalid/required", errors: errors });
   }
+  let community;
+  if (valData.value.communityID) {
+    try {
+      community = await CommunityModel.findOne({
+        _id: valData.value.communityID
+      });
+      if (!community)
+        return res.status(404).json({ message: "Community not found" });
+    } catch (e) {
+      return res.sendStatus(500);
+    }
+  }
   try {
     const newPost = await new PostModel({
       ...valData.value,
       author: user._id
     }).save();
-    return res.status(201).json(newPost);
+    res.status(201).json(newPost);
+    if (community) {
+      const notificationInfo: notification = {
+        message: `${req.user.profile.fullname} added a new post in ${community.name}`,
+        type: "community",
+        user: user._id,
+        postID: newPost._id
+      };
+      await sendNotification(
+        req.socket,
+        notificationInfo,
+        community._id.toString()
+      );
+    }
   } catch (error) {
     return res.sendStatus(500);
   }
@@ -38,6 +66,7 @@ export const getPosts = async (req: any, res: Response) => {
   const communityID = req.query.communityID || null;
   const skip = req.query.skip || 0;
   const limit = req.query.limit || 20;
+  console.log(req.io);
 
   let dbPosts;
   try {
@@ -190,7 +219,14 @@ export const addPostComment = async (req: any, res: Response) => {
     post.comments?.push(newComment._id);
     post.numberOfComments! += 1;
     await post.save();
-    return res.status(201).json(
+    const notificationInfo: notification = {
+      message: `${req.user.profile.fullname} commented on your post`,
+      user: req.user._id,
+      type: "post",
+      userID: post.author._id,
+      postID: post._id
+    };
+    res.status(201).json(
       newComment.populate({
         path: "comments",
         select: "-__v",
@@ -199,6 +235,11 @@ export const addPostComment = async (req: any, res: Response) => {
           select: "profile.fullname profile.picture"
         }
       })
+    );
+    await sendNotification(
+      req.socket,
+      notificationInfo,
+      post.author._id.toString()
     );
   } catch (error) {
     return res.sendStatus(500);
@@ -233,7 +274,19 @@ export const postLikes = async (req: any, res: Response) => {
   }
   try {
     await post.save();
-    return res.sendStatus(200);
+    const notificationInfo: notification = {
+      message: `${req.user.profile.fullname} liked your post`,
+      user: req.user._id,
+      type: "post",
+      userID: post.author._id,
+      postID: post._id
+    };
+    res.sendStatus(200);
+    await sendNotification(
+      req.socket,
+      notificationInfo,
+      post.author._id.toString()
+    );
   } catch (error) {
     return res.sendStatus(500);
   }

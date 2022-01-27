@@ -3,8 +3,8 @@ import { Socket } from "socket.io";
 import User from "../models/User";
 import { decodeToken } from "../utils/Token";
 
-export const getUser = async (socket: Socket, next: any) => {
-  const token = socket.handshake.auth.token;
+export const getUser = async (socket: any, next: any) => {
+  const token = socket.handshake.headers.authorization;
   if (token === null) next(new Error("Bad request"));
 
   let payload: JwtPayload | string = "";
@@ -27,7 +27,7 @@ export const getUser = async (socket: Socket, next: any) => {
         }
       ]);
     if (!user) next(new Error("User does not exist"));
-    socket.data.user = user;
+    socket.user = user;
     next();
   } catch (error) {
     return next(new Error("Something went wrong"));
