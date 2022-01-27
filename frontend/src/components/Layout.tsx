@@ -1,4 +1,5 @@
 import { Suspense, useState } from "react";
+import { Outlet } from "react-router-dom";
 import { Theme } from "@mui/material/styles";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
@@ -7,11 +8,7 @@ import BottomNav from "./BottomNav";
 import TopBar from "./TopBar";
 import Sidebar from "./Sidebar";
 
-interface IProps {
-  children: React.ReactNode;
-}
-
-const Layout = ({ children }: IProps) => {
+const Layout = () => {
   const [isDrawerOpened, setIsDrawerOpened] = useState(false);
   const tabletUp = useMediaQuery(({ breakpoints }: Theme) =>
     breakpoints.up("sm")
@@ -36,7 +33,7 @@ const Layout = ({ children }: IProps) => {
           maxWidth="md"
           sx={{ pt: 11 }}
         >
-          {children}
+          <Outlet />
         </Container>
       </Stack>
       {!tabletUp && <BottomNav />}
