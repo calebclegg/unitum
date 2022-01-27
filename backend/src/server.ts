@@ -34,10 +34,11 @@ io.use(wrap(express.json()));
 const onConnection = async (socket: any) => {
   console.log("A user Connected", socket.id);
 
-  socket.join(socket.user._id);
+  socket.join(socket.user._id.toString());
   socket.user.profile.communities.forEach((comm: String) => {
-    socket.join(comm);
+    socket.join(comm.toString());
   });
+  console.log(socket.rooms);
 
   app.use((req: any, res, next) => {
     req.io = io;
@@ -49,7 +50,7 @@ const onConnection = async (socket: any) => {
     userID: socket.user._id
   }).select("-__v -updatedAt");
 
-  socket.to(socket.user._id).emit("Notification:get", notifications);
+  socket.to(socket.user._id.toString()).emit("Notification:get", notifications);
 
   notificationHandler(io, socket);
   chatHandler(io, socket);

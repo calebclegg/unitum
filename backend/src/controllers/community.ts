@@ -141,7 +141,6 @@ export const searchCommunity = async (req: any, res: Response) => {
   if (!communities) return res.sendStatus(404);
   return res.status(200).json(communities);
 };
-feature/chat
 
 export const addMember = async (req: any, res: Response) => {
   const commID = req.params.commID;
@@ -173,7 +172,7 @@ export const addMember = async (req: any, res: Response) => {
       .json({ message: "User is already a member of this community" });
 
   user.profile?.communities?.push(community._id);
-  community.members?.push({ memberID: userID });
+  community.members?.push({ memberID: userID, role: "member" });
   community.numberOfMembers! += 1;
   try {
     user.save();
@@ -281,4 +280,3 @@ export const leaveCommunity = async (req: any, res: Response) => {
     return res.sendStatus(500);
   }
 };
-develop
