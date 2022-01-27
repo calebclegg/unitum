@@ -18,6 +18,7 @@ import PostCard, { IProps } from "../../components/PostCard";
 import { useDisplaySize } from "../../hooks";
 import { fetcher } from "../../utils";
 import { communities } from "./communities";
+import { useTheme } from "@mui/material/styles";
 
 const Sidebar = lazy(() => import("../../components/Sidebar"));
 
@@ -40,6 +41,7 @@ interface IUserPost extends IProps {
 }
 
 const Feed = () => {
+  const { breakpoints } = useTheme();
   const [isDrawerOpened, setIsDrawerOpened] = useState(false);
   const tabletUp = useDisplaySize("sm");
   const laptopUp = useDisplaySize("md");
@@ -90,14 +92,22 @@ const Feed = () => {
             }
           }}
         >
-          <Paper square variant="outlined" sx={{ px: 3, py: 1.5 }}>
+          <Paper
+            square
+            variant="outlined"
+            sx={{
+              px: 3,
+              py: 1.5,
+              width: `min(100%, ${breakpoints.values.md}px)`
+            }}
+          >
             <Typography variant="h5" fontWeight={500} component="h1">
               Feed
             </Typography>
           </Paper>
           <Stack
             spacing={2}
-            maxWidth={700}
+            width={`min(100%, ${breakpoints.values.md}px)`}
             sx={{
               "& .MuiPaper-rounded:first-of-type": {
                 borderTopLeftRadius: 0,
