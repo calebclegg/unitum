@@ -12,7 +12,7 @@ Do note to get two different secret keys, one for JWT_SECRET and one for RF_TOKE
 ### Socket.io Implementation 😎😋
 ---
 
-The client need to provide Authorization header when initializing socket.<br>
+The client need to provide Authorization header when initializing the socket an all when sending subsequent requests.<br>
 The Authorization header must have the access token provided after sign in / sign up as value.<br>
 
 On successful connection,
