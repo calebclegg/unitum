@@ -5,22 +5,12 @@ import reportWebVitals from "./reportWebVitals";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./lib/theme";
 import { BrowserRouter } from "react-router-dom";
-import { io } from "socket.io-client";
 
 if (process.env.NODE_ENV !== "production") {
   import("@axe-core/react").then(({ default: axe }) =>
     axe(React, ReactDOM, 1000)
   );
 }
-
-const SERVER =
-  process.env.NODE_ENV === "production"
-    ? "<production-url>"
-    : "http://localhost:5000";
-
-export const socket = io(SERVER, {
-  withCredentials: true
-});
 
 ReactDOM.render(
   <React.StrictMode>
