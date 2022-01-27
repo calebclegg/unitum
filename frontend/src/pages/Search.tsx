@@ -35,13 +35,14 @@ const Search = () => {
 
   useEffect(() => {
     const params = new URLSearchParams();
+    query && params.set("query", query);
 
     filters.forEach((type) => {
       params.set(type, "1");
     });
 
     setSearchParams(params.toString(), { replace: true });
-  }, [filters]);
+  }, [filters, query]);
 
   const toggleFilter = (event: React.MouseEvent<HTMLDivElement>) => {
     const filter = event.currentTarget.textContent;
