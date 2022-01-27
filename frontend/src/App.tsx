@@ -8,6 +8,7 @@ import Landing from "./pages/Landing";
 import Layout from "./components/Layout";
 
 const Feed = lazy(() => import("./pages/Feed"));
+const Search = lazy(() => import("./pages/Search"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 
@@ -42,6 +43,7 @@ function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/*" element={<Layout />}>
             <Route path="feed" element={<Feed />} />
+            <Route path="search" element={<Search />} />
           </Route>
           <Route path="login/*" element={<Login />} />
           <Route path="register/*" element={<Register />} />

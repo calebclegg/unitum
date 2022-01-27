@@ -10,21 +10,21 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Tag from "../Tag";
 import useSWR from "swr";
-import Highlight from "./Highlight";
 import { useTheme } from "@mui/material/styles";
-import { createElement, useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { fetcher } from "../../utils/fetcher";
 import Empty from "./Empty";
 import Failure from "./Failure";
 
-const content = "...ipsum dolor sit amet consectetur adipisicing elit...";
+export const content =
+  "...ipsum dolor sit amet consectetur adipisicing elit...";
 
 interface IType {
   type: "post" | "user" | "community";
   color: "primary" | "success" | "error";
 }
 
-const resultTypes: IType[] = [
+export const resultTypes: IType[] = [
   {
     type: "post",
     color: "primary"
@@ -49,7 +49,12 @@ const Result = ({ anchorEl, query }: IProps) => {
   const paperRef = useRef<HTMLDivElement>(null);
   const open = Boolean(anchorEl);
   const [filters, setFilters] = useState<string[]>([]);
-  const [result, setResult] = useState<string>(content);
+
+  const result = useMemo(
+    () => content.replaceAll(query, `<mark>${query}</mark>`),
+    [query]
+  );
+
   const { data, error, isValidating } = useSWR(
     () => {
       if (query) {
@@ -67,10 +72,7 @@ const Result = ({ anchorEl, query }: IProps) => {
     },
     fetcher,
     {
-      shouldRetryOnError: false,
-      onError: (error) => {
-        console.log(error);
-      }
+      shouldRetryOnError: false
     }
   );
 
@@ -85,16 +87,6 @@ const Result = ({ anchorEl, query }: IProps) => {
       }
     }
   }, [open]);
-
-  useEffect(() => {
-    if (query) {
-      const resultPlaceholder = content.replaceAll(
-        query,
-        `<mark>${query}</mark>`
-      );
-      setResult(resultPlaceholder);
-    }
-  }, [query]);
 
   const toggleFilter = (event: React.MouseEvent<HTMLDivElement>) => {
     const filter = event.currentTarget.textContent;
