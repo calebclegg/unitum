@@ -9,7 +9,7 @@ export const sendNotification = async (
   try {
     const newNotification = await new Notification(content).save();
     socket.to(to).emit(
-      "New Notification",
+      "new notification",
       newNotification.populate({
         path: "user",
         select: "profile.fullname -profile.picture -__v -updatedAt"

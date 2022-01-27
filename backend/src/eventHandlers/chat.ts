@@ -8,6 +8,7 @@ import { validateMessageData } from "../validators/message.validator";
 export const chatHandler = async (io: Server, socket: any) => {
   const sendMessage = async (msg: any, callback: Function) => {
     if (typeof msg === "string") msg = JSON.parse(msg);
+    msg.from = socket.user._id.toString();
     const valData = await validateMessageData(msg);
     let errors;
     if (valData.error) {
@@ -57,6 +58,9 @@ export const chatHandler = async (io: Server, socket: any) => {
               "-__v -createdAt -updatedAt profile.fullname profile.picture -profile.dob -profile.education -email -fullname"
           }
         ]);
+      chats.forEach((chat) => {
+        socket.join(chat._id.toString());
+      });
       socket.to(user._id).emit("all chats", chats);
     } catch (error) {
       console.log(error);

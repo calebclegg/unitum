@@ -50,7 +50,7 @@ const onConnection = async (socket: any) => {
     userID: socket.user._id
   }).select("-__v -updatedAt");
 
-  socket.to(socket.user._id.toString()).emit("Notification:get", notifications);
+  socket.to(socket.user._id.toString()).emit("notification:get", notifications);
 
   notificationHandler(io, socket);
   chatHandler(io, socket);
