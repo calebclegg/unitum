@@ -40,6 +40,9 @@ const fetcher = async (endpoint: string, token?: string) => {
 
 const useUser = () => {
   const navigate = useNavigate();
+  const isOnAuthPage = ["/register", "/login"].includes(
+    window.location.pathname
+  );
   const { data: tokens } = useSWR<
     {
       accessToken: string;
@@ -54,7 +57,7 @@ const useUser = () => {
     fetcher,
     {
       onSuccess: ({ refreshToken }) => {
-        if (["/register", "/login"].includes(window.location.pathname)) {
+        if (isOnAuthPage) {
           window.history.back();
         }
 
@@ -66,13 +69,15 @@ const useUser = () => {
         setTimeout(() => revalidate({ retryCount }), 5000);
       },
       onError: () => {
-        navigate("/login", {
-          replace: true,
-          state: {
-            condition: "auth-error",
-            from: getUrl()
-          }
-        });
+        if (!isOnAuthPage) {
+          navigate("/login", {
+            replace: true,
+            state: {
+              condition: "auth-error",
+              from: getUrl()
+            }
+          });
+        }
       }
     }
   );
