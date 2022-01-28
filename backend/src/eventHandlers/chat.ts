@@ -8,6 +8,7 @@ import { validateMessageData } from "../validators/message.validator";
 export const chatHandler = async (io: Server, socket: any) => {
   const sendMessage = async (msg: any, callback: Function) => {
     if (typeof msg === "string") msg = JSON.parse(msg);
+    msg.from = socket.user._id.toString();
     const valData = await validateMessageData(msg);
     let errors;
     if (valData.error) {
@@ -26,7 +27,7 @@ export const chatHandler = async (io: Server, socket: any) => {
         await new Message({ ...valData.value }).save()
       ).populate({
         path: "from",
-        select: "profile.fullname profile.picture"
+        select: "profile.fullName profile.picture"
       });
 
       socket.to(newMessage.chatID.toString()).emit("new message", newMessage);
@@ -54,9 +55,12 @@ export const chatHandler = async (io: Server, socket: any) => {
           {
             path: "participant",
             select:
-              "-__v -createdAt -updatedAt profile.fullname profile.picture -profile.dob -profile.education -email -fullname"
+              "-__v -createdAt -updatedAt profile.fullName profile.picture -profile.dob -profile.education -email -fullName"
           }
         ]);
+      chats.forEach((chat) => {
+        socket.join(chat._id.toString());
+      });
       socket.to(user._id).emit("all chats", chats);
     } catch (error) {
       console.log(error);
@@ -130,7 +134,7 @@ export const chatHandler = async (io: Server, socket: any) => {
         .populate({
           path: "from",
           select:
-            "profile.fullname profile.picture -profile.dob -profile.education -email -fullname"
+            "profile.fullName profile.picture -profile.dob -profile.education -email -fullName"
         })
         .sort({ updatedAt: 1 })
         .skip(skip)

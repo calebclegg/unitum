@@ -130,7 +130,7 @@ export const externalAuth = async (req: any, res: Response) => {
 };
 
 export const getNewAccessToken = async (req: any, res: Response) => {
-  const refreshToken = req.body.refreshToken;
+  const refreshToken = req.headers.authorization.split(" ")[1];
   if (!refreshToken)
     return res.status(400).json({ message: "refresh Token required" });
   let tokenData;

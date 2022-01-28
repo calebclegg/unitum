@@ -2,7 +2,7 @@ POST http://localhost:3000/api/auth/register
 Content-Type: application/json
 
 {
-    "fullname": "kwame Osei",
+    "fullName": "kwame Osei",
     "email": "kyeisamuel9@gmail.com",
     "password": "rexosei111"
 }
@@ -11,7 +11,7 @@ POST http://localhost:3000/api/auth/register
 Content-Type: application/json
 
 {
-    "fullname": "Test User 2",
+    "fullName": "Test User 2",
     "email": "testUser2@gmail.com",
     "password": "testuser",
     "profile": {
@@ -75,7 +75,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 
 {
     "profile": {
-        "fullname" : "Otwe",
+        "fullName" : "Otwe",
         "dob": "2001-05-06",
         "education": [{
             "school": {
