@@ -40,7 +40,10 @@ const profileSchema = new Schema<IProfile>({
     type: [Types.ObjectId],
     ref: "SchoolWork"
   },
-  unicoyn: Number
+  unicoyn: {
+    type: Number,
+    default: 0
+  }
 });
 
 const userSchema = new Schema<IUSer>(

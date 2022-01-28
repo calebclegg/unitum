@@ -267,7 +267,7 @@ export const postLikes = async (req: any, res: Response) => {
       (objectID) => objectID.toString() !== req.user._id.toString()
     );
     post.upvoteBy = result;
-    post.upvotes! -= 1;
+    if (post.upvotes! > 0) post.upvotes! -= 1;
   } else {
     post.upvoteBy?.push(req.user._id);
     post.upvotes! += 1;

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import CommunityModel from "../models/Community";
 import { PostModel } from "../models/Post";
+import { SchoolWork } from "../models/schoolWork";
 import User from "../models/User";
 
 export const search = async (req: Request, res: Response) => {
@@ -21,7 +22,17 @@ export const search = async (req: Request, res: Response) => {
       $or: [{ body: { $regex: searchString, $options: "i" } }]
     })
       .select("-media -comments -upvoteBy -__v -updatedAt")
-      .populate({ path: "author", select: "profile.fullName profile.picture" })
+      .populate({ path: "author", select: "profile.fullName profile.picture" }),
+    schoolWork: SchoolWork.find({
+      $or: [
+        { title: { $regex: searchString, $options: "i" } },
+        { description: { $regex: searchString, $options: "i" } }
+      ]
+    }).populate({
+      path: "userID",
+      select:
+        "-__v -updatedAt -email - role -fullName -profile.dob -profile.communities -profile.schoolWork -profile.education"
+    })
   };
   try {
     let dbquery, data: any;
