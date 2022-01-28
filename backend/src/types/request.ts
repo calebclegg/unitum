@@ -3,7 +3,7 @@ import { Request } from "express";
 import { IUSer } from "./user";
 
 interface CustomRequest extends Request {
-  user?: IUSer;
+  user: IUSer;
   headers: IncomingHttpHeaders & {
     "X-Auth-Provider"?: string;
   };

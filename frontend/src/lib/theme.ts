@@ -69,7 +69,9 @@ theme.components = {
     },
     styleOverrides: {
       root: {
-        padding: theme.spacing(2),
+        padding: theme.spacing(2)
+      },
+      rounded: {
         borderRadius: 8
       }
     }
@@ -82,3 +84,23 @@ theme.components = {
     }
   }
 };
+
+export const darkTheme = createTheme(theme, {
+  palette: {
+    mode: "dark",
+    text: {
+      primary: theme.palette.grey[100],
+      secondary: theme.palette.grey[300]
+    }
+  }
+});
+
+export const lightTheme = createTheme(theme, {
+  palette: {
+    mode: "light",
+    text: {
+      primary: theme.palette.text.primary,
+      secondary: theme.palette.text.secondary
+    }
+  }
+});

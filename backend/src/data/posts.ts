@@ -1,12 +1,11 @@
 export const posts = [
-    {
-        text: "New Post 1",
-        
-    },
-    {
-
-    },
-    {
-
-    }
-]
+  {
+    body: "New Post 1"
+  },
+  {
+    body: "All about Django"
+  },
+  {
+    body: "Typescript"
+  }
+];

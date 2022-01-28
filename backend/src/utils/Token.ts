@@ -16,12 +16,13 @@ export const createToken = async (user: IUSer) => {
 
 export const createRefreshToken = async (user: IUSer) => {
   const secret = process.env.RF_TOKEN_SECRET;
+  const expiresIn = process.env.RF_TOKEN_EX;
 
   const dataStoredInToken: JwtPayload = {
     sub: user.email,
     iss: process.env.JWT_ISSUER
   };
-  const token = jwt.sign(dataStoredInToken, secret!, { expiresIn: "7d" });
+  const token = jwt.sign(dataStoredInToken, secret!, { expiresIn: expiresIn });
   return token;
 };
 
@@ -50,6 +51,11 @@ export const saveRefreshToken = async (email: string, token: string) => {
   await redisClient.execute(["expire", email, 691200]);
 };
 
+export const retrieveRefreshToken = async (email: string) => {
+  await redisConnect();
+  const token = await redisClient.execute(["GET", email]);
+  return token;
+};
 export const deleteRefreshToken = async (email: string) => {
   await redisConnect();
   await redisClient.execute(["DEL", email]);

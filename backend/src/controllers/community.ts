@@ -5,6 +5,9 @@ import {
 } from "../validators/community.validator";
 import CommunityModel from "../models/Community";
 import { Types } from "mongoose";
+import User from "../models/User";
+import { notification } from "../types/notification";
+import { sendNotification } from "../utils/notification";
 import { ICommunity } from "../types/community";
 
 export const createCommunity = async (req: any, res: Response) => {
@@ -12,11 +15,13 @@ export const createCommunity = async (req: any, res: Response) => {
   const valData = await validateCommCreateData(req.body);
   let errors;
   if (valData.error) {
-    errors = valData.error.details.map(error => ( {label:error.context?.label,message:error.message}
-    ))
+    errors = valData.error.details.map((error) => ({
+      label: error.context?.label,
+      message: error.message
+    }));
     return res
       .status(400)
-      .json({ message: "Some fields are invalid/required", errors: errors});
+      .json({ message: "Some fields are invalid/required", errors: errors });
   }
   const newCommunity = new CommunityModel({
     admin: user._id,
@@ -35,8 +40,8 @@ export const editCommunity = async (req: any, res: Response) => {
   const commID = new Types.ObjectId(req.params.commID);
   const dbCommunity = await CommunityModel.findById({
     _id: commID
-  });
-  
+  }).populate({ path: "admin", select: "profile.fullname" });
+
   if (!dbCommunity)
     return res.status(404).json({ message: "Community not found" });
 
@@ -45,18 +50,31 @@ export const editCommunity = async (req: any, res: Response) => {
   const valData = await validateCommEditData(req.body);
   let errors;
   if (valData.error) {
-    errors = valData.error.details.map(error => ( {label:error.context?.label,message:error.message}
-    ))
+    errors = valData.error.details.map((error) => ({
+      label: error.context?.label,
+      message: error.message
+    }));
     return res
       .status(400)
-      .json({ message: "Some fields are invalid/required", errors: errors});
+      .json({ message: "Some fields are invalid/required", errors: errors });
   }
   try {
     const updatedCommunity = await CommunityModel.findByIdAndUpdate(
       { _id: commID },
-      valData.value, {new: true}
+      valData.value,
+      { new: true }
     );
-    return res.status(200).json(updatedCommunity);
+    res.status(200).json(updatedCommunity);
+    const admin = await User.findOne({ _id: dbCommunity.admin._id }).select(
+      "profile.fullname"
+    );
+    const notification: notification = {
+      message: `${admin?.profile?.fullname} updated ${dbCommunity.name} community`,
+      type: "community",
+      user: dbCommunity.admin._id,
+      communityID: dbCommunity._id
+    };
+    await sendNotification(req.socket, notification, dbCommunity._id);
   } catch (error) {
     return res.sendStatus(500);
   }
@@ -64,9 +82,13 @@ export const editCommunity = async (req: any, res: Response) => {
 
 export const viewCommunity = async (req: any, res: Response) => {
   const commID = new Types.ObjectId(req.params.commID);
-  const dbCommunity = await CommunityModel.findById(commID).select([
-    "-members"
-  ]);
+  const dbCommunity = await CommunityModel.findById(commID)
+    .select(["-members"])
+    .populate({
+      path: "admin",
+      select: ["profile.fullname", "email", "profile.picture"]
+    })
+    .select("-members -__v -updatedAt");
   if (!dbCommunity)
     return res.status(404).json({ message: "Community not found" });
 
@@ -76,7 +98,7 @@ export const viewCommunity = async (req: any, res: Response) => {
 export const deleteCommunity = async (req: any, res: Response) => {
   const commID = new Types.ObjectId(req.params.commID);
   const community = await CommunityModel.findById(commID);
-  
+
   if (!community) return res.sendStatus(404);
   if (community && community._id.toString() !== req.user._id.toString())
     return res.sendStatus(403);
@@ -92,19 +114,169 @@ export const searchCommunity = async (req: any, res: Response) => {
   const communityName = req.query.search;
   const limit = req.query.limit || 10;
   const skip = req.query.offset || 0;
-  
+
   let communities;
   if (!communityName) {
-    communities = await CommunityModel.find({}).skip(skip).limit(limit);
+    communities = await CommunityModel.find({})
+      .skip(skip)
+      .limit(limit)
+      .populate({
+        path: "admin",
+        select: ["profile.fullname", "email", "profile.picture"]
+      })
+      .select("-members -__v -updatedAt");
   } else {
     communities = await CommunityModel.find({
       $text: { $search: communityName }
     })
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .populate({
+        path: "admin",
+        select: ["profile.fullname", "email", "profile.picture"]
+      })
+      .select("-members -__v -updatedAt");
   }
 
-  
   if (!communities) return res.sendStatus(404);
   return res.status(200).json(communities);
+};
+
+export const addMember = async (req: any, res: Response) => {
+  const commID = req.params.commID;
+  const userID = req.body.userID;
+  if (!userID) {
+    return res.status(400).json({ message: "userID is required" });
+  }
+
+  const user = await User.findOne({ _id: userID });
+  if (!user)
+    return res.status(404).json({ message: "User with this Id not found" });
+
+  const community = await CommunityModel.findOne({ _id: commID });
+  if (!community)
+    return res.status(404).json({ message: "Community not found" });
+
+  if (community.admin.toString() !== req.user._id.toString())
+    return res
+      .status(401)
+      .json({ message: "You are unauthorized to add user to this community" });
+
+  const isMember = community.members?.some((member) => {
+    return member?.memberID?.equals(userID);
+  });
+
+  if (isMember)
+    return res
+      .status(200)
+      .json({ message: "User is already a member of this community" });
+
+  user.profile?.communities?.push(community._id);
+  community.members?.push({ memberID: userID, role: "member" });
+  community.numberOfMembers! += 1;
+  try {
+    user.save();
+    community.save();
+    res.status(200).json({ message: "New Member has been added successfully" });
+
+    const admin = await User.findOne({ _id: community.admin._id }).select(
+      "profile.fullname"
+    );
+    const notification: notification = {
+      message: `${admin?.profile?.fullname} added you to ${community.name}`,
+      type: "community",
+      user: community.admin._id,
+      communityID: community._id,
+      userID: user._id
+    };
+    await sendNotification(req.socket, notification, user._id);
+  } catch (error) {
+    return res.sendStatus(500);
+  }
+};
+
+export const removeMember = async (req: any, res: Response) => {
+  const commID = req.params.commID;
+  const userID = req.body.userID;
+  if (!userID) return res.status(400).json({ message: "userID is required" });
+
+  const user = await User.findOne({ _id: userID });
+
+  const community = await CommunityModel.findOne({ _id: commID });
+  if (!community)
+    return res.status(404).json({ message: "Community not found" });
+
+  if (!(community.admin._id.toString() === req.user._id.toString()))
+    return res.status(401).json({
+      message: "You are unauthorized to remove a member from this community"
+    });
+  const isMember = community.members?.some((member) => {
+    return member?.memberID?.equals(user?._id);
+  });
+
+  if (!isMember)
+    return res
+      .status(400)
+      .json({ message: "User is not a member of this community" });
+
+  const newMemberList = community.members?.filter((member) => {
+    member?.memberID?.toString() !== user?._id.toString();
+  });
+
+  const newCommunityList = user?.profile?.communities?.filter((comm) => {
+    comm._id.toString() !== community._id.toString();
+  });
+  community.members = newMemberList;
+  if (user?.profile?.communities) {
+    user.profile.communities = newCommunityList;
+  }
+  try {
+    community.save();
+    user!.save();
+    return res.sendStatus(200);
+  } catch (error) {
+    return res.sendStatus(500);
+  }
+};
+
+export const leaveCommunity = async (req: any, res: Response) => {
+  const commID = req.params.commID;
+  const userID = req.user._id;
+  const user = await User.findOne({ _id: userID });
+
+  const community = await CommunityModel.findOne({ _id: commID });
+  if (!community)
+    return res.status(404).json({ message: "Community not found" });
+
+  const isMember = community.members?.some((member) => {
+    console.log(member.memberID, user?._id);
+    console.log(member);
+    return member?.memberID?.equals(user?._id.toString());
+  });
+
+  if (!isMember)
+    return res
+      .status(400)
+      .json({ message: "You are not a member of this community" });
+
+  const newMemberList = community.members?.filter((member) => {
+    console.log(member.memberID.toString(), user?._id.toString());
+    member.memberID.toString() !== user?._id.toString();
+  });
+  console.log(newMemberList);
+  const newCommunityList = user?.profile?.communities?.filter((comm) => {
+    console.log(comm._id.toString(), community._id.toString());
+    comm._id.toString() !== community._id.toString();
+  });
+  community.members = newMemberList;
+  if (user?.profile?.communities) {
+    user.profile.communities = newCommunityList;
+  }
+  try {
+    community.save();
+    user!.save();
+    return res.sendStatus(200);
+  } catch (error) {
+    return res.sendStatus(500);
+  }
 };

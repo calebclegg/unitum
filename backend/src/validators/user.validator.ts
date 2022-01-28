@@ -15,10 +15,18 @@ const educationSchema = Joi.array().items(
 );
 
 const profileSchema = Joi.object({
+  fullname: Joi.string().min(2).max(20),
+  picture: Joi.string(),
   dob: Joi.date(),
   education: educationSchema,
   communities: Joi.array(),
   unicoyn: Joi.number()
+});
+
+const profileUpdateSchema = Joi.object({
+  fullname: Joi.string().min(2).max(20),
+  picture: Joi.string(),
+  dob: Joi.date()
 });
 
 function validateRegUser(data: IUSer) {
@@ -50,8 +58,7 @@ const validateEmail = (data: { email: string }) => {
 
 export const validateUserUpdate = async (data: IUSer) => {
   const userUpdateSchema = Joi.object({
-    fullName: Joi.string(),
-    profile: profileSchema
+    profile: profileUpdateSchema
   }).options({ abortEarly: false });
 
   return userUpdateSchema.validate(data);

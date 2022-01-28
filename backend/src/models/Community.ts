@@ -24,6 +24,9 @@ const communitySchema = new Schema<ICommunity>(
       max: 30,
       required: true
     },
+    picture: {
+      type: String
+    },
     description: {
       type: String,
       max: 200
