@@ -4,8 +4,8 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Post, { IProps } from "../components/Post";
 import useSWR from "swr";
-import useUser from "../hooks/useUser";
-import { fetcher } from "../utils/fetcher";
+import { fetcher } from "../utils";
+import { useUser } from "../hooks";
 
 interface IPost {
   id: number;
@@ -65,7 +65,7 @@ const Feed = () => {
         spacing={2}
         maxWidth={700}
         sx={{
-          "& .MuiPaper-rounded:first-child": {
+          "& .MuiPaper-rounded:first-of-type": {
             borderTopLeftRadius: 0,
             borderTopRightRadius: 0
           }

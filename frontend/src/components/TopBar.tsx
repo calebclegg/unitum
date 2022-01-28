@@ -21,6 +21,7 @@ import { darkTheme } from "../lib";
 import { useDisplaySize } from "../hooks";
 import { Link, useLocation } from "react-router-dom";
 import { lazy, Suspense, useEffect, useState } from "react";
+import { useUser } from "../hooks";
 
 const Search = lazy(() => import("./Search"));
 const MobileInput = lazy(() => import("./Search/MobileInput"));
@@ -44,6 +45,7 @@ interface IProps {
 }
 
 const TopBar = ({ openDrawer }: IProps) => {
+  const { user } = useUser();
   const { pathname } = useLocation();
   const tabletUp = useDisplaySize("sm");
   const laptopUp = useDisplaySize("md");
@@ -162,11 +164,11 @@ const TopBar = ({ openDrawer }: IProps) => {
                             gap={0.25}
                           >
                             <Typography color="text.primary">
-                              John Doe
+                              {user?.profile.fullName}
                             </Typography>
                             <Chip
                               size="small"
-                              label="Student"
+                              label={`unicoyn ${user?.profile.unicoyn || 0}`}
                               sx={({ customPalette }) => ({
                                 height: 20,
                                 borderRadius: 0.5,
