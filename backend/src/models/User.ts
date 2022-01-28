@@ -1,7 +1,6 @@
 import { model, Schema, Types } from "mongoose";
 import { IEducation, IProfile, IUSer } from "../types/user";
 import bcrypt from "bcryptjs";
-import { string } from "joi";
 
 const schoolSchema = new Schema({
   name: String,
@@ -37,7 +36,14 @@ const profileSchema = new Schema<IProfile>({
     type: [Types.ObjectId],
     ref: "Community"
   },
-  unicoyn: Number
+  schoolWork: {
+    type: [Types.ObjectId],
+    ref: "SchoolWork"
+  },
+  unicoyn: {
+    type: Number,
+    default: 0
+  }
 });
 
 const userSchema = new Schema<IUSer>(

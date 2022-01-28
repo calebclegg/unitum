@@ -20,6 +20,7 @@ interface IProfile {
   dob?: Date;
   education?: IEducation[];
   communities?: Types.ObjectId[];
+  schoolWork?: Types.ObjectId[];
   unicoyn: number;
 }
 
