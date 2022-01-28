@@ -4,12 +4,8 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Post, { IProps } from "../components/Post";
 import useSWR from "swr";
-import axios from "axios";
-
-const fetcher = async (endpoint: string) =>
-  await (
-    await axios.get(`https://jsonplaceholder.typicode.com/${endpoint}`)
-  ).data;
+import useUser from "../hooks/useUser";
+import { fetcher } from "../utils/fetcher";
 
 interface IPost {
   id: number;
@@ -30,9 +26,12 @@ interface IUserPost extends IProps {
 }
 
 const Feed = () => {
+  const { user } = useUser();
   const { data: posts } = useSWR<IPost[]>("posts", fetcher);
   const { data: users } = useSWR<IUser[]>("users", fetcher);
   const [userPosts, setUserPosts] = useState<IUserPost[] | null>(null);
+
+  console.log({ user });
 
   useEffect(() => {
     const reshapedPosts = posts

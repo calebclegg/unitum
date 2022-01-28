@@ -15,7 +15,7 @@ const educationSchema = Joi.array().items(
 );
 
 const profileSchema = Joi.object({
-  fullname: Joi.string().min(2).max(20),
+  fullName: Joi.string().min(2).max(20),
   picture: Joi.string(),
   dob: Joi.date(),
   education: educationSchema,
@@ -24,14 +24,14 @@ const profileSchema = Joi.object({
 });
 
 const profileUpdateSchema = Joi.object({
-  fullname: Joi.string().min(2).max(20),
+  fullName: Joi.string().min(2).max(20),
   picture: Joi.string(),
   dob: Joi.date()
 });
 
 function validateRegUser(data: IUSer) {
   const userSchema = Joi.object({
-    fullname: Joi.string().min(2).max(20),
+    fullName: Joi.string().min(2).max(20),
     email: Joi.string().email().required(),
     password: Joi.string().min(6).required(),
     profile: profileSchema

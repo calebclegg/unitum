@@ -40,7 +40,7 @@ export const editCommunity = async (req: any, res: Response) => {
   const commID = new Types.ObjectId(req.params.commID);
   const dbCommunity = await CommunityModel.findById({
     _id: commID
-  }).populate({ path: "admin", select: "profile.fullname" });
+  }).populate({ path: "admin", select: "profile.fullName" });
 
   if (!dbCommunity)
     return res.status(404).json({ message: "Community not found" });
@@ -66,10 +66,10 @@ export const editCommunity = async (req: any, res: Response) => {
     );
     res.status(200).json(updatedCommunity);
     const admin = await User.findOne({ _id: dbCommunity.admin._id }).select(
-      "profile.fullname"
+      "profile.fullName"
     );
     const notification: notification = {
-      message: `${admin?.profile?.fullname} updated ${dbCommunity.name} community`,
+      message: `${admin?.profile?.fullName} updated ${dbCommunity.name} community`,
       type: "community",
       user: dbCommunity.admin._id,
       communityID: dbCommunity._id
@@ -86,7 +86,7 @@ export const viewCommunity = async (req: any, res: Response) => {
     .select(["-members"])
     .populate({
       path: "admin",
-      select: ["profile.fullname", "email", "profile.picture"]
+      select: ["profile.fullName", "email", "profile.picture"]
     })
     .select("-members -__v -updatedAt");
   if (!dbCommunity)
@@ -122,7 +122,7 @@ export const searchCommunity = async (req: any, res: Response) => {
       .limit(limit)
       .populate({
         path: "admin",
-        select: ["profile.fullname", "email", "profile.picture"]
+        select: ["profile.fullName", "email", "profile.picture"]
       })
       .select("-members -__v -updatedAt");
   } else {
@@ -133,7 +133,7 @@ export const searchCommunity = async (req: any, res: Response) => {
       .limit(limit)
       .populate({
         path: "admin",
-        select: ["profile.fullname", "email", "profile.picture"]
+        select: ["profile.fullName", "email", "profile.picture"]
       })
       .select("-members -__v -updatedAt");
   }
@@ -180,10 +180,10 @@ export const addMember = async (req: any, res: Response) => {
     res.status(200).json({ message: "New Member has been added successfully" });
 
     const admin = await User.findOne({ _id: community.admin._id }).select(
-      "profile.fullname"
+      "profile.fullName"
     );
     const notification: notification = {
-      message: `${admin?.profile?.fullname} added you to ${community.name}`,
+      message: `${admin?.profile?.fullName} added you to ${community.name}`,
       type: "community",
       user: community.admin._id,
       communityID: community._id,
