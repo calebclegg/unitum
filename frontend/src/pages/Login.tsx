@@ -1,15 +1,20 @@
 import Helmet from "react-helmet";
 import axios from "axios";
 import MuiLink from "@mui/material/Link";
-import { Link, useNavigate } from "react-router-dom";
 import { FormikHelpers } from "formik";
+import { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { API, loginSchema, loginValues, TLoginValues } from "../lib";
 import { camelToCapitalized } from "../utils";
+import { saveToken } from "../utils/store-token";
 import CustomInput from "../components/CustomInput";
 import FormLayout from "../components/FormLayout";
+import { getRedirectUrlFromState, TState } from "../utils/get-url";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (
     values: Partial<TLoginValues>,
@@ -17,11 +22,11 @@ const Login = () => {
   ) => {
     try {
       const { data } = await API.post("auth/login", values);
-      localStorage.setItem("token", data.refreshToken);
-      navigate("/feed", { replace: true });
+      saveToken(data?.refreshToken);
+      navigate(getRedirectUrlFromState(state as TState), { replace: true });
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.log(error.response);
+      if (axios.isAxiosError(error) && error.response) {
+        setErrorMessage(error.response.data.message);
       }
     } finally {
       setSubmitting(false);
@@ -34,7 +39,7 @@ const Login = () => {
         <title>Login to your Account</title>
       </Helmet>
       <FormLayout
-        loadingIndicator="Fetching your account..."
+        authError={errorMessage}
         initialValues={loginValues}
         validationSchema={loginSchema}
         handleSubmit={handleSubmit}
@@ -43,7 +48,7 @@ const Login = () => {
         formFooter={
           <>
             Don&apos;t have an account?&nbsp;
-            <MuiLink component={Link} to="/register">
+            <MuiLink component={Link} to="/register" state={state}>
               Register here
             </MuiLink>
           </>

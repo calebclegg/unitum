@@ -31,6 +31,8 @@ const Feed = () => {
   const { data: users } = useSWR<IUser[]>("users", fetcher);
   const [userPosts, setUserPosts] = useState<IUserPost[] | null>(null);
 
+  console.log({ user });
+
   useEffect(() => {
     const reshapedPosts = posts
       ?.slice(0, users?.length || 0)

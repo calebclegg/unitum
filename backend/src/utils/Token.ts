@@ -1,4 +1,3 @@
-import { DataStoredInToken } from "../types/token";
 import { IUSer } from "../types/user";
 import jwt from "jsonwebtoken";
 import { JwtPayload, VerifyOptions } from "jsonwebtoken";
@@ -16,13 +15,12 @@ export const createToken = async (user: IUSer) => {
 
 export const createRefreshToken = async (user: IUSer) => {
   const secret = process.env.RF_TOKEN_SECRET;
-  const expiresIn = process.env.RF_TOKEN_EX;
 
   const dataStoredInToken: JwtPayload = {
     sub: user.email,
     iss: process.env.JWT_ISSUER
   };
-  const token = jwt.sign(dataStoredInToken, secret!, { expiresIn: expiresIn });
+  const token = jwt.sign(dataStoredInToken, secret!, { expiresIn: "7d" });
   return token;
 };
 
@@ -38,8 +36,7 @@ export const decodeToken = async (jwtString: string, type: string) => {
     }
   };
   const options: VerifyOptions = {
-    issuer: process.env.JWT_ISSUER,
-    maxAge: tokenTypes[type].maxAge || "15m"
+    issuer: process.env.JWT_ISSUER
   };
   const payload = jwt.verify(jwtString, tokenTypes[type].secret, options);
   return payload;

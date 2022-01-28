@@ -1,5 +1,6 @@
 import LoadingButton from "@mui/lab/LoadingButton";
 import ArrowBack from "@mui/icons-material/ArrowBack";
+import Alert, { AlertColor } from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
@@ -9,7 +10,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/system/Box";
 import { visuallyHidden } from "@mui/utils";
 import { Form, Formik, FormikHelpers } from "formik";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   TLoginSchema,
   TLoginValues,
@@ -18,17 +19,20 @@ import {
 } from "../lib";
 import { kebabToCapitalized } from "../utils";
 import { useDisplaySize } from "../hooks";
+import { useEffect, useState } from "react";
+import { TState, getAlertTypeFromCondition } from "../utils";
 import AuthProviders from "./AuthProviders";
+import useUser from "../hooks/useUser";
 
 interface IProps {
   children: React.ReactNode;
   formType: "sign-up" | "sign-in";
   formFooter: React.ReactNode;
+  authError?: string;
   handleSubmit: (
     values: Partial<TRegisterValues>,
     actions: FormikHelpers<Partial<TRegisterValues>>
   ) => void;
-  loadingIndicator: string;
   initialValues: TLoginValues | TRegisterValues;
   validationSchema: TLoginSchema | TRegisterSchema;
   title: string;
@@ -39,12 +43,43 @@ const FormLayout = ({
   children,
   formType,
   formFooter,
+  authError,
   handleSubmit,
   initialValues,
-  validationSchema,
-  loadingIndicator
+  validationSchema
 }: IProps) => {
+  useUser();
   const laptopUp = useDisplaySize("md");
+  const { state } = useLocation();
+  const [{ type, message }, setMessage] = useState<{
+    type: AlertColor;
+    message: string;
+  }>({
+    type: "error",
+    message: ""
+  });
+
+  useEffect(() => {
+    const typedState = state as TState;
+
+    if (typedState?.condition.startsWith("auth")) {
+      const type = getAlertTypeFromCondition(typedState.condition);
+
+      setMessage({
+        type,
+        message:
+          type === "error" && window.location.pathname === "/login"
+            ? "Please login to continue"
+            : type === "success"
+            ? "Account registered successfully"
+            : ""
+      });
+    }
+  }, [state]);
+
+  useEffect(() => {
+    authError && setMessage({ type: "error", message: authError });
+  }, [authError]);
 
   return (
     <Box
@@ -88,8 +123,13 @@ const FormLayout = ({
             fontWeight={500}
             sx={{ mb: laptopUp ? 4 : 3 }}
           >
-            {title}
+            {type === "success" && message ? "Login here" : title}
           </Typography>
+          {message && (
+            <Alert severity={type} sx={{ mb: 2 }}>
+              {message}
+            </Alert>
+          )}
           <Stack
             direction={laptopUp ? "row" : "column"}
             justifyContent="center"
@@ -106,11 +146,10 @@ const FormLayout = ({
                   <Form id={`${formType}-form`} name={formType}>
                     {children}
                     <LoadingButton
-                      variant="contained"
-                      type="submit"
-                      loading={isSubmitting}
-                      loadingIndicator={loadingIndicator}
                       fullWidth
+                      type="submit"
+                      variant="contained"
+                      loading={isSubmitting}
                       sx={{ my: 2 }}
                     >
                       {kebabToCapitalized(formType)}

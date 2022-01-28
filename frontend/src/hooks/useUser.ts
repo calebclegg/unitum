@@ -1,5 +1,8 @@
 import useSWR from "swr";
-import { useState, useEffect } from "react";
+import axios, { AxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
+import { getToken, saveToken } from "../utils/store-token";
+import { getUrl } from "../utils";
 
 interface IEducation {
   school: {
@@ -26,35 +29,60 @@ interface IUser {
 }
 
 const fetcher = async (endpoint: string, token?: string) => {
-  const res = await fetch(`http://localhost:5000/api/${endpoint}`, {
-    method: "GET",
+  const { data } = await axios.get(`http://localhost:5000/api/${endpoint}`, {
     headers: {
-      "Content-Type": "application/json",
       Authorization: token ? `Bearer ${token}` : ""
-    },
-    body: JSON.stringify({ refreshToken: token })
+    }
   });
-
-  const data = await res.json();
-
-  if (!res.ok) {
-    throw new Error(data.message);
-  }
 
   return data;
 };
 
 const useUser = () => {
-  const { data: token } = useSWR<string>(
-    ["auth/token", localStorage.getItem("token")],
+  const navigate = useNavigate();
+  const { data: tokens } = useSWR<
+    {
+      accessToken: string;
+      refreshToken: string;
+    },
+    AxiosError
+  >(
+    () => {
+      const refreshToken = getToken();
+      return ["auth/token", refreshToken];
+    },
+    fetcher,
+    {
+      onSuccess: ({ refreshToken }) => {
+        if (["/register", "/login"].includes(window.location.pathname)) {
+          window.history.back();
+        }
+
+        saveToken(refreshToken);
+      },
+      onErrorRetry: (error, _, __, revalidate, { retryCount }) => {
+        if (error.response?.status === 400 || retryCount >= 10) return;
+
+        setTimeout(() => revalidate({ retryCount }), 5000);
+      },
+      onError: () => {
+        navigate("/login", {
+          replace: true,
+          state: {
+            condition: "auth-error",
+            from: getUrl()
+          }
+        });
+      }
+    }
+  );
+
+  const { data: user } = useSWR<IUser>(
+    tokens ? ["users/me", tokens?.accessToken] : null,
     fetcher
   );
 
-  const { data: user } = useSWR<IUser>(["users/me", token], fetcher);
-
-  console.log({ token, user });
-
-  return { user, token };
+  return { user, token: tokens?.accessToken };
 };
 
 export default useUser;
