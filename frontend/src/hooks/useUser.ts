@@ -1,31 +1,28 @@
 import useSWR from "swr";
 import axios, { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
-import { getToken, saveToken } from "../utils/store-token";
+import { clearToken, getToken, saveToken } from "../utils/store-token";
 import { getUrl } from "../utils";
 
-interface IEducation {
-  school: {
-    name: string;
-    url?: string;
-  };
-  fieldOfStudy: string;
-  startDate: Date;
-  endDate: Date;
-}
-
-interface IProfile {
-  dob?: string;
-  education?: IEducation[];
-  unicoyn: number;
-}
-
 interface IUser {
-  fullName: string;
-  authProvider: string;
+  _id: string;
   email: string;
-  profile: IProfile;
-  number?: number[];
+  fullName: string;
+  profile: {
+    _id: string;
+    communities: string[];
+    dob: string;
+    unicoyn: string;
+    education: {
+      _id: string;
+      startDate: string;
+      fieldOfStudy: string;
+      school: {
+        _id: string;
+        name: string;
+      };
+    }[];
+  };
 }
 
 const fetcher = async (endpoint: string, token?: string) => {
@@ -38,16 +35,16 @@ const fetcher = async (endpoint: string, token?: string) => {
   return data;
 };
 
-const useUser = () => {
+export const useUser = () => {
   const navigate = useNavigate();
   const isOnAuthPage = ["/register", "/login"].includes(
     window.location.pathname
   );
-  const { data: tokens } = useSWR<
+  const { data: tokens, mutate: updateToken } = useSWR<
     {
       accessToken: string;
       refreshToken: string;
-    },
+    } | null,
     AxiosError
   >(
     () => {
@@ -56,12 +53,12 @@ const useUser = () => {
     },
     fetcher,
     {
-      onSuccess: ({ refreshToken }) => {
+      onSuccess: (data) => {
         if (isOnAuthPage) {
           window.history.back();
         }
 
-        saveToken(refreshToken);
+        saveToken(data?.refreshToken);
       },
       onErrorRetry: (error, _, __, revalidate, { retryCount }) => {
         if (error.response?.status === 400 || retryCount >= 10) return;
@@ -82,12 +79,18 @@ const useUser = () => {
     }
   );
 
-  const { data: user } = useSWR<IUser>(
+  const { data: user, mutate: updateUser } = useSWR<IUser | null>(
     tokens ? ["users/me", tokens?.accessToken] : null,
     fetcher
   );
 
-  return { user, token: tokens?.accessToken };
-};
+  const logout = async () => {
+    await fetcher("auth/logout", tokens?.accessToken);
+    updateToken(null);
+    updateUser(null);
+    clearToken();
+    navigate("/login");
+  };
 
-export default useUser;
+  return { user, token: tokens?.accessToken, logout };
+};
