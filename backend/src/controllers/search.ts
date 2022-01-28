@@ -8,20 +8,20 @@ export const search = async (req: Request, res: Response) => {
   const searchString = req.query.search;
   const dbqueries: Record<string, any> = {
     user: User.find({
-      $or: [{ "profile.fullname": { $regex: searchString, $options: "i" } }]
+      $or: [{ "profile.fullName": { $regex: searchString, $options: "i" } }]
     }).select(
-      "-__v -createdAt -updatedAt -profile.education +profile.picture -profile.dob -email -fullname -role -profile.communities"
+      "-__v -createdAt -updatedAt -profile.education +profile.picture -profile.dob -email -fullName -role -profile.communities"
     ),
     community: CommunityModel.find({
       $or: [{ name: { $regex: searchString, $options: "i" } }]
     })
       .select("-__v -updatedAt -members")
-      .populate({ path: "admin", select: "profile.fullname profile.picture" }),
+      .populate({ path: "admin", select: "profile.fullName profile.picture" }),
     post: PostModel.find({
       $or: [{ body: { $regex: searchString, $options: "i" } }]
     })
       .select("-media -comments -upvoteBy -__v -updatedAt")
-      .populate({ path: "author", select: "profile.fullname profile.picture" })
+      .populate({ path: "author", select: "profile.fullName profile.picture" })
   };
   try {
     let dbquery, data: any;

@@ -15,16 +15,17 @@ interface IEducation {
 }
 
 interface IProfile {
-  fullname?: string;
+  fullName?: string;
   picture?: string;
   dob?: Date;
   education?: IEducation[];
   communities?: Types.ObjectId[];
+  schoolWork?: Types.ObjectId[];
   unicoyn: number;
 }
 
 interface IUSer {
-  fullname: string;
+  fullName: string;
   password?: string;
   role?: Role;
   picture?: string;

@@ -47,7 +47,7 @@ On successful connection,
 ---
 * **all chats**: this event returns a list all the chats or conversations of a the connected user. The shape of the chat object is:
   * ***_id***: the id of the chat.
-  * ***participants***: an array containing some profile info("fullname", "picture") of the the users participating in this chat.
+  * ***participants***: an array containing some profile info("fullName", "picture") of the the users participating in this chat.
   * ***messages***: an array of one element, the latest message in the chat.
 
 * **chat messages**: returns an array of 30(default) most recent messages in a chat.

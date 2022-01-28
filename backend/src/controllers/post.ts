@@ -44,7 +44,7 @@ export const createPost = async (req: any, res: Response) => {
     res.status(201).json(newPost);
     if (community) {
       const notificationInfo: notification = {
-        message: `${req.user.profile.fullname} added a new post in ${community.name}`,
+        message: `${req.user.profile.fullName} added a new post in ${community.name}`,
         type: "community",
         user: user._id,
         postID: newPost._id
@@ -74,14 +74,14 @@ export const getPosts = async (req: any, res: Response) => {
       dbPosts = await PostModel.find({ communityID: communityID })
         .sort("createdAt")
         .select("-comments")
-        .populate({ path: "author", select: "profile.fullname" })
+        .populate({ path: "author", select: "profile.fullName" })
         .skip(skip)
         .limit(limit);
     } else {
       dbPosts = await PostModel.find({})
         .sort("createdAt")
         .select("-comments")
-        .populate({ path: "author", select: "profile.fullname" })
+        .populate({ path: "author", select: "profile.fullName" })
         .skip(skip)
         .limit(limit);
     }
@@ -99,14 +99,14 @@ export const getPostDetails = async (req: any, res: Response) => {
       .populate([
         {
           path: "author",
-          select: "profile.fullname"
+          select: "profile.fullName"
         },
         {
           path: "comments",
           select: "-__v",
           populate: {
             path: "author",
-            select: "profile.fullname profile.picture"
+            select: "profile.fullName profile.picture"
           }
         }
       ])
@@ -220,7 +220,7 @@ export const addPostComment = async (req: any, res: Response) => {
     post.numberOfComments! += 1;
     await post.save();
     const notificationInfo: notification = {
-      message: `${req.user.profile.fullname} commented on your post`,
+      message: `${req.user.profile.fullName} commented on your post`,
       user: req.user._id,
       type: "post",
       userID: post.author._id,
@@ -232,7 +232,7 @@ export const addPostComment = async (req: any, res: Response) => {
         select: "-__v",
         populate: {
           path: "author",
-          select: "profile.fullname profile.picture"
+          select: "profile.fullName profile.picture"
         }
       })
     );
@@ -275,7 +275,7 @@ export const postLikes = async (req: any, res: Response) => {
   try {
     await post.save();
     const notificationInfo: notification = {
-      message: `${req.user.profile.fullname} liked your post`,
+      message: `${req.user.profile.fullName} liked your post`,
       user: req.user._id,
       type: "post",
       userID: post.author._id,
