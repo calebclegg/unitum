@@ -15,7 +15,7 @@ const educationSchema = Joi.array().items(
 );
 
 const profileSchema = Joi.object({
-  fullname: Joi.string().min(2).max(20),
+  fullName: Joi.string().min(2).max(20),
   picture: Joi.string(),
   dob: Joi.date(),
   education: educationSchema,
@@ -24,7 +24,7 @@ const profileSchema = Joi.object({
 });
 
 const profileUpdateSchema = Joi.object({
-  fullname: Joi.string().min(2).max(20),
+  fullName: Joi.string().min(2).max(20),
   picture: Joi.string(),
   dob: Joi.date()
 });

@@ -3,44 +3,44 @@ import { profile } from "console";
 
 const users = [
   {
-    fullname: "John Barnes",
+    fullName: "John Barnes",
     email: "ohenesetwumasi@gmail.com",
     password: bcrypt.hashSync("jaybarnes3319", 10),
     role: "active",
     profile: {
-      fullname: "John Barnes"
+      fullName: "John Barnes"
     }
   },
   {
-    fullname: "John Doe",
+    fullName: "John Doe",
     email: "john@example.com",
     password: bcrypt.hashSync("123456", 10),
     profile: {
-      fullname: "John Doe"
+      fullName: "John Doe"
     }
   },
   {
-    fullname: "Jane Doe",
+    fullName: "Jane Doe",
     email: "jane@example.com",
     password: bcrypt.hashSync("123456", 10),
     profile: {
-      fullname: "Jane Doe"
+      fullName: "Jane Doe"
     }
   },
   {
-    fullname: "Rex Osei",
+    fullName: "Rex Osei",
     email: "rexosei111@gmail.com",
     password: bcrypt.hashSync("rexosei111", 10),
     profile: {
-      fullname: "Rex Osei"
+      fullName: "Rex Osei"
     }
   },
   {
-    fullname: "Derek Oware",
+    fullName: "Derek Oware",
     email: "Dchole@gmail.com",
     password: bcrypt.hashSync("testuser", 10),
     profile: {
-      fullname: "Derek Oware",
+      fullName: "Derek Oware",
       dob: "2001-05-06",
       education: [
         {

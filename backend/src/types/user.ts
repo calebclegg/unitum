@@ -15,7 +15,7 @@ interface IEducation {
 }
 
 interface IProfile {
-  fullname?: string;
+  fullName?: string;
   picture?: string;
   dob?: Date;
   education?: IEducation[];
@@ -24,7 +24,7 @@ interface IProfile {
 }
 
 interface IUSer {
-  fullname: string;
+  fullName: string;
   password?: string;
   role?: Role;
   picture?: string;

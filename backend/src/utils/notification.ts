@@ -12,7 +12,7 @@ export const sendNotification = async (
       "new notification",
       newNotification.populate({
         path: "user",
-        select: "profile.fullname -profile.picture -__v -updatedAt"
+        select: "profile.fullName -profile.picture -__v -updatedAt"
       })
     );
   } catch (e) {
