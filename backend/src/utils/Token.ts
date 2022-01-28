@@ -6,32 +6,36 @@ import { redisConnect, redisClient } from "../config/redis_connect";
 
 export const createToken = async (user: IUSer) => {
   const secret = process.env.JWT_SECRET;
-  const expiresIn = process.env.JWT_EXPIRE_TIME;
   const dataStoredInToken: JwtPayload = {
     sub: user.email,
     iss: process.env.JWT_ISSUER
   };
   const token = jwt.sign(dataStoredInToken, secret!, { expiresIn: "10m" });
-  return token
+  return token;
 };
 
 export const createRefreshToken = async (user: IUSer) => {
   const secret = process.env.RF_TOKEN_SECRET;
-  const expiresIn = process.env.RF_TOKEN_EX;
-  
+
   const dataStoredInToken: JwtPayload = {
     sub: user.email,
     iss: process.env.JWT_ISSUER
   };
-  const token = jwt.sign(dataStoredInToken, secret!, { expiresIn: expiresIn });
-  return token
+  const token = jwt.sign(dataStoredInToken, secret!, { expiresIn: "7d" });
+  return token;
 };
 
 export const decodeToken = async (jwtString: string, type: string) => {
-  const tokenTypes:Record<string,Record<string, string>> = {
-    "access": {"secret": process.env.JWT_SECRET||"", "maxAge": process.env.JWT_EXPIRE_TIME || ""},
-    "refresh": {"secret": process.env.RF_TOKEN_SECRET||"", "maxAge": process.env.RF_EXPIRE_TIME || ""}
-  }
+  const tokenTypes: Record<string, Record<string, string>> = {
+    access: {
+      secret: process.env.JWT_SECRET || "",
+      maxAge: process.env.JWT_EXPIRE_TIME || ""
+    },
+    refresh: {
+      secret: process.env.RF_TOKEN_SECRET || "",
+      maxAge: process.env.RF_EXPIRE_TIME || ""
+    }
+  };
   const options: VerifyOptions = {
     issuer: process.env.JWT_ISSUER,
     maxAge: tokenTypes[type].maxAge || "15m"
@@ -40,14 +44,13 @@ export const decodeToken = async (jwtString: string, type: string) => {
   return payload;
 };
 
-
 export const saveRefreshToken = async (email: string, token: string) => {
-  await redisConnect()
-  await redisClient.execute(["SET", email, token])
-  await redisClient.execute(["expire", email,  691200])
-}
+  await redisConnect();
+  await redisClient.execute(["SET", email, token]);
+  await redisClient.execute(["expire", email, 691200]);
+};
 
 export const deleteRefreshToken = async (email: string) => {
-  await redisConnect()
-  await redisClient.execute(["DEL", email])
-}
+  await redisConnect();
+  await redisClient.execute(["DEL", email]);
+};

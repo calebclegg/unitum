@@ -1,7 +1,7 @@
 import Helmet from "react-helmet";
 import axios from "axios";
 import MuiLink from "@mui/material/Link";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FormikHelpers } from "formik";
 import { API, loginSchema, loginValues, TLoginValues } from "../lib";
 import { camelToCapitalized } from "../utils";
@@ -9,13 +9,16 @@ import CustomInput from "../components/CustomInput";
 import FormLayout from "../components/FormLayout";
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const handleSubmit = async (
     values: Partial<TLoginValues>,
     { setSubmitting }: FormikHelpers<Partial<TLoginValues>>
   ) => {
     try {
       const { data } = await API.post("auth/login", values);
-      console.log(data);
+      localStorage.setItem("token", data.refreshToken);
+      navigate("/feed", { replace: true });
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log(error.response);

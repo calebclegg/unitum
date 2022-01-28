@@ -39,9 +39,9 @@ const profileSchema = new Schema<IProfile>({
 
 const userSchema = new Schema<IUSer>(
   {
-   fullname: {
-     type: String,
-   },
+    fullName: {
+      type: String
+    },
     password: {
       type: String,
       select: false

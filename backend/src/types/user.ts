@@ -22,7 +22,7 @@ interface IProfile {
 }
 
 interface IUSer {
-  fullname: string,
+  fullName: string;
   password?: string;
   role?: Role;
   authProvider: string;
