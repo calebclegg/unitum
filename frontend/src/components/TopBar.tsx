@@ -164,11 +164,11 @@ const TopBar = ({ openDrawer }: IProps) => {
                             gap={0.25}
                           >
                             <Typography color="text.primary">
-                              {user?.fullName}
+                              {user?.profile.fullName}
                             </Typography>
                             <Chip
                               size="small"
-                              label={`unicoyn ${user?.profile?.unicoyn || 0}`}
+                              label={`unicoyn ${user?.profile.unicoyn || 0}`}
                               sx={({ customPalette }) => ({
                                 height: 20,
                                 borderRadius: 0.5,

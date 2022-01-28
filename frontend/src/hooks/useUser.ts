@@ -7,9 +7,10 @@ import { getUrl } from "../utils";
 interface IUser {
   _id: string;
   email: string;
-  fullName: string;
   profile: {
     _id: string;
+    fullName: string;
+    schoolWork: string[];
     communities: string[];
     dob: string;
     unicoyn: string;
