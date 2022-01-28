@@ -126,7 +126,10 @@ const FormLayout = ({
             {type === "success" && message ? "Login here" : title}
           </Typography>
           {message && (
-            <Alert severity={type} sx={{ mb: 2 }}>
+            <Alert
+              severity={type}
+              sx={{ mb: 2, mx: "auto", px: 4, width: "fit-content" }}
+            >
               {message}
             </Alert>
           )}
