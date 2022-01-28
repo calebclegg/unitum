@@ -94,3 +94,13 @@ export const darkTheme = createTheme(theme, {
     }
   }
 });
+
+export const lightTheme = createTheme(theme, {
+  palette: {
+    mode: "light",
+    text: {
+      primary: theme.palette.text.primary,
+      secondary: theme.palette.text.secondary
+    }
+  }
+});

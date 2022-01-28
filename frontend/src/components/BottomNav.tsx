@@ -10,7 +10,8 @@ import Fab from "@mui/material/Fab";
 import Stack from "@mui/material/Stack";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Theme } from "@mui/material/styles";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 const navLinks = [
   {
@@ -37,7 +38,12 @@ const navLinks = [
 
 const BottomNav = () => {
   const scrollPosition = useRef(0);
-  const [current, setCurrent] = useState(0);
+  const { pathname } = useLocation();
+  const current = useMemo(
+    () => navLinks.findIndex(({ path }) => path === pathname) || 0,
+    [pathname]
+  );
+
   const [scrollingDown, setScrollingDown] = useState(false);
   const smallMobile = useMediaQuery("@media (max-width: 389.99px)");
   const largeMobile = useMediaQuery(
@@ -46,13 +52,6 @@ const BottomNav = () => {
         .down("sm")
         .replace("@media ", "")}`
   );
-
-  const handleChange = (
-    _event: React.SyntheticEvent<Element, Event>,
-    value: number
-  ) => {
-    setCurrent(value);
-  };
 
   const handleScroll = () => {
     setScrollingDown(window.scrollY > scrollPosition.current);
@@ -91,14 +90,19 @@ const BottomNav = () => {
       <BottomNavigation
         showLabels
         value={current}
-        onChange={handleChange}
         sx={{
           borderTop: "2px solid",
           borderColor: "divider"
         }}
       >
         {navLinks.map(({ path, icon, label }) => (
-          <BottomNavigationAction key={path} label={label} icon={icon} />
+          <BottomNavigationAction
+            key={path}
+            to={path}
+            component={Link}
+            label={label}
+            icon={icon}
+          />
         ))}
         {largeMobile && (
           <Box

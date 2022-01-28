@@ -38,7 +38,7 @@ const users = [
   {
     fullName: "Derek Oware",
     email: "Dchole@gmail.com",
-    password: bcrypt.hashSync("Bethany", 10),
+    password: bcrypt.hashSync("testuser", 10),
     profile: {
       fullName: "Derek Oware",
       dob: "2001-05-06",
