@@ -48,7 +48,7 @@ POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
-   "email": "rexosei111@gmail.com",
+   "email": "kyeisamuel9@gmail.com",
    "password": "rexosei111"
 }
 
@@ -65,31 +65,50 @@ Content-Type: application/json
 
 GET http://localhost:3000/api/users/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjQyNTQwNywiZXhwIjoxNjQyNDI2MDA3fQ.IdzLBG9UUbVZkndvSJvShxtTmp3apOhn2LAn1cIA8Vo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzM3NjAxMCwiZXhwIjoxNjQzMzc2NjEwfQ.8Bk5zKdYjPVbATi5cmySL-rCrBYDshYln9TF_V6EwjM
 
 ###
 
 PATCH http://localhost:3000/api/users/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjI2Njk1MCwiZXhwIjoxNjQyMjY3NTUwfQ.Ag1bIQEl4NVx_TSIm_1T4Of3cW8Rvlm0H5SL8wR0uCo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzM3NjAxMCwiZXhwIjoxNjQzMzc2NjEwfQ.8Bk5zKdYjPVbATi5cmySL-rCrBYDshYln9TF_V6EwjM
 
 {
     "profile": {
-        "fullName" : "Otwe",
-        "dob": "2001-05-06",
-        "education": [{
-            "school": {
-                "name": "University of Mines"
-            },
-            "degree": "Bsc. Computer Science",
-            "fieldOfStudy": "Computer Science",
-            "startDate": "2019-09-02",
-            "grade": 83
-        }],
-        "unicoyn": 21
-
+        "fullName" : "Rex Osei",
+        "picture": "string",
+        "dob": "2001-09-22"
     }
 }
+
+###
+POST http://localhost:3000/api/users/me/schoolWork
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzM3NjAxMCwiZXhwIjoxNjQzMzc2NjEwfQ.8Bk5zKdYjPVbATi5cmySL-rCrBYDshYln9TF_V6EwjM
+
+{
+    "title": "New School Work 23",
+    "description": "Meaninful",
+    "grade": "79"
+}
+
+###
+
+PATCH  http://localhost:3000/api/users/me/schoolWork/61f3ee24f010c823c0c38a99
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJreWVpc2FtdWVsOUBnbWFpbC5jb20iLCJpc3MiOiJ1bml0dW06cGxhdGZvcm0iLCJpYXQiOjE2NDMzNzYzMDYsImV4cCI6MTY0MzM3NjkwNn0.BcMYq1Eikd2SkN2bohhJZEfm8K7M66yegZt8wpj8naQ
+
+{
+    "title": "New Work",
+    "description": "sjfsdkjfsiowj",
+    "grade": "89"
+}
+
+###
+
+DELETE http://localhost:3000/api/users/me/schoolWork/61f3ee24f010c823c0c38a99
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJreWVpc2FtdWVsOUBnbWFpbC5jb20iLCJpc3MiOiJ1bml0dW06cGxhdGZvcm0iLCJpYXQiOjE2NDMzNzYzMDYsImV4cCI6MTY0MzM3NjkwNn0.BcMYq1Eikd2SkN2bohhJZEfm8K7M66yegZt8wpj8naQ
 
 ###
 GET http://localhost:3000/api/auth/token
