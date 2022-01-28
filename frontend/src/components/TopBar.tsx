@@ -1,8 +1,10 @@
 import { styled, Theme, ThemeProvider } from "@mui/material/styles";
+import SearchIcon from "@mui/icons-material/Search";
 import Email from "@mui/icons-material/Email";
 import ButtonUnstyled from "@mui/base/ButtonUnstyled";
 import Menu from "@mui/icons-material/Menu";
 import Notifications from "@mui/icons-material/Notifications";
+import Box from "@mui/system/Box";
 import AppBar from "@mui/material/AppBar";
 import Avatar from "@mui/material/Avatar";
 import Badge from "@mui/material/Badge";
@@ -17,9 +19,11 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import Logo from "./Logo";
 import { darkTheme } from "../lib";
 import { useDisplaySize } from "../hooks";
-import { Link } from "react-router-dom";
-import { lazy, Suspense, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { lazy, Suspense, useEffect, useState } from "react";
 
+const Search = lazy(() => import("./Search"));
+const MobileInput = lazy(() => import("./Search/MobileInput"));
 const MenuOptions = lazy(() => import("./MenuOptions"));
 
 const MenuButton = styled("button")(({ theme }) => ({
@@ -40,12 +44,22 @@ interface IProps {
 }
 
 const TopBar = ({ openDrawer }: IProps) => {
+  const { pathname } = useLocation();
   const tabletUp = useDisplaySize("sm");
+  const laptopUp = useDisplaySize("md");
   const tabletLaptop = useMediaQuery(({ breakpoints }: Theme) =>
     breakpoints.between("sm", "lg")
   );
+  const tablet = useMediaQuery(({ breakpoints }: Theme) =>
+    breakpoints.only("sm")
+  );
 
+  const [searchMode, setSearchMode] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    setSearchMode(pathname === "/search");
+  }, [pathname]);
 
   const openMenu = (event: React.MouseEvent<HTMLButtonElement>) =>
     setAnchorEl(event.currentTarget);
@@ -64,90 +78,120 @@ const TopBar = ({ openDrawer }: IProps) => {
           }}
         >
           <Container maxWidth="xl" disableGutters={!tabletUp}>
-            <Toolbar sx={{ justifyContent: "space-between" }}>
-              <Stack direction="row">
-                {tabletLaptop && (
-                  <IconButton
-                    onClick={openDrawer}
-                    aria-label="open sidebar"
-                    sx={{ color: "text.secondary" }}
-                  >
-                    <Menu />
-                  </IconButton>
-                )}
-                <Logo full />
-              </Stack>
-              <Stack
-                direction="row"
-                spacing={tabletUp ? 2 : 1}
-                alignItems="center"
-              >
-                <IconButton
-                  component={Link}
-                  aria-label="notifications"
-                  to={tabletUp ? "#notifications" : "/notifications"}
-                  sx={{ color: "text.secondary" }}
-                >
-                  <Badge
-                    color="error"
-                    variant="dot"
-                    overlap="circular"
-                    badgeContent={5}
-                  >
-                    <Notifications />
-                  </Badge>
-                </IconButton>
-                {tabletUp && (
-                  <IconButton
-                    aria-label="messages"
-                    component={Link}
-                    to={tabletUp ? "#messages" : "/messages"}
-                    sx={{ color: "text.secondary" }}
-                  >
-                    <Badge
-                      color="error"
-                      variant="dot"
-                      overlap="circular"
-                      badgeContent={5}
+            <Toolbar sx={{ justifyContent: "space-between", gap: 2 }}>
+              {(!searchMode || tabletUp) && (
+                <Stack direction="row">
+                  {tabletLaptop && (
+                    <IconButton
+                      onClick={openDrawer}
+                      aria-label="open sidebar"
+                      sx={{ color: "text.secondary" }}
                     >
-                      <Email />
-                    </Badge>
-                  </IconButton>
-                )}
-                {tabletUp ? (
-                  <ButtonUnstyled component={MenuButton} onClick={openMenu}>
-                    <Grid container spacing={1.5} alignItems="center">
-                      <Grid item>
-                        <Avatar sx={{ width: 50, height: 50 }}>U</Avatar>
-                      </Grid>
-                      <Grid
-                        item
-                        container
-                        width="fit-content"
-                        direction="column"
-                        alignItems="center"
-                        gap={0.25}
+                      <Menu />
+                    </IconButton>
+                  )}
+                  <Logo full />
+                </Stack>
+              )}
+              {!searchMode && (
+                <>
+                  {laptopUp && (
+                    <Suspense fallback={<div />}>
+                      <Search />
+                    </Suspense>
+                  )}
+                  <Stack
+                    direction="row"
+                    spacing={tabletUp ? 2 : 1}
+                    alignItems="center"
+                  >
+                    {tablet && (
+                      <IconButton
+                        component={Link}
+                        aria-label="search"
+                        to="/search"
+                        sx={{ color: "text.secondary" }}
                       >
-                        <Typography color="text.primary">John Doe</Typography>
-                        <Chip
-                          size="small"
-                          label="Student"
-                          sx={({ customPalette }) => ({
-                            height: 20,
-                            borderRadius: 0.5,
-                            bgcolor: "grey.300",
-                            color: customPalette.navyBlue
-                          })}
-                        />
-                      </Grid>
-                    </Grid>
-                  </ButtonUnstyled>
-                ) : (
-                  <IconButton aria-label="menu" onClick={openMenu}>
-                    <Avatar sx={{ width: 50, height: 50 }}>U</Avatar>
-                  </IconButton>
-                )}
-              </Stack>
+                        <SearchIcon />
+                      </IconButton>
+                    )}
+                    <IconButton
+                      component={Link}
+                      aria-label="notifications"
+                      to={tabletUp ? "#notifications" : "/notifications"}
+                      sx={{ color: "text.secondary" }}
+                    >
+                      <Badge
+                        color="error"
+                        variant="dot"
+                        overlap="circular"
+                        badgeContent={5}
+                      >
+                        <Notifications />
+                      </Badge>
+                    </IconButton>
+                    {tabletUp && (
+                      <IconButton
+                        aria-label="messages"
+                        component={Link}
+                        to={tabletUp ? "#messages" : "/messages"}
+                        sx={{ color: "text.secondary" }}
+                      >
+                        <Badge
+                          color="error"
+                          variant="dot"
+                          overlap="circular"
+                          badgeContent={5}
+                        >
+                          <Email />
+                        </Badge>
+                      </IconButton>
+                    )}
+                    {tabletUp ? (
+                      <ButtonUnstyled component={MenuButton} onClick={openMenu}>
+                        <Grid container spacing={1.5} alignItems="center">
+                          <Grid item>
+                            <Avatar sx={{ width: 50, height: 50 }}>U</Avatar>
+                          </Grid>
+                          <Grid
+                            item
+                            container
+                            width="fit-content"
+                            direction="column"
+                            alignItems="center"
+                            gap={0.25}
+                          >
+                            <Typography color="text.primary">
+                              John Doe
+                            </Typography>
+                            <Chip
+                              size="small"
+                              label="Student"
+                              sx={({ customPalette }) => ({
+                                height: 20,
+                                borderRadius: 0.5,
+                                bgcolor: "grey.300",
+                                color: customPalette.navyBlue
+                              })}
+                            />
+                          </Grid>
+                        </Grid>
+                      </ButtonUnstyled>
+                    ) : (
+                      <IconButton aria-label="menu" onClick={openMenu}>
+                        <Avatar sx={{ width: 50, height: 50 }}>U</Avatar>
+                      </IconButton>
+                    )}
+                  </Stack>
+                </>
+              )}
+              {searchMode && (
+                <Suspense fallback={<div />}>
+                  <Box width="100%">
+                    <MobileInput />
+                  </Box>
+                </Suspense>
+              )}
             </Toolbar>
           </Container>
           <Suspense fallback={<div />}>
