@@ -6,7 +6,7 @@ export const validateSchoolWorkData = async (data: schoolWork) => {
     userID: Joi.string(),
     title: Joi.string().required(),
     description: Joi.string().max(400),
-    media: Joi.array().items(Joi.string()),
+    media: Joi.array().items(Joi.string()).required(),
     grade: Joi.string().required(),
     date: Joi.date()
   });

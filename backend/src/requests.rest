@@ -65,13 +65,13 @@ Content-Type: application/json
 
 GET http://localhost:3000/api/users/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzM3NjAxMCwiZXhwIjoxNjQzMzc2NjEwfQ.8Bk5zKdYjPVbATi5cmySL-rCrBYDshYln9TF_V6EwjM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJreWVpc2FtdWVsOUBnbWFpbC5jb20iLCJpc3MiOiJ1bml0dW06cGxhdGZvcm0iLCJpYXQiOjE2NDM0NDQ2MDQsImV4cCI6MTY0MzQ0NTIwNH0.g669ulqo8BP7gDvKal6JaKXSzPC951hXQHKRaNL2Iys
 
 ###
 
 PATCH http://localhost:3000/api/users/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzM3NjAxMCwiZXhwIjoxNjQzMzc2NjEwfQ.8Bk5zKdYjPVbATi5cmySL-rCrBYDshYln9TF_V6EwjM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJreWVpc2FtdWVsOUBnbWFpbC5jb20iLCJpc3MiOiJ1bml0dW06cGxhdGZvcm0iLCJpYXQiOjE2NDM0NDQ2MDQsImV4cCI6MTY0MzQ0NTIwNH0.g669ulqo8BP7gDvKal6JaKXSzPC951hXQHKRaNL2Iys
 
 {
     "profile": {
@@ -84,19 +84,20 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 ###
 POST http://localhost:3000/api/users/me/schoolWork
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzM3NjAxMCwiZXhwIjoxNjQzMzc2NjEwfQ.8Bk5zKdYjPVbATi5cmySL-rCrBYDshYln9TF_V6EwjM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJreWVpc2FtdWVsOUBnbWFpbC5jb20iLCJpc3MiOiJ1bml0dW06cGxhdGZvcm0iLCJpYXQiOjE2NDM0NDQ2MDQsImV4cCI6MTY0MzQ0NTIwNH0.g669ulqo8BP7gDvKal6JaKXSzPC951hXQHKRaNL2Iys
 
 {
     "title": "New School Work 23",
     "description": "Meaninful",
-    "grade": "79"
+    "grade": "79",
+    "media": ["http://localhost:3000/images"]
 }
 
 ###
 
 PATCH  http://localhost:3000/api/users/me/schoolWork/61f3ee24f010c823c0c38a99
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJreWVpc2FtdWVsOUBnbWFpbC5jb20iLCJpc3MiOiJ1bml0dW06cGxhdGZvcm0iLCJpYXQiOjE2NDMzNzYzMDYsImV4cCI6MTY0MzM3NjkwNn0.BcMYq1Eikd2SkN2bohhJZEfm8K7M66yegZt8wpj8naQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJreWVpc2FtdWVsOUBnbWFpbC5jb20iLCJpc3MiOiJ1bml0dW06cGxhdGZvcm0iLCJpYXQiOjE2NDM0NDQ2MDQsImV4cCI6MTY0MzQ0NTIwNH0.g669ulqo8BP7gDvKal6JaKXSzPC951hXQHKRaNL2Iys
 
 {
     "title": "New Work",
@@ -108,7 +109,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJreWVpc2Ftd
 
 DELETE http://localhost:3000/api/users/me/schoolWork/61f3ee24f010c823c0c38a99
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJreWVpc2FtdWVsOUBnbWFpbC5jb20iLCJpc3MiOiJ1bml0dW06cGxhdGZvcm0iLCJpYXQiOjE2NDMzNzYzMDYsImV4cCI6MTY0MzM3NjkwNn0.BcMYq1Eikd2SkN2bohhJZEfm8K7M66yegZt8wpj8naQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJreWVpc2FtdWVsOUBnbWFpbC5jb20iLCJpc3MiOiJ1bml0dW06cGxhdGZvcm0iLCJpYXQiOjE2NDM0NDQ2MDQsImV4cCI6MTY0MzQ0NTIwNH0.g669ulqo8BP7gDvKal6JaKXSzPC951hXQHKRaNL2Iys
 
 ###
 GET http://localhost:3000/api/auth/token

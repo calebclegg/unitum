@@ -283,7 +283,7 @@ export const postLikes = async (req: any, res: Response) => {
     };
     res.sendStatus(200);
     await sendNotification(
-      req.socket,
+      req.io,
       notificationInfo,
       post.author._id.toString()
     );
