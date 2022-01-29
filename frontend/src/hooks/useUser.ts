@@ -56,7 +56,7 @@ export const useUser = () => {
     {
       onSuccess: (data) => {
         if (isOnAuthPage) {
-          window.history.back();
+          navigate("/feed", { replace: true });
         }
 
         saveToken(data?.refreshToken);

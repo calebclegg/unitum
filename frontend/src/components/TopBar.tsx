@@ -22,6 +22,7 @@ import { useDisplaySize } from "../hooks";
 import { Link, useLocation } from "react-router-dom";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { useUser } from "../hooks";
+import { useSocket } from "../context/Socket";
 
 const Search = lazy(() => import("./Search"));
 const MobileInput = lazy(() => import("./Search/MobileInput"));
@@ -46,6 +47,7 @@ interface IProps {
 
 const TopBar = ({ openDrawer }: IProps) => {
   const { user } = useUser();
+  const { socket } = useSocket();
   const { pathname } = useLocation();
   const tabletUp = useDisplaySize("sm");
   const laptopUp = useDisplaySize("md");
@@ -56,12 +58,21 @@ const TopBar = ({ openDrawer }: IProps) => {
     breakpoints.only("sm")
   );
 
+  const [notifications, setNotifications] = useState(0);
   const [searchMode, setSearchMode] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     setSearchMode(pathname === "/search");
   }, [pathname]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("notification:get", (notifications) => {
+        setNotifications(notifications.length);
+      });
+    }
+  }, [socket]);
 
   const openMenu = (event: React.MouseEvent<HTMLButtonElement>) =>
     setAnchorEl(event.currentTarget);
@@ -127,7 +138,7 @@ const TopBar = ({ openDrawer }: IProps) => {
                         color="error"
                         variant="dot"
                         overlap="circular"
-                        badgeContent={5}
+                        badgeContent={notifications}
                       >
                         <Notifications />
                       </Badge>

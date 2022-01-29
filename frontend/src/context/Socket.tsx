@@ -1,27 +1,38 @@
 import { DefaultEventsMap } from "@socket.io/component-emitter";
-import { createContext, useContext, useMemo } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
+import { useUser } from "../hooks";
 
 interface IProviderProps {
   children: React.ReactNode;
 }
 
 interface IContextProps {
-  socket: Socket<DefaultEventsMap, DefaultEventsMap>;
+  socket: Socket<DefaultEventsMap, DefaultEventsMap> | null;
 }
 
 const SocketContext = createContext<IContextProps | null>(null);
 
 const SocketProvider = ({ children }: IProviderProps) => {
-  const socket = useMemo(
-    () =>
-      io("http://localhost:3000", {
+  const { token } = useUser();
+  const [socket, setSocket] = useState<Socket<
+    DefaultEventsMap,
+    DefaultEventsMap
+  > | null>(null);
+
+  useEffect(() => {
+    if (token && !socket) {
+      const socketInit = io("ws://localhost:5000", {
         extraHeaders: {
-          Authorization: "Bearer <token>"
+          Authorization: `Bearer ${token}`
         }
-      }),
-    []
-  );
+      });
+
+      socketInit.on("connect", () => console.log("connected"));
+
+      setSocket(socketInit);
+    }
+  }, [token, socket]);
 
   return (
     <SocketContext.Provider value={{ socket }}>
