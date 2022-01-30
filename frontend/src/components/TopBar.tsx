@@ -27,7 +27,7 @@ import { useSocket } from "../context/Socket";
 const Search = lazy(() => import("./Search"));
 const MobileInput = lazy(() => import("./Search/MobileInput"));
 const MenuOptions = lazy(() => import("./MenuOptions"));
-const Notifications = lazy(() => import("./Notifications"));
+const Notifications = lazy(() => import("./Notifications/Popper"));
 
 const MenuButton = styled("button")(({ theme }) => ({
   padding: theme.spacing(0.4, 1),

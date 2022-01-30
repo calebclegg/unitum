@@ -3,48 +3,13 @@ import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import Popover from "@mui/material/Popover";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { alpha } from "@mui/material/styles";
-import { useLocation, useNavigate } from "react-router-dom";
-import { getUrl } from "../utils";
 
-interface IProps {
-  anchorEl: HTMLButtonElement | null;
-}
-
-const Notifications = ({ anchorEl }: IProps) => {
-  const { hash } = useLocation();
-  const open = hash === "#notifications";
-  const navigate = useNavigate();
-
-  const handleClose = () => {
-    navigate(getUrl().replace(hash, ""));
-  };
-
+const NotificationsList = () => {
   return (
-    <Popover
-      id="notifications"
-      open={open}
-      anchorEl={anchorEl}
-      onClose={handleClose}
-      anchorOrigin={{
-        vertical: "bottom",
-        horizontal: "center"
-      }}
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "center"
-      }}
-      PaperProps={{
-        sx: {
-          mt: 1.375,
-          width: "min(350px, 100%)",
-          maxHeight: 400
-        }
-      }}
-    >
+    <>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Typography variant="body2">
           <strong>2</strong> unread messages
@@ -320,8 +285,8 @@ const Notifications = ({ anchorEl }: IProps) => {
       >
         Load more
       </LoadingButton>
-    </Popover>
+    </>
   );
 };
 
-export default Notifications;
+export default NotificationsList;

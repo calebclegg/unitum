@@ -9,6 +9,7 @@ import Layout from "./components/Layout";
 
 const Feed = lazy(() => import("./pages/Feed"));
 const Search = lazy(() => import("./pages/Search"));
+const Notification = lazy(() => import("./pages/Notification"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 
@@ -44,6 +45,7 @@ function App() {
           <Route path="/*" element={<Layout />}>
             <Route path="feed" element={<Feed />} />
             <Route path="search" element={<Search />} />
+            <Route path="notifications" element={<Notification />} />
           </Route>
           <Route path="login/*" element={<Login />} />
           <Route path="register/*" element={<Register />} />
