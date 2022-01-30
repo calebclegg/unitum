@@ -1,18 +1,35 @@
 import Joi from "joi";
-import { IUSer } from "../types/user";
+import { IEducation, IUSer } from "../types/user";
 
-const educationSchema = Joi.array().items(
-  Joi.object({
-    school: Joi.object({
-      name: Joi.string().required(),
-      url: Joi.string()
-    }),
-    degree: Joi.string(),
-    fieldOfStudy: Joi.string().required(),
-    startDate: Joi.date().required(),
-    grade: Joi.number()
-  })
-);
+const educationSchema = Joi.object({
+  school: Joi.object({
+    name: Joi.string().required(),
+    url: Joi.string()
+  }),
+  degree: Joi.string(),
+  fieldOfStudy: Joi.string().required(),
+  startDate: Joi.date().required(),
+  grade: Joi.number()
+}).options({ abortEarly: false });
+
+const educationEditSchema = Joi.object({
+  school: Joi.object({
+    name: Joi.string(),
+    url: Joi.string()
+  }),
+  degree: Joi.string(),
+  fieldOfStudy: Joi.string(),
+  startDate: Joi.date(),
+  grade: Joi.number()
+}).options({ abortEarly: false });
+
+export const validateEducationData = async (data: IEducation) => {
+  return educationSchema.validate(data);
+};
+
+export const validateEducationEditData = async (data: IEducation) => {
+  return educationEditSchema.validate(data);
+};
 
 const profileSchema = Joi.object({
   fullName: Joi.string().min(2).max(20),
@@ -27,7 +44,7 @@ const profileUpdateSchema = Joi.object({
   fullName: Joi.string().min(2).max(20),
   picture: Joi.string(),
   dob: Joi.date()
-});
+}).options({ abortEarly: false });
 
 function validateRegUser(data: IUSer) {
   const userSchema = Joi.object({

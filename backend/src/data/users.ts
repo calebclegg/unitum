@@ -1,5 +1,4 @@
 import bcrypt from "bcryptjs";
-import { profile } from "console";
 
 const users = [
   {
@@ -8,7 +7,11 @@ const users = [
     password: bcrypt.hashSync("jaybarnes3319", 10),
     role: "active",
     profile: {
-      fullName: "John Barnes"
+      picture: "https://liel2c.deta.dev/images/2CqdBMbBaKkxJFv5kzDkHQ.jpeg",
+      fullName: "John Barnes",
+      education: new Array(),
+      communities: new Array(),
+      schoolWork: new Array()
     }
   },
   {
@@ -16,7 +19,11 @@ const users = [
     email: "john@example.com",
     password: bcrypt.hashSync("123456", 10),
     profile: {
-      fullName: "John Doe"
+      fullName: "John Doe",
+      picture: "https://liel2c.deta.dev/images/C9n6B24XbvjKWtnbRHaQw6.jpg",
+      education: new Array(),
+      communities: new Array(),
+      schoolWork: new Array()
     }
   },
   {
@@ -24,7 +31,11 @@ const users = [
     email: "jane@example.com",
     password: bcrypt.hashSync("123456", 10),
     profile: {
-      fullName: "Jane Doe"
+      fullName: "Jane Doe",
+      picture: "https://liel2c.deta.dev/images/BZN8RLvDqrQrqGgQL4GUzF.png",
+      education: new Array(),
+      communities: new Array(),
+      schoolWork: new Array()
     }
   },
   {
@@ -32,7 +43,11 @@ const users = [
     email: "rexosei111@gmail.com",
     password: bcrypt.hashSync("rexosei111", 10),
     profile: {
-      fullName: "Rex Osei"
+      fullName: "Rex Osei",
+      picture: "https://liel2c.deta.dev/images/BZN8RLvDqrQrqGgQL4GUzF.png",
+      education: new Array(),
+      communities: new Array(),
+      schoolWork: new Array()
     }
   },
   {
@@ -42,19 +57,24 @@ const users = [
     profile: {
       fullName: "Derek Oware",
       dob: "2001-05-06",
-      education: [
-        {
-          school: {
-            name: "University of Mines"
-          },
-          degree: "Bsc. Computer Science",
-          fieldOfStudy: "Computer Science",
-          startDate: "2019-09-02",
-          grade: 83
-        }
-      ],
+      picture: "https://liel2c.deta.dev/images/BTa8GQJQJV6VXdmFyqpDCc.png",
+      education: new Array(),
+      communities: new Array(),
+      schoolWork: new Array(),
       unicoyn: 21
     }
+  }
+];
+
+export const education = [
+  {
+    school: {
+      name: "University of Mines"
+    },
+    degree: "Bsc. Computer Science",
+    fieldOfStudy: "Computer Science",
+    startDate: "2019-09-02",
+    grade: 83
   }
 ];
 

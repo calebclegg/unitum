@@ -1,12 +1,16 @@
 import { Request, Response } from "express";
 import { Types } from "mongoose";
 import { SchoolWork } from "../models/schoolWork";
-import User from "../models/User";
+import User, { Education } from "../models/User";
 import {
   validateEditSchoolWorkData,
   validateSchoolWorkData
 } from "../validators/schoolWork.validator";
-import { validateUserUpdate } from "../validators/user.validator";
+import {
+  validateEducationData,
+  validateEducationEditData,
+  validateUserUpdate
+} from "../validators/user.validator";
 
 export const userInfo = async (req: any, res: Response) => {
   try {
@@ -17,7 +21,8 @@ export const userInfo = async (req: any, res: Response) => {
           path: "profile.schoolWork",
           select: "-__v -userID -updatedAt"
         },
-        { path: "profile.communities", select: "-__v, -updatedAt" }
+        { path: "profile.communities", select: "-__v -updatedAt -members" },
+        { path: "profile.education", select: "-__v -updatedAt -user" }
       ]);
     return res.status(200).json(user);
   } catch (error) {
@@ -38,10 +43,97 @@ export const updateUserInfo = async (req: any, res: Response) => {
       .status(400)
       .json({ message: "Some fields are invalid/required", errors: errors });
   }
-
   await User.findOneAndUpdate({ _id: user._id }, valData.value, { new: true });
 
   return res.sendStatus(200);
+};
+
+export const getEducation = async (req: any, res: Response) => {
+  const edID = req.params.edID;
+  try {
+    const education = await Education.findOne({ _id: edID }).populate({
+      path: "user",
+      select:
+        "-__v -updatedAt -createdAt -role -fullName -profile.dob -profile.communities -profile.education -profile.schoolWork -profile.unicoyn"
+    });
+    if (!education)
+      return res.status(404).json({ message: "Education not found" });
+    return res.status(200).json(education);
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+};
+
+export const addNewEducation = async (req: any, res: Response) => {
+  const valData = await validateEducationData(req.body);
+  console.log(req.body);
+  let errors;
+  if (valData.error) {
+    errors = valData.error.details.map((error: any) => ({
+      label: error.context?.label,
+      message: error.message
+    }));
+    return res
+      .status(400)
+      .json({ message: "Some fields are invalid/required", errors: errors });
+  }
+  try {
+    const newEducation = await new Education({
+      ...valData.value,
+      user: req.user._id
+    }).save();
+    const user = await User.findOne({ _id: req.user._id });
+    user?.profile?.education?.push(newEducation._id);
+    await user?.save();
+    return res.status(201).json(newEducation);
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+};
+
+export const editEducation = async (req: any, res: Response) => {
+  const valData = await validateEducationEditData(req.body);
+  const edID = new Types.ObjectId(req.params.edID);
+  let errors;
+  if (valData.error) {
+    errors = valData.error.details.map((error: any) => ({
+      label: error.context?.label,
+      message: error.message
+    }));
+    return res
+      .status(400)
+      .json({ message: "Some fields are invalid/required", errors: errors });
+  }
+  try {
+    const updatedEducation = await Education.findOneAndUpdate(
+      { _id: edID, user: req.user._id },
+      valData.value,
+      { new: true }
+    );
+    if (!updatedEducation)
+      return res.status(404).json({
+        message: "Couldn't find education details tha belonged to you"
+      });
+    return res.sendStatus(200);
+  } catch (error) {
+    return res.sendStatus(500);
+  }
+};
+
+export const deleteEducation = async (req: any, res: Response) => {
+  const edID = new Types.ObjectId(req.params.edID);
+  try {
+    const edu = await Education.findOne({ _id: edID, user: req.user._id });
+    if (!edu)
+      return res.status(404).json({
+        message: "Couldn't find education details tha belonged to you"
+      });
+    await edu.delete();
+  } catch (error) {
+    return res.sendStatus(500);
+  }
 };
 
 export const newSchoolWork = async (req: any, res: Response) => {

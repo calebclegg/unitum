@@ -29,6 +29,8 @@ export const createCommunity = async (req: any, res: Response) => {
   });
   try {
     const savedCommunity = await newCommunity.save();
+    user.profile.communities.push(savedCommunity._id);
+    user.save();
     return res.status(201).json(savedCommunity);
   } catch (error) {
     return res.sendStatus(500);
@@ -83,12 +85,18 @@ export const editCommunity = async (req: any, res: Response) => {
 export const viewCommunity = async (req: any, res: Response) => {
   const commID = new Types.ObjectId(req.params.commID);
   const dbCommunity = await CommunityModel.findById(commID)
-    .select(["-members"])
-    .populate({
-      path: "admin",
-      select: ["profile.fullName", "email", "profile.picture"]
-    })
-    .select("-members -__v -updatedAt");
+    .select(["-__v", "-updatedAt"])
+    .populate([
+      {
+        path: "admin",
+        select: ["profile.fullName", "email", "profile.picture"]
+      },
+      {
+        path: "members.info",
+        select:
+          "-fullName -role -profile.dob -profile.communities -profile.schoolWork -profile.education -__v"
+      }
+    ]);
   if (!dbCommunity)
     return res.status(404).json({ message: "Community not found" });
 
@@ -163,7 +171,7 @@ export const addMember = async (req: any, res: Response) => {
       .json({ message: "You are unauthorized to add user to this community" });
 
   const isMember = community.members?.some((member) => {
-    return member?.memberID?.equals(userID);
+    return member?.info?.equals(userID);
   });
 
   if (isMember)
@@ -172,7 +180,7 @@ export const addMember = async (req: any, res: Response) => {
       .json({ message: "User is already a member of this community" });
 
   user.profile?.communities?.push(community._id);
-  community.members?.push({ memberID: userID, role: "member" });
+  community.members?.push({ info: userID, role: "member" });
   community.numberOfMembers! += 1;
   try {
     user.save();
@@ -211,7 +219,7 @@ export const removeMember = async (req: any, res: Response) => {
       message: "You are unauthorized to remove a member from this community"
     });
   const isMember = community.members?.some((member) => {
-    return member?.memberID?.equals(user?._id);
+    return member?.info?.equals(user?._id);
   });
 
   if (!isMember)
@@ -220,7 +228,7 @@ export const removeMember = async (req: any, res: Response) => {
       .json({ message: "User is not a member of this community" });
 
   const newMemberList = community.members?.filter((member) => {
-    member?.memberID?.toString() !== user?._id.toString();
+    member?.info?.toString() !== user?._id.toString();
   });
 
   const newCommunityList = user?.profile?.communities?.filter((comm) => {
@@ -249,9 +257,9 @@ export const leaveCommunity = async (req: any, res: Response) => {
     return res.status(404).json({ message: "Community not found" });
 
   const isMember = community.members?.some((member) => {
-    console.log(member.memberID, user?._id);
+    console.log(member.info, user?._id);
     console.log(member);
-    return member?.memberID?.equals(user?._id.toString());
+    return member?.info?.equals(user?._id.toString());
   });
 
   if (!isMember)
@@ -260,8 +268,8 @@ export const leaveCommunity = async (req: any, res: Response) => {
       .json({ message: "You are not a member of this community" });
 
   const newMemberList = community.members?.filter((member) => {
-    console.log(member.memberID.toString(), user?._id.toString());
-    member.memberID.toString() !== user?._id.toString();
+    console.log(member.info.toString(), user?._id.toString());
+    member.info.toString() !== user?._id.toString();
   });
   console.log(newMemberList);
   const newCommunityList = user?.profile?.communities?.filter((comm) => {

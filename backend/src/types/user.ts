@@ -3,6 +3,7 @@ import { Types } from "mongoose";
 type Role = "admin" | "active";
 
 interface IEducation {
+  user: Types.ObjectId;
   school: {
     name: string;
     url?: string;
@@ -18,7 +19,7 @@ interface IProfile {
   fullName?: string;
   picture?: string;
   dob?: Date;
-  education?: IEducation[];
+  education?: Types.ObjectId[];
   communities?: Types.ObjectId[];
   schoolWork?: Types.ObjectId[];
   unicoyn: number;
