@@ -24,7 +24,7 @@ interface IProfile {
   unicoyn: number;
 }
 
-interface IUSer {
+interface IUser {
   fullName: string;
   password?: string;
   role?: Role;
@@ -35,4 +35,4 @@ interface IUSer {
   number?: number[];
   verifyPassword(password: string): boolean;
 }
-export { IEducation, IProfile, IUSer };
+export { IEducation, IProfile, IUser };

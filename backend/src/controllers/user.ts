@@ -1,16 +1,26 @@
 import { Request, Response } from "express";
-import { Types } from "mongoose";
+import { Document, Types } from "mongoose";
 import { SchoolWork } from "../models/schoolWork";
 import User from "../models/User";
+import { IUser } from "../types/user";
 import {
   validateEditSchoolWorkData,
   validateSchoolWorkData
 } from "../validators/schoolWork.validator";
 import { validateUserUpdate } from "../validators/user.validator";
 
-export const userInfo = async (req: any, res: Response) => {
+interface IReq extends Request {
+  user: Document<any, any, IUser> &
+    IUser & {
+      _id: Types.ObjectId;
+    };
+}
+
+export const userInfo = async (req: Request, res: Response) => {
+  const customRequest = req as IReq;
+
   try {
-    const user = await User.findOne({ _id: req.user._id })
+    const user = await User.findOne({ _id: customRequest.user._id })
       .select("-role -fullName -__v -createdAt -updatedAt")
       .populate([
         {
@@ -25,9 +35,10 @@ export const userInfo = async (req: any, res: Response) => {
   }
 };
 
-export const updateUserInfo = async (req: any, res: Response) => {
-  const user = req.user;
-  const valData = await validateUserUpdate(req.body);
+export const updateUserInfo = async (req: Request, res: Response) => {
+  const customRequest = req as IReq;
+  const user = customRequest.user;
+  const valData = await validateUserUpdate(customRequest.body);
   let errors;
   if (valData.error) {
     errors = valData.error.details.map((error) => ({
@@ -39,7 +50,11 @@ export const updateUserInfo = async (req: any, res: Response) => {
       .json({ message: "Some fields are invalid/required", errors: errors });
   }
 
-  await User.findOneAndUpdate({ _id: user._id }, valData.value, { new: true });
+  Object.entries(valData.value.profile).forEach(([key, value]) => {
+    (user.profile as Record<string, any>)[key] = value;
+  });
+
+  await user.save();
 
   return res.sendStatus(200);
 };

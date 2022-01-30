@@ -1,5 +1,5 @@
 import { model, Schema, Types } from "mongoose";
-import { IEducation, IProfile, IUSer } from "../types/user";
+import { IEducation, IProfile, IUser } from "../types/user";
 import bcrypt from "bcryptjs";
 
 const schoolSchema = new Schema({
@@ -46,7 +46,7 @@ const profileSchema = new Schema<IProfile>({
   }
 });
 
-const userSchema = new Schema<IUSer>(
+const userSchema = new Schema<IUser>(
   {
     fullName: {
       type: String
