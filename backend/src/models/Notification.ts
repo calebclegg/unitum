@@ -22,7 +22,7 @@ const notificationSchema = new Schema<notification>(
     },
     communityID: {
       type: Schema.Types.ObjectId,
-      ref: "Community"  
+      ref: "Community"
     },
     postID: {
       type: Schema.Types.ObjectId,

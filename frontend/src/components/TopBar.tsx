@@ -3,7 +3,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import Email from "@mui/icons-material/Email";
 import ButtonUnstyled from "@mui/base/ButtonUnstyled";
 import Menu from "@mui/icons-material/Menu";
-import Notifications from "@mui/icons-material/Notifications";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 import Box from "@mui/system/Box";
 import AppBar from "@mui/material/AppBar";
 import Avatar from "@mui/material/Avatar";
@@ -22,10 +22,12 @@ import { useDisplaySize } from "../hooks";
 import { Link, useLocation } from "react-router-dom";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { useUser } from "../hooks";
+import { useSocket } from "../context/Socket";
 
 const Search = lazy(() => import("./Search"));
 const MobileInput = lazy(() => import("./Search/MobileInput"));
 const MenuOptions = lazy(() => import("./MenuOptions"));
+const Notifications = lazy(() => import("./Notifications"));
 
 const MenuButton = styled("button")(({ theme }) => ({
   padding: theme.spacing(0.4, 1),
@@ -46,6 +48,7 @@ interface IProps {
 
 const TopBar = ({ openDrawer }: IProps) => {
   const { user } = useUser();
+  const { socket } = useSocket();
   const { pathname } = useLocation();
   const tabletUp = useDisplaySize("sm");
   const laptopUp = useDisplaySize("md");
@@ -56,17 +59,36 @@ const TopBar = ({ openDrawer }: IProps) => {
     breakpoints.only("sm")
   );
 
+  const [notifications, setNotifications] = useState(0);
   const [searchMode, setSearchMode] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [menuButton, setMenuButton] = useState<HTMLButtonElement | null>(null);
+  const [notificationButton, setNotificationButton] =
+    useState<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     setSearchMode(pathname === "/search");
   }, [pathname]);
 
-  const openMenu = (event: React.MouseEvent<HTMLButtonElement>) =>
-    setAnchorEl(event.currentTarget);
+  useEffect(() => {
+    if (socket) {
+      socket.on("notification:get", (notifications) => {
+        setNotifications(notifications.length);
+      });
+    }
+  }, [socket]);
 
-  const closeMenu = () => setAnchorEl(null);
+  const openMenu = (event: React.MouseEvent<HTMLButtonElement>) =>
+    setMenuButton(event.currentTarget);
+
+  const closeMenu = () => setMenuButton(null);
+
+  const setNotificationAnchor = (
+    event: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>
+  ) => {
+    setNotificationButton(
+      (event as React.MouseEvent<HTMLButtonElement>).currentTarget
+    );
+  };
 
   return (
     <>
@@ -120,6 +142,7 @@ const TopBar = ({ openDrawer }: IProps) => {
                     <IconButton
                       component={Link}
                       aria-label="notifications"
+                      onClick={setNotificationAnchor}
                       to={tabletUp ? "#notifications" : "/notifications"}
                       sx={{ color: "text.secondary" }}
                     >
@@ -127,9 +150,9 @@ const TopBar = ({ openDrawer }: IProps) => {
                         color="error"
                         variant="dot"
                         overlap="circular"
-                        badgeContent={5}
+                        badgeContent={notifications}
                       >
-                        <Notifications />
+                        <NotificationsIcon />
                       </Badge>
                     </IconButton>
                     {tabletUp && (
@@ -197,7 +220,10 @@ const TopBar = ({ openDrawer }: IProps) => {
             </Toolbar>
           </Container>
           <Suspense fallback={<div />}>
-            <MenuOptions anchorEl={anchorEl} handleClose={closeMenu} />
+            <Notifications anchorEl={notificationButton} />
+          </Suspense>
+          <Suspense fallback={<div />}>
+            <MenuOptions anchorEl={menuButton} handleClose={closeMenu} />
           </Suspense>
         </AppBar>
       </ThemeProvider>

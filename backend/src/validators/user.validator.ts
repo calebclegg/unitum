@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { IUSer } from "../types/user";
+import { IUser } from "../types/user";
 
 const educationSchema = Joi.array().items(
   Joi.object({
@@ -29,7 +29,7 @@ const profileUpdateSchema = Joi.object({
   dob: Joi.date()
 });
 
-function validateRegUser(data: IUSer) {
+function validateRegUser(data: IUser) {
   const userSchema = Joi.object({
     fullName: Joi.string().min(2).max(20),
     email: Joi.string().email().required(),
@@ -40,7 +40,7 @@ function validateRegUser(data: IUSer) {
   return userSchema.validate(data);
 }
 
-const validateLogUser = (data: IUSer) => {
+const validateLogUser = (data: IUser) => {
   const UserSchema = Joi.object({
     email: Joi.string().min(6).required().email(),
     password: Joi.string().min(6).required()
@@ -56,7 +56,7 @@ const validateEmail = (data: { email: string }) => {
   return EmailSchema.validate(data);
 };
 
-export const validateUserUpdate = async (data: IUSer) => {
+export const validateUserUpdate = async (data: IUser) => {
   const userUpdateSchema = Joi.object({
     profile: profileUpdateSchema
   }).options({ abortEarly: false });

@@ -1,9 +1,9 @@
-import { IUSer } from "../types/user";
+import { IUser } from "../types/user";
 import jwt from "jsonwebtoken";
 import { JwtPayload, VerifyOptions } from "jsonwebtoken";
 import { redisConnect, redisClient } from "../config/redis_connect";
 
-export const createToken = async (user: IUSer) => {
+export const createToken = async (user: IUser) => {
   const secret = process.env.JWT_SECRET;
   const dataStoredInToken: JwtPayload = {
     sub: user.email,
@@ -13,7 +13,7 @@ export const createToken = async (user: IUSer) => {
   return token;
 };
 
-export const createRefreshToken = async (user: IUSer) => {
+export const createRefreshToken = async (user: IUser) => {
   const secret = process.env.RF_TOKEN_SECRET;
 
   const dataStoredInToken: JwtPayload = {
