@@ -21,4 +21,6 @@ router.patch("/me/schoolWork/:workID", getUser, controller.updateSchoolwork);
 
 router.delete("/me/schoolWork/:workID", getUser, controller.deleteSchoolwork);
 
+router.get("/me/notifications", getUser, controller.getUnreadNotifications);
+
 export default router;

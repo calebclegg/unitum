@@ -1,7 +1,11 @@
 import { Request, Response } from "express";
-import { Types } from "mongoose";
+import { Document, Types } from "mongoose";
 import { SchoolWork } from "../models/schoolWork";
-import User, { Education } from "../models/User";
+import User from "../models/User";
+import { Education } from "../models/User";
+import { IUser } from "../types/user";
+import { IReq } from "../types/request";
+import { Notification } from "../models/Notification";
 import {
   validateEditSchoolWorkData,
   validateSchoolWorkData
@@ -12,9 +16,18 @@ import {
   validateUserUpdate
 } from "../validators/user.validator";
 
-export const userInfo = async (req: any, res: Response) => {
+// interface IReq extends Request {
+//   user: Document<any, any, IUser> &
+//     IUser & {
+//       _id: Types.ObjectId;
+//     };
+// }
+
+export const userInfo = async (req: Request, res: Response) => {
+  const customRequest = req as IReq;
+
   try {
-    const user = await User.findOne({ _id: req.user._id })
+    const user = await User.findOne({ _id: customRequest.user._id })
       .select("-role -fullName -__v -createdAt -updatedAt")
       .populate([
         {
@@ -30,9 +43,10 @@ export const userInfo = async (req: any, res: Response) => {
   }
 };
 
-export const updateUserInfo = async (req: any, res: Response) => {
-  const user = req.user;
-  const valData = await validateUserUpdate(req.body);
+export const updateUserInfo = async (req: Request, res: Response) => {
+  const customRequest = req as IReq;
+  const user = customRequest.user;
+  const valData = await validateUserUpdate(customRequest.body);
   let errors;
   if (valData.error) {
     errors = valData.error.details.map((error) => ({
@@ -43,7 +57,12 @@ export const updateUserInfo = async (req: any, res: Response) => {
       .status(400)
       .json({ message: "Some fields are invalid/required", errors: errors });
   }
-  await User.findOneAndUpdate({ _id: user._id }, valData.value, { new: true });
+
+  Object.entries(valData.value.profile).forEach(([key, value]) => {
+    (user.profile as Record<string, any>)[key] = value;
+  });
+
+  await user.save();
 
   return res.sendStatus(200);
 };
@@ -131,6 +150,7 @@ export const deleteEducation = async (req: any, res: Response) => {
         message: "Couldn't find education details tha belonged to you"
       });
     await edu.delete();
+    return res.sendStatus(200);
   } catch (error) {
     return res.sendStatus(500);
   }
@@ -216,4 +236,27 @@ export const deleteSchoolwork = async (req: any, res: Response) => {
   } catch (error) {
     return res.sendStatus(500);
   }
+};
+
+export const getUnreadNotifications = async (req: any, res: Response) => {
+  const notifications = await Notification.find({
+    userID: req.user._id
+  })
+    .select("-__v -updatedAt")
+    .populate([
+      {
+        path: "user",
+        select:
+          "-fullName -role -__v -profile.communities -profile.education -profile.schoolWork"
+      },
+      {
+        path: "community",
+        select: "-__v -updatedAt -members"
+      },
+      {
+        path: "post",
+        select: "-__v -upvoteBy"
+      }
+    ]);
+  return res.status(200).json(notifications);
 };

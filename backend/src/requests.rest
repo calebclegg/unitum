@@ -65,24 +65,25 @@ Content-Type: application/json
 
 GET http://localhost:3000/api/users/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzU1MTE3MiwiZXhwIjoxNjQzNTUxNzcyfQ.g_G93XsjH8hKrM1dRp1EQ6IsZ5zpMsJ7JsoNTh61tx4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzU2NDQ4MiwiZXhwIjoxNjQzNTY1MDgyfQ.JDAzvIzrZSqd5wOmre2whOIIosaaPbosfxFInDcL8-4
 
 ###
 
 PATCH http://localhost:3000/api/users/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzU1MTE3MiwiZXhwIjoxNjQzNTUxNzcyfQ.g_G93XsjH8hKrM1dRp1EQ6IsZ5zpMsJ7JsoNTh61tx4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzU2MTc4NiwiZXhwIjoxNjQzNTYyMzg2fQ.61N0Oe4Rx0OxABB-1XbA5uoatDU43q-IinRwMsC5rMc
 
 {
-    "fullName" : "Rex Osei",
-    "dob": "2001-09-22"
+   "profile": {    
+    "picture": "http://localhost"
+   } 
 }
 
 
 ###
 POST http://localhost:3000/api/users/me/schoolWork
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzQ1ODc3MywiZXhwIjoxNjQzNDU5MzczfQ.8Grb5XJuNWLwsZ6wAs7AW9hykshwODkm_QkFuPIQGoE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzU2MTc4NiwiZXhwIjoxNjQzNTYyMzg2fQ.61N0Oe4Rx0OxABB-1XbA5uoatDU43q-IinRwMsC5rMc
 
 {
     "title": "New School Work 23",
@@ -126,15 +127,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 
 POST http://localhost:3000/api/community/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzQ1NzA3OCwiZXhwIjoxNjQzNDU3Njc4fQ.p_SoNWWeV1fjbPJ6mN-scvEZ4ej9X9qi920NLEozpm8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzU2NDQ4MiwiZXhwIjoxNjQzNTY1MDgyfQ.JDAzvIzrZSqd5wOmre2whOIIosaaPbosfxFInDcL8-4
 
 {
-    "name": "channel1",
+    "name": "new Channel",
     "description": "All about web dev"
 }
 
 ###
-PATCH http://localhost:3000/api/community/61f52c628b16537c8db6b367
+PATCH http://localhost:3000/api/community/61f6c5e9322b64a993b1e956
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzQ1NzA3OCwiZXhwIjoxNjQzNDU3Njc4fQ.p_SoNWWeV1fjbPJ6mN-scvEZ4ej9X9qi920NLEozpm8
 
@@ -144,7 +145,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 }
 
 ###
-DELETE http://localhost:3000/api/community/61f52c628b16537c8db6b367
+DELETE http://localhost:3000/api/community/61f6c5e9322b64a993b1e956
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MTkwMzI0OCwiZXhwIjoxNjQxOTAzODQ4fQ.j0BP61tb_zr9aMSf1ndu08KKfIHnEq4aJWg3Dyd8TU8
 
@@ -155,40 +156,40 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 
 ###
 GET http://localhost:3000/api/community/ HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzQ1NzA3OCwiZXhwIjoxNjQzNDU3Njc4fQ.p_SoNWWeV1fjbPJ6mN-scvEZ4ej9X9qi920NLEozpm8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzU2NDQ4MiwiZXhwIjoxNjQzNTY1MDgyfQ.JDAzvIzrZSqd5wOmre2whOIIosaaPbosfxFInDcL8-4
 
 ###
-GET http://localhost:3000/api/community/61f52c628b16537c8db6b367 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzQ1NjMwNSwiZXhwIjoxNjQzNDU2OTA1fQ.Uj66AQHRntVNY1hyCQKXi-AEf7mx2WWxgCL3WGvUubM
+GET http://localhost:3000/api/community/61f6c5e9322b64a993b1e956 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzU2NDQ4MiwiZXhwIjoxNjQzNTY1MDgyfQ.JDAzvIzrZSqd5wOmre2whOIIosaaPbosfxFInDcL8-4
 
 ###
 
-POST http://localhost:3000/api/community/61f52c628b16537c8db6b367/add
+POST http://localhost:3000/api/community/61f6c5e9322b64a993b1e956/add
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzQ1NzA3OCwiZXhwIjoxNjQzNDU3Njc4fQ.p_SoNWWeV1fjbPJ6mN-scvEZ4ej9X9qi920NLEozpm8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzU2NDQ4MiwiZXhwIjoxNjQzNTY1MDgyfQ.JDAzvIzrZSqd5wOmre2whOIIosaaPbosfxFInDcL8-4
 
 {
-    "userID": "61f51984f245a33d63955d74"
+    "userID": "61f671741c9134d46565f333"
 }
 ###
 
-DELETE http://localhost:3000/api/community/61f52c628b16537c8db6b367/remove
+DELETE http://localhost:3000/api/community/61f6c5e9322b64a993b1e956/remove
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzQ1NzA3OCwiZXhwIjoxNjQzNDU3Njc4fQ.p_SoNWWeV1fjbPJ6mN-scvEZ4ej9X9qi920NLEozpm8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzU2NDQ4MiwiZXhwIjoxNjQzNTY1MDgyfQ.JDAzvIzrZSqd5wOmre2whOIIosaaPbosfxFInDcL8-4
 
 {
-    "userID": "61f51984f245a33d63955d74"
+    "userID": "61f671741c9134d46565f333"
 }
 
 ###
-DELETE http://localhost:3000/api/community/61f52c628b16537c8db6b367/leave
+DELETE http://localhost:3000/api/community/61f6c5e9322b64a993b1e956/leave
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzQ1NzA3OCwiZXhwIjoxNjQzNDU3Njc4fQ.p_SoNWWeV1fjbPJ6mN-scvEZ4ej9X9qi920NLEozpm8
 
 ###
 POST http://localhost:3000/api/users/me/education
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzQ1ODA4OCwiZXhwIjoxNjQzNDU4Njg4fQ.sJXiitGspc28G5GWd4nMp_q8Gb0uzSQRS5tZZdXii6A
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzU2MTc4NiwiZXhwIjoxNjQzNTYyMzg2fQ.61N0Oe4Rx0OxABB-1XbA5uoatDU43q-IinRwMsC5rMc
 
 {
     "school": {
@@ -201,17 +202,22 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 }
 
 ###
-PATCH http://localhost:3000/api/users/me/education/
+PATCH http://localhost:3000/api/users/me/education/61f6c24e49b30163d4ee90f8
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzQ1ODA4OCwiZXhwIjoxNjQzNDU4Njg4fQ.sJXiitGspc28G5GWd4nMp_q8Gb0uzSQRS5tZZdXii6A
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzU2MTc4NiwiZXhwIjoxNjQzNTYyMzg2fQ.61N0Oe4Rx0OxABB-1XbA5uoatDU43q-IinRwMsC5rMc
 
 {
-    
+    "degree": "Bsc. Mechanical"
 }
 ###
-DELETE http://localhost:3000/api/users/me/education/
+DELETE http://localhost:3000/api/users/me/education/61f6c24e49b30163d4ee90f8
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzQ1ODA4OCwiZXhwIjoxNjQzNDU4Njg4fQ.sJXiitGspc28G5GWd4nMp_q8Gb0uzSQRS5tZZdXii6A
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzU2MTc4NiwiZXhwIjoxNjQzNTYyMzg2fQ.61N0Oe4Rx0OxABB-1XbA5uoatDU43q-IinRwMsC5rMc
+###
+
+GET http://localhost:3000/api/users/me/education/61f6c24e49b30163d4ee90f8
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzU2MTc4NiwiZXhwIjoxNjQzNTYyMzg2fQ.61N0Oe4Rx0OxABB-1XbA5uoatDU43q-IinRwMsC5rMc
 ###
 GET http://localhost:3000/api/auth/logout
 Content-Type: application/json

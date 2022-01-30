@@ -21,8 +21,8 @@ import { kebabToCapitalized } from "../utils";
 import { useDisplaySize } from "../hooks";
 import { useEffect, useState } from "react";
 import { TState, getAlertTypeFromCondition } from "../utils";
+import { useUser } from "../hooks";
 import AuthProviders from "./AuthProviders";
-import useUser from "../hooks/useUser";
 
 interface IProps {
   children: React.ReactNode;

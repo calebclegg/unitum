@@ -6,6 +6,6 @@ export interface notification {
   createdAt?: Date;
   user?: Types.ObjectId;
   type: "message" | "post" | "community";
-  postID?: Types.ObjectId;
-  communityID?: Types.ObjectId;
+  post?: Types.ObjectId;
+  community?: Types.ObjectId;
 }

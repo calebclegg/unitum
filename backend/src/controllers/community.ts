@@ -74,7 +74,7 @@ export const editCommunity = async (req: any, res: Response) => {
       message: `${admin?.profile?.fullName} updated ${dbCommunity.name} community`,
       type: "community",
       user: dbCommunity.admin._id,
-      communityID: dbCommunity._id
+      community: dbCommunity._id
     };
     await sendNotification(req.socket, notification, dbCommunity._id);
   } catch (error) {
@@ -194,7 +194,7 @@ export const addMember = async (req: any, res: Response) => {
       message: `${admin?.profile?.fullName} added you to ${community.name}`,
       type: "community",
       user: community.admin._id,
-      communityID: community._id,
+      community: community._id,
       userID: user._id
     };
     await sendNotification(req.socket, notification, user._id);
@@ -228,12 +228,13 @@ export const removeMember = async (req: any, res: Response) => {
       .json({ message: "User is not a member of this community" });
 
   const newMemberList = community.members?.filter((member) => {
-    member?.info?.toString() !== user?._id.toString();
+    return member.info?.toString() !== user?._id.toString();
   });
 
   const newCommunityList = user?.profile?.communities?.filter((comm) => {
-    comm._id.toString() !== community._id.toString();
+    return comm.toString() !== community._id.toString();
   });
+
   community.members = newMemberList;
   if (user?.profile?.communities) {
     user.profile.communities = newCommunityList;
@@ -268,13 +269,11 @@ export const leaveCommunity = async (req: any, res: Response) => {
       .json({ message: "You are not a member of this community" });
 
   const newMemberList = community.members?.filter((member) => {
-    console.log(member.info.toString(), user?._id.toString());
-    member.info.toString() !== user?._id.toString();
+    return member.info.toString() !== user?._id.toString();
   });
-  console.log(newMemberList);
+
   const newCommunityList = user?.profile?.communities?.filter((comm) => {
-    console.log(comm._id.toString(), community._id.toString());
-    comm._id.toString() !== community._id.toString();
+    return comm._id.toString() !== community._id.toString();
   });
   community.members = newMemberList;
   if (user?.profile?.communities) {

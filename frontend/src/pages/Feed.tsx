@@ -4,8 +4,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Post, { IProps } from "../components/Post";
 import useSWR from "swr";
-import useUser from "../hooks/useUser";
-import { fetcher } from "../utils/fetcher";
+import { fetcher } from "../utils";
 
 interface IPost {
   id: number;
@@ -26,12 +25,9 @@ interface IUserPost extends IProps {
 }
 
 const Feed = () => {
-  const { user } = useUser();
   const { data: posts } = useSWR<IPost[]>("posts", fetcher);
   const { data: users } = useSWR<IUser[]>("users", fetcher);
   const [userPosts, setUserPosts] = useState<IUserPost[] | null>(null);
-
-  console.log({ user });
 
   useEffect(() => {
     const reshapedPosts = posts
@@ -65,7 +61,7 @@ const Feed = () => {
         spacing={2}
         maxWidth={700}
         sx={{
-          "& .MuiPaper-rounded:first-child": {
+          "& .MuiPaper-rounded:first-of-type": {
             borderTopLeftRadius: 0,
             borderTopRightRadius: 0
           }

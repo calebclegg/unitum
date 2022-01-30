@@ -25,7 +25,7 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "*"
+    origin: "http://localhost:3000"
   }
 });
 
@@ -35,7 +35,7 @@ const onConnection = async (socket: any) => {
   console.log("A user Connected", socket.id);
 
   socket.join(socket.user._id.toString());
-  socket.user.profile.communities.forEach((comm: String) => {
+  socket.user.profile.communities.forEach((comm: string) => {
     socket.join(comm.toString());
   });
   console.log(socket.rooms);
@@ -45,12 +45,6 @@ const onConnection = async (socket: any) => {
     req.socket = socket;
     next();
   });
-
-  const notifications = await Notification.find({
-    userID: socket.user._id
-  }).select("-__v -updatedAt");
-
-  socket.to(socket.user._id.toString()).emit("notification:get", notifications);
 
   notificationHandler(io, socket);
   chatHandler(io, socket);

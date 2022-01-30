@@ -47,7 +47,7 @@ export const createPost = async (req: any, res: Response) => {
         message: `${req.user.profile.fullName} added a new post in ${community.name}`,
         type: "community",
         user: user._id,
-        postID: newPost._id
+        post: newPost._id
       };
       await sendNotification(
         req.socket,
@@ -224,7 +224,7 @@ export const addPostComment = async (req: any, res: Response) => {
       user: req.user._id,
       type: "post",
       userID: post.author._id,
-      postID: post._id
+      post: post._id
     };
     res.status(201).json(
       newComment.populate({
@@ -279,7 +279,7 @@ export const postLikes = async (req: any, res: Response) => {
       user: req.user._id,
       type: "post",
       userID: post.author._id,
-      postID: post._id
+      post: post._id
     };
     res.sendStatus(200);
     await sendNotification(

@@ -8,8 +8,8 @@ export const redisConnect = async () => {
       await redisClient.open(process.env.REDIS_URI);
       console.log("Redis server running...");
     } catch (error) {
-      console.log("Unable to connect to redis sever!!");
+      console.log("Unable to connect to redis sever!!\n Reconnecting...");
+      await redisConnect();
     }
-    await redisClient.execute(["PING"]);
   }
 };

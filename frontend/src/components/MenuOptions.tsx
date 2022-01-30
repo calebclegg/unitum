@@ -1,10 +1,14 @@
+import ExitToApp from "@mui/icons-material/ExitToApp";
 import Person from "@mui/icons-material/Person";
 import ManageAccounts from "@mui/icons-material/ManageAccounts";
+import Divider from "@mui/material/Divider";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
+import { alpha } from "@mui/material/styles";
 import { Link } from "react-router-dom";
+import { useUser } from "../hooks";
 
 const menuItems = [
   {
@@ -25,6 +29,8 @@ interface IProps {
 }
 
 const MenuOptions = ({ anchorEl, handleClose }: IProps) => {
+  const { logout } = useUser();
+
   return (
     <Menu
       open={Boolean(anchorEl)}
@@ -51,6 +57,24 @@ const MenuOptions = ({ anchorEl, handleClose }: IProps) => {
           <ListItemText>{label}</ListItemText>
         </MenuItem>
       ))}
+      <Divider variant="middle" light />
+      <MenuItem
+        onClick={logout}
+        sx={{
+          "& .MuiListItemText-primary, & .MuiListItemIcon-root": {
+            color: "error.main"
+          },
+
+          "&.Mui-focusVisible": {
+            bgcolor: ({ palette }) => alpha(palette.error.light, 0.1)
+          }
+        }}
+      >
+        <ListItemIcon>
+          <ExitToApp />
+        </ListItemIcon>
+        <ListItemText>Logout</ListItemText>
+      </MenuItem>
     </Menu>
   );
 };

@@ -7,6 +7,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import BottomNav from "./BottomNav";
 import TopBar from "./TopBar";
 import Sidebar from "./Sidebar";
+import SocketProvider from "../context/Socket";
 
 const Layout = () => {
   const [isDrawerOpened, setIsDrawerOpened] = useState(false);
@@ -21,7 +22,7 @@ const Layout = () => {
   const closeDrawer = () => setIsDrawerOpened(false);
 
   return (
-    <>
+    <SocketProvider>
       <TopBar openDrawer={openDrawer} />
       <Stack direction="row" spacing={4}>
         <Suspense fallback={<div />}>
@@ -37,7 +38,7 @@ const Layout = () => {
         </Container>
       </Stack>
       {!tabletUp && <BottomNav />}
-    </>
+    </SocketProvider>
   );
 };
 

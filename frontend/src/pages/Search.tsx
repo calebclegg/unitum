@@ -9,7 +9,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { fetcher } from "../utils/fetcher";
+import { fetcher } from "../utils";
 import { content, resultTypes } from "../components/Search/Result";
 import Empty from "../components/Search/Empty";
 import Failure from "../components/Search/Failure";
