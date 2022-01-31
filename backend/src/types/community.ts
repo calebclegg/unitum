@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 
 interface IMembers {
-  memberID: Types.ObjectId;
+  info: Types.ObjectId;
   role: "admin" | "moderator" | "member";
 }
 interface ICommunity {

@@ -19,7 +19,7 @@ const workSchema = new Schema<schoolWork>(
     },
     media: {
       type: [String],
-      required: false
+      required: true
     },
     grade: {
       type: String,

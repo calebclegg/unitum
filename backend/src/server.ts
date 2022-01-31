@@ -46,12 +46,6 @@ const onConnection = async (socket: any) => {
     next();
   });
 
-  const notifications = await Notification.find({
-    userID: socket.user._id
-  }).select("-__v -updatedAt");
-
-  socket.to(socket.user._id.toString()).emit("notification:get", notifications);
-
   notificationHandler(io, socket);
   chatHandler(io, socket);
   socket.on("disconnect", () => {

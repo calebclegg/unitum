@@ -1,7 +1,8 @@
 import users from "./data/users";
 import { communities } from "./data/community";
 import { posts } from "./data/posts";
-import User from "./models/User";
+import User, { Education } from "./models/User";
+import { education } from "./data/users";
 import CommunityModel from "./models/Community";
 import { PostModel } from "./models/Post";
 import connectDB from "./config/db";
@@ -17,10 +18,15 @@ export const importData = async () => {
     await CommunityModel.deleteMany();
     await PostModel.deleteMany();
 
+    // const educations = await Education.insertMany(education);
+
+    // users.forEach((user) => {
+    //   return (user.profile.education = [educations[0]._id]);
+    // });
     const createdUsers = await User.insertMany(users);
 
+    let i = 0;
     const communitiesL = communities.map((community) => {
-      let i = 0;
       const comm = { ...community, admin: createdUsers[i]._id };
       i++;
       return comm;

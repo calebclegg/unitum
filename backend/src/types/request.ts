@@ -1,12 +1,11 @@
 import { IncomingHttpHeaders } from "http";
 import { Request } from "express";
 import { IUser } from "./user";
+import { Document, Types } from "mongoose";
 
-interface CustomRequest extends Request {
-  user: IUser;
-  headers: IncomingHttpHeaders & {
-    "X-Auth-Provider"?: string;
-  };
+export interface IReq extends Request {
+  user: Document<any, any, IUser> &
+    IUser & {
+      _id: Types.ObjectId;
+    };
 }
-
-export { CustomRequest };
