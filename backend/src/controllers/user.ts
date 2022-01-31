@@ -260,3 +260,24 @@ export const getUnreadNotifications = async (req: any, res: Response) => {
     ]);
   return res.status(200).json(notifications);
 };
+
+export const deleteNotification = async (req: any, res: Response) => {
+  const user = req.user;
+  const notificationIDs = req.query.notIDs;
+  try {
+    if (Array.isArray(notificationIDs)) {
+      await Notification.findByIdAndDelete({
+        _id: { $in: notificationIDs },
+        userID: user._id
+      });
+    } else {
+      await Notification.findByIdAndDelete({
+        _id: notificationIDs,
+        userID: user._id
+      });
+    }
+    return res.sendStatus(200);
+  } catch (error) {
+    res.sendStatus(500);
+  }
+};

@@ -23,4 +23,10 @@ router.delete("/me/schoolWork/:workID", getUser, controller.deleteSchoolwork);
 
 router.get("/me/notifications", getUser, controller.getUnreadNotifications);
 
+router.delete(
+  "/me/notifications/delete",
+  getUser,
+  controller.deleteNotification
+);
+
 export default router;

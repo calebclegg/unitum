@@ -1,3 +1,4 @@
+import { bool } from "joi";
 import { Schema, model, Types } from "mongoose";
 import { IChat } from "../types/chat";
 import { IMessage } from "../types/message";
@@ -21,6 +22,10 @@ const messageSchema = new Schema<IMessage>(
     },
     media: {
       type: String
+    },
+    read: {
+      type: bool,
+      default: false
     }
   },
   { timestamps: true }
