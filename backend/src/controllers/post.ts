@@ -64,9 +64,8 @@ export const createPost = async (req: any, res: Response) => {
 export const getPosts = async (req: any, res: Response) => {
   const user = req.user;
   const communityID = req.query.communityID || null;
-  const skip = req.query.skip || 0;
-  const limit = req.query.limit || 20;
-  console.log(req.io);
+  const skip = +req.query.skip || 0;
+  const limit = +req.query.limit || 20;
 
   let dbPosts;
   try {

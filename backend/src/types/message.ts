@@ -7,6 +7,7 @@ export interface IMessage {
   to: Types.ObjectId;
   text?: string;
   media?: string;
+  read?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
