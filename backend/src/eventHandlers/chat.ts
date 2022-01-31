@@ -23,6 +23,15 @@ export const chatHandler = async (io: Server, socket: any) => {
       });
     }
     try {
+      const chat = await Chat.findOne({
+        _id: valData.value.chatID,
+        participant: { $in: [socket.user._id] }
+      });
+      if (!chat)
+        return callback({
+          status: "401",
+          message: "You are not a participant of this chat"
+        });
       const newMessage = await (
         await new Message({ ...valData.value }).save()
       ).populate({

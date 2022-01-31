@@ -57,3 +57,32 @@ export const markAsRead = async (req: any, res: Response) => {
     return res.sendStatus(500);
   }
 };
+
+export const getChatMessages = async (req: any, res: Response) => {
+  const limit = +req.query.limit || 30;
+  const skip = +req.query.skip || 0;
+  const chatID = req.params.chatID;
+  const user = req.user;
+
+  try {
+    const chat = await Chat.findOne({
+      _id: chatID,
+      participant: { $in: [user._id] }
+    });
+    if (!chat)
+      return res
+        .status(401)
+        .json({ message: "You are not a participant of this chat" });
+    const messages = await Message.find({ chatID: chatID })
+      .populate({
+        path: "from",
+        select: "-profile.dob -profile.education -email -fullName"
+      })
+      .sort({ updatedAt: 1 })
+      .skip(skip)
+      .limit(limit);
+    return res.json(messages);
+  } catch (error) {
+    return res.sendStatus(500);
+  }
+};
