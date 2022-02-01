@@ -17,6 +17,7 @@ import { Notification } from "./models/Notification";
 import { notificationHandler } from "./eventHandlers/notification";
 import { chatHandler } from "./eventHandlers/chat";
 import searchRouter from "./routes/search";
+import path from "path";
 //dotenv conf
 dotenv();
 
@@ -46,7 +47,9 @@ const onConnection = async (socket: any) => {
 
   notificationHandler(io, socket);
   chatHandler(io, socket);
-  socket.on("disconnect", () => {});
+  socket.on("disconnect", () => {
+    console.log("Socket disconnected");
+  });
 };
 
 io.on("connection", onConnection);
@@ -56,6 +59,18 @@ redisConnect();
 
 //Body parser setup
 app.use(express.json());
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.resolve("../frontend/build")));
+  console.log(path.resolve("../frontend/build"));
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve("../frontend", "build", "index.html"))
+  );
+} else {
+  app.get("/", (req, res) => {
+    res.send("API is running....");
+  });
+}
 
 app.use(
   cors({
