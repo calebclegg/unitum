@@ -120,9 +120,9 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:3000/api/search/?search=n
+GET http://localhost:3000/api/search/?community=1&post=1&search=Rex
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzEyOTYyOSwiZXhwIjoxNjQzMTMwMjI5fQ.zXR_KvSYZe4IHbk4oypUZU86J-vzfbTZ9XOg4myFuGo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzczMTU4MSwiZXhwIjoxNjQzNzMyMTgxfQ.9Ou-C-ZTIdc4-D7pv1vwjjEGvrOvuRycpiKjAbZwVVs
 ###
 
 POST http://localhost:3000/api/community/ HTTP/1.1

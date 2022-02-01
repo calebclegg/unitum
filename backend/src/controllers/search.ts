@@ -3,9 +3,12 @@ import CommunityModel from "../models/Community";
 import { PostModel } from "../models/Post";
 import { SchoolWork } from "../models/schoolWork";
 import User from "../models/User";
+import { matchSorter } from "match-sorter";
 
 export const search = async (req: Request, res: Response) => {
-  const type = req.query.type || undefined;
+  const queryTypes = Object.keys(req.query).filter((key: string) => {
+    return key !== "search";
+  });
   const searchString = req.query.search;
   const dbqueries: Record<string, any> = {
     user: User.find({
@@ -22,36 +25,40 @@ export const search = async (req: Request, res: Response) => {
       $or: [{ body: { $regex: searchString, $options: "i" } }]
     })
       .select("-media -comments -upvoteBy -__v -updatedAt")
-      .populate({ path: "author", select: "profile.fullName profile.picture" }),
-    schoolWork: SchoolWork.find({
-      $or: [
-        { title: { $regex: searchString, $options: "i" } },
-        { description: { $regex: searchString, $options: "i" } }
-      ]
-    }).populate({
-      path: "userID",
-      select:
-        "-__v -updatedAt -email - role -fullName -profile.dob -profile.communities -profile.schoolWork -profile.education"
-    })
+      .populate({ path: "author", select: "profile.fullName profile.picture" })
+    // schoolWork: SchoolWork.find({
+    //   $or: [
+    //     { title: { $regex: searchString, $options: "i" } },
+    //     { description: { $regex: searchString, $options: "i" } }
+    //   ]
+    // }).populate({
+    //   path: "userID",
+    //   select:
+    //     "-__v -updatedAt -email - role -fullName -profile.dob -profile.communities -profile.schoolWork -profile.education"
+    // })
   };
-  try {
-    let dbquery, data: any;
-    if (type) {
-      dbquery = dbqueries[type.toString()];
-      data = await dbquery;
-    } else {
-      const types = Object.keys(dbqueries);
-      data = {};
-      for (const type of types) {
-        const items = await dbqueries[type];
-        data[type] = items;
-      }
-      console.log(data);
-    }
+  let types;
+  if (queryTypes.length === 0) {
+    types = Object.keys(dbqueries);
+  } else {
+    types = queryTypes;
+  }
 
-    return res.send(data);
+  try {
+    let dbData = new Array();
+    for (const type of types) {
+      let items = await dbqueries[type];
+      items = items.map((item: any) => ({
+        ...item.toObject(),
+        type: type
+      }));
+      dbData.push(...items);
+    }
+    matchSorter(dbData, searchString?.toString()!, {
+      keys: ["profile.fullName", "name", "body", "title", "description"]
+    });
+    return res.status(200).json(dbData);
   } catch (error) {
-    console.log(error);
     return res.sendStatus(500);
   }
 };

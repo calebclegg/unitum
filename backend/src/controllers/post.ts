@@ -72,15 +72,21 @@ export const getPosts = async (req: any, res: Response) => {
     if (communityID) {
       dbPosts = await PostModel.find({ communityID: communityID })
         .sort("createdAt")
-        .select("-comments")
-        .populate({ path: "author", select: "profile.fullName" })
+        .select("-comments -upvoteBy")
+        .populate([
+          { path: "author", select: "profile.fullName" },
+          { path: "communityID", select: "-__v -members" }
+        ])
         .skip(skip)
         .limit(limit);
     } else {
       dbPosts = await PostModel.find({})
         .sort("createdAt")
-        .select("-comments")
-        .populate({ path: "author", select: "profile.fullName" })
+        .select("-comments -upvoteBy")
+        .populate([
+          { path: "author", select: "profile.fullName" },
+          { path: "communityID", select: "-__v -members" }
+        ])
         .skip(skip)
         .limit(limit);
     }
@@ -107,7 +113,8 @@ export const getPostDetails = async (req: any, res: Response) => {
             path: "author",
             select: "profile.fullName profile.picture"
           }
-        }
+        },
+        { path: "communityID", select: "-__v -members" }
       ])
       .select("-upvoteBy");
     if (!post) return res.sendStatus(404);
@@ -178,7 +185,6 @@ export const getPostComments = async (req: any, res: Response) => {
       .select(["-__v"]);
     return res.status(200).json(comments);
   } catch (error) {
-    console.log(error);
     return res.sendStatus(500);
   }
 };
@@ -209,7 +215,6 @@ export const addPostComment = async (req: any, res: Response) => {
       .json({ message: "Some fields are invalid/required", errors: errors });
   }
   try {
-    console.log("new Post");
     const newComment = await new CommentModel({
       ...valData.value,
       postID: postID,

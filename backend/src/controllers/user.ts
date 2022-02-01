@@ -79,14 +79,13 @@ export const getEducation = async (req: any, res: Response) => {
       return res.status(404).json({ message: "Education not found" });
     return res.status(200).json(education);
   } catch (error) {
-    console.log(error);
     return res.sendStatus(500);
   }
 };
 
 export const addNewEducation = async (req: any, res: Response) => {
   const valData = await validateEducationData(req.body);
-  console.log(req.body);
+
   let errors;
   if (valData.error) {
     errors = valData.error.details.map((error: any) => ({
@@ -107,7 +106,6 @@ export const addNewEducation = async (req: any, res: Response) => {
     await user?.save();
     return res.status(201).json(newEducation);
   } catch (error) {
-    console.log(error);
     return res.sendStatus(500);
   }
 };
