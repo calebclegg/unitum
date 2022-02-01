@@ -9,7 +9,7 @@
     "node": "14.x"
   },
   "scripts": {
-    "heroku-prebuild": "NPM_CONFIG_PRODUCTION=false",
+    "heroku-prebuild": "NPM_CONFIG_PRODUCTION=false npm install --dev",
     "install:client": "cd frontend && yarn",
     "install:server": "cd backend && yarn",
     "preinstall": "concurrently \"yarn install:client\" \"yarn install:server\"",
