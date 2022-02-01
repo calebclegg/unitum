@@ -4,6 +4,7 @@ import authRoutes from "./routes/auth";
 import userRoutes from "./routes/user";
 import communityRoutes from "./routes/community";
 import postRoutes from "./routes/post";
+import chatRoutes from "./routes/chat";
 import morgan from "morgan";
 import connectDB from "./config/db";
 import helmet from "helmet";
@@ -46,12 +47,6 @@ const onConnection = async (socket: any) => {
     next();
   });
 
-  const notifications = await Notification.find({
-    userID: socket.user._id
-  }).select("-__v -updatedAt");
-
-  socket.to(socket.user._id.toString()).emit("notification:get", notifications);
-
   notificationHandler(io, socket);
   chatHandler(io, socket);
   socket.on("disconnect", () => {
@@ -80,6 +75,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/community", communityRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api", searchRouter);
+app.use("/api/chat", chatRoutes);
 //Mount api routes here
 
 httpServer.listen(process.env.PORT, () => {

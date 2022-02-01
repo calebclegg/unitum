@@ -47,7 +47,7 @@ export const createPost = async (req: any, res: Response) => {
         message: `${req.user.profile.fullName} added a new post in ${community.name}`,
         type: "community",
         user: user._id,
-        postID: newPost._id
+        post: newPost._id
       };
       await sendNotification(
         req.socket,
@@ -64,9 +64,8 @@ export const createPost = async (req: any, res: Response) => {
 export const getPosts = async (req: any, res: Response) => {
   const user = req.user;
   const communityID = req.query.communityID || null;
-  const skip = req.query.skip || 0;
-  const limit = req.query.limit || 20;
-  console.log(req.io);
+  const skip = +req.query.skip || 0;
+  const limit = +req.query.limit || 20;
 
   let dbPosts;
   try {
@@ -224,7 +223,7 @@ export const addPostComment = async (req: any, res: Response) => {
       user: req.user._id,
       type: "post",
       userID: post.author._id,
-      postID: post._id
+      post: post._id
     };
     res.status(201).json(
       newComment.populate({
@@ -279,11 +278,11 @@ export const postLikes = async (req: any, res: Response) => {
       user: req.user._id,
       type: "post",
       userID: post.author._id,
-      postID: post._id
+      post: post._id
     };
     res.sendStatus(200);
     await sendNotification(
-      req.socket,
+      req.io,
       notificationInfo,
       post.author._id.toString()
     );
