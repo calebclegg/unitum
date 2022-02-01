@@ -9,11 +9,13 @@
     "node": "14.x"
   },
   "scripts": {
+    "heroku-preinstall": "NPM_CONFIG_PRODUCTION=false",
     "install:client": "cd frontend && yarn",
     "install:server": "cd backend && yarn",
+    "preinstall": "concurrently \"yarn install:client\" \"yarn install:server\"",
     "client": "cd frontend && yarn start",
     "server": "cd backend && yarn dev",
-    "start": "yarn server",
+    "start": "concurrently \"yarn client\" \"yarn server\"",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
   },
   "dependencies": {
