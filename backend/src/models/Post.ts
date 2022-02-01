@@ -36,7 +36,7 @@ export const postSchema = new Schema<IPost>(
       required: true
     },
     media: {
-      type: [String]
+      type: String
     },
     numberOfComments: {
       type: Number,

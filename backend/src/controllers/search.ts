@@ -25,17 +25,16 @@ export const search = async (req: Request, res: Response) => {
       $or: [{ body: { $regex: searchString, $options: "i" } }]
     })
       .select("-media -comments -upvoteBy -__v -updatedAt")
-      .populate({ path: "author", select: "profile.fullName profile.picture" })
-    // schoolWork: SchoolWork.find({
-    //   $or: [
-    //     { title: { $regex: searchString, $options: "i" } },
-    //     { description: { $regex: searchString, $options: "i" } }
-    //   ]
-    // }).populate({
-    //   path: "userID",
-    //   select:
-    //     "-__v -updatedAt -email - role -fullName -profile.dob -profile.communities -profile.schoolWork -profile.education"
-    // })
+      .populate({ path: "author", select: "profile.fullName profile.picture" }),
+    schoolWork: SchoolWork.find({
+      $or: [
+        { title: { $regex: searchString, $options: "i" } },
+        { description: { $regex: searchString, $options: "i" } }
+      ]
+    }).populate({
+      path: "userID",
+      select: "profile.fullName profile.picture"
+    })
   };
   let types;
   if (queryTypes.length === 0) {
