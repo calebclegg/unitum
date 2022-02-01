@@ -5,6 +5,9 @@
   "repository": "https://github.com/jaybarnes33/unitum.git",
   "author": "",
   "license": "MIT",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "install:client": "cd frontend && yarn",
     "install:server": "cd backend && yarn",
