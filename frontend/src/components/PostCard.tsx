@@ -35,7 +35,7 @@ export interface IProps {
   revalidate?: () => void;
 }
 
-const Post = ({
+const PostCard = ({
   _id,
   author,
   upvotes,
@@ -173,4 +173,4 @@ const Post = ({
   );
 };
 
-export default Post;
+export default PostCard;

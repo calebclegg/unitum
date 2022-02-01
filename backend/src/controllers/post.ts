@@ -175,7 +175,11 @@ export const getPostComments = async (req: any, res: Response) => {
     const comments = await CommentModel.find({ postID: postID })
       .skip(skip)
       .limit(limit)
-      .select(["-__v"]);
+      .select(["-__v"])
+      .populate({
+        path: "author",
+        select: "profile.fullName profile.picture"
+      });
     return res.status(200).json(comments);
   } catch (error) {
     console.log(error);
