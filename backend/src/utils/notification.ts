@@ -15,7 +15,5 @@ export const sendNotification = async (
         select: "profile.fullName -profile.picture -__v -updatedAt"
       })
     );
-  } catch (e) {
-    console.log("An error occurred");
-  }
+  } catch (e) {}
 };

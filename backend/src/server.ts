@@ -33,13 +33,10 @@ const io = new Server(httpServer, {
 io.use(getUser);
 io.use(wrap(express.json()));
 const onConnection = async (socket: any) => {
-  console.log("A user Connected", socket.id);
-
   socket.join(socket.user._id.toString());
   socket.user.profile.communities.forEach((comm: string) => {
     socket.join(comm.toString());
   });
-  console.log(socket.rooms);
 
   app.use((req: any, res, next) => {
     req.io = io;
@@ -49,9 +46,7 @@ const onConnection = async (socket: any) => {
 
   notificationHandler(io, socket);
   chatHandler(io, socket);
-  socket.on("disconnect", () => {
-    console.log("A user disconnected", socket.id);
-  });
+  socket.on("disconnect", () => {});
 };
 
 io.on("connection", onConnection);

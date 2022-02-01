@@ -122,7 +122,7 @@ Content-Type: application/json
 
 GET http://localhost:3000/api/search/?search=n
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzEyOTYyOSwiZXhwIjoxNjQzMTMwMjI5fQ.zXR_KvSYZe4IHbk4oypUZU86J-vzfbTZ9XOg4myFuGo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzczMzEyNywiZXhwIjoxNjQzNzMzNzI3fQ.HkT-Fp3xxRmIPe7k8nP5coX-SUGGbCAs6Zvd9xNwmWk
 ###
 
 POST http://localhost:3000/api/community/ HTTP/1.1
@@ -227,7 +227,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 
 GET http://localhost:3000/api/posts
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzA0NTMyNCwiZXhwIjoxNjQzMDQ1OTI0fQ.jnxnAqnQh5NdRZlQcx8YAEVbcG9tlIfhRlod-ELG3UM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzczNTI4MiwiZXhwIjoxNjQzNzM1ODgyfQ.vte9Wo23CurEZgBbe3dHa8Et-d3Unj_9irmV089IgnI
 
 ###
 

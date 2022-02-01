@@ -12,7 +12,6 @@ config();
 const db = connectDB();
 
 export const importData = async () => {
-  console.log("Importing data ...");
   try {
     await User.deleteMany();
     await CommunityModel.deleteMany();
@@ -43,7 +42,6 @@ export const importData = async () => {
 
     const savedPosts = await PostModel.insertMany(postL);
 
-    console.log("Data Imported!");
     (await db).connection.close();
     process.exit();
   } catch (error) {
@@ -59,7 +57,6 @@ export const destroyData = async () => {
     await CommunityModel.deleteMany();
     await PostModel.deleteMany();
 
-    console.log("Data Destroyed!");
     (await db).connection.close();
     process.exit();
   } catch (error) {
