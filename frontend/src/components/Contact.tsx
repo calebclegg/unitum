@@ -28,7 +28,6 @@ const Contact = () => {
   ) => {
     try {
       const data = await API.post("contact", values);
-      console.log(data);
     } catch (error) {
       console.log(error);
     } finally {

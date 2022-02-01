@@ -22,12 +22,9 @@ export const register = async (req: Request, res: Response) => {
     const refreshToken = await createRefreshToken(savedUser);
     try {
       await saveRefreshToken(req.body.email, refreshToken);
-    } catch (error) {
-      console.log("Unable to save refresh token");
-    }
+    } catch (error) {}
     res.status(201).json({ accessToken, refreshToken });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Something went wrong" });
   }
 };
@@ -42,9 +39,7 @@ export const login = async (req: any, res: Response) => {
   const refreshToken = await createRefreshToken(user);
   try {
     await saveRefreshToken(user.email, refreshToken);
-  } catch (error) {
-    console.log("Unable to save refresh token");
-  }
+  } catch (error) {}
   return res.status(200).json({ accessToken, refreshToken });
 };
 
@@ -104,9 +99,7 @@ export const externalAuth = async (req: any, res: Response) => {
       refreshToken = await createRefreshToken(savedUser);
       try {
         await saveRefreshToken(savedUser.email!, refreshToken);
-      } catch (error) {
-        console.log("Unable to save refresh token");
-      }
+      } catch (error) {}
       return res.status(201).json({ accessToken, refreshToken });
     } catch (error) {
       return res.status(500).json({ message: "Something went wrong" });
@@ -122,15 +115,13 @@ export const externalAuth = async (req: any, res: Response) => {
   refreshToken = await createRefreshToken(dbUser);
   try {
     await saveRefreshToken(dbUser.email!, refreshToken);
-  } catch (error) {
-    console.log("Unable to save refresh token");
-  }
+  } catch (error) {}
 
   return res.status(200).json({ accessToken, refreshToken });
 };
 
 export const getNewAccessToken = async (req: any, res: Response) => {
-  const refreshToken = req.body.refreshToken;
+  const refreshToken = req.headers.authorization.split(" ")[1];
   if (!refreshToken)
     return res.status(400).json({ message: "refresh Token required" });
   let tokenData;
@@ -161,9 +152,7 @@ export const getNewAccessToken = async (req: any, res: Response) => {
   const newRefreshToken = await createRefreshToken(dbUser!);
   try {
     await saveRefreshToken(tokenData.sub?.toString()!, refreshToken);
-  } catch (error) {
-    console.log("Unable to save refresh token");
-  }
+  } catch (error) {}
   return res.status(200).json({ accessToken, newRefreshToken });
 };
 

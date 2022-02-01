@@ -1,7 +1,6 @@
 import { model, Schema, Types } from "mongoose";
-import { IEducation, IProfile, IUSer } from "../types/user";
+import { IEducation, IProfile, IUser } from "../types/user";
 import bcrypt from "bcryptjs";
-import { string } from "joi";
 
 const schoolSchema = new Schema({
   name: String,
@@ -9,6 +8,11 @@ const schoolSchema = new Schema({
 });
 
 const educationSchema = new Schema<IEducation>({
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true
+  },
   school: {
     type: schoolSchema,
     required: true
@@ -29,20 +33,30 @@ const educationSchema = new Schema<IEducation>({
   }
 });
 const profileSchema = new Schema<IProfile>({
-  fullname: String,
+  fullName: String,
   picture: String,
   dob: Date,
-  education: [educationSchema],
+  education: {
+    type: [Types.ObjectId],
+    ref: "Education"
+  },
   communities: {
     type: [Types.ObjectId],
     ref: "Community"
   },
-  unicoyn: Number
+  schoolWork: {
+    type: [Types.ObjectId],
+    ref: "SchoolWork"
+  },
+  unicoyn: {
+    type: Number,
+    default: 0
+  }
 });
 
-const userSchema = new Schema<IUSer>(
+const userSchema = new Schema<IUser>(
   {
-    fullname: {
+    fullName: {
       type: String
     },
     password: {
@@ -82,7 +96,7 @@ userSchema.pre("save", async function (next) {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 
-  this.profile = { fullname: this.fullname, picture: this.picture };
+  this.profile = { fullName: this.fullName, picture: this.picture };
 });
 
 userSchema.methods.verifyPassword = async function (enteredPassword) {
@@ -90,5 +104,6 @@ userSchema.methods.verifyPassword = async function (enteredPassword) {
 };
 
 const User = model("User", userSchema);
+export const Education = model("Education", educationSchema);
 
 export default User;
