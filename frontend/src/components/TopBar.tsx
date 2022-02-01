@@ -21,13 +21,14 @@ import { darkTheme } from "../lib";
 import { useDisplaySize } from "../hooks";
 import { Link, useLocation } from "react-router-dom";
 import { lazy, Suspense, useEffect, useState } from "react";
-import { useUser } from "../hooks";
 import { useSocket } from "../context/Socket";
+import { useUser, useMessages } from "../hooks";
 
 const Search = lazy(() => import("./Search"));
 const MobileInput = lazy(() => import("./Search/MobileInput"));
 const MenuOptions = lazy(() => import("./MenuOptions"));
 const Notifications = lazy(() => import("./Notifications"));
+const Messages = lazy(() => import("./Messages"));
 
 const MenuButton = styled("button")(({ theme }) => ({
   padding: theme.spacing(0.4, 1),
@@ -47,7 +48,8 @@ interface IProps {
 }
 
 const TopBar = ({ openDrawer }: IProps) => {
-  const { user } = useUser();
+  const { user, notifications } = useUser();
+  const { messages } = useMessages();
   const { socket } = useSocket();
   const { pathname } = useLocation();
   const tabletUp = useDisplaySize("sm");
@@ -59,10 +61,11 @@ const TopBar = ({ openDrawer }: IProps) => {
     breakpoints.only("sm")
   );
 
-  const [notifications, setNotifications] = useState(0);
   const [searchMode, setSearchMode] = useState(false);
   const [menuButton, setMenuButton] = useState<HTMLButtonElement | null>(null);
   const [notificationButton, setNotificationButton] =
+    useState<HTMLButtonElement | null>(null);
+  const [messagesButton, setMessagesButton] =
     useState<HTMLButtonElement | null>(null);
 
   useEffect(() => {
@@ -72,7 +75,7 @@ const TopBar = ({ openDrawer }: IProps) => {
   useEffect(() => {
     if (socket) {
       socket.on("notification:get", (notifications) => {
-        setNotifications(notifications.length);
+        console.log(notifications.length);
       });
     }
   }, [socket]);
@@ -82,12 +85,16 @@ const TopBar = ({ openDrawer }: IProps) => {
 
   const closeMenu = () => setMenuButton(null);
 
-  const setNotificationAnchor = (
+  const setAnchor = (
     event: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>
   ) => {
-    setNotificationButton(
-      (event as React.MouseEvent<HTMLButtonElement>).currentTarget
-    );
+    event.currentTarget.id === "open-notifications"
+      ? setNotificationButton(
+          (event as React.MouseEvent<HTMLButtonElement>).currentTarget
+        )
+      : setMessagesButton(
+          (event as React.MouseEvent<HTMLButtonElement>).currentTarget
+        );
   };
 
   return (
@@ -140,9 +147,10 @@ const TopBar = ({ openDrawer }: IProps) => {
                       </IconButton>
                     )}
                     <IconButton
+                      id="open-notifications"
                       component={Link}
                       aria-label="notifications"
-                      onClick={setNotificationAnchor}
+                      onClick={setAnchor}
                       to={tabletUp ? "#notifications" : "/notifications"}
                       sx={{ color: "text.secondary" }}
                     >
@@ -150,15 +158,17 @@ const TopBar = ({ openDrawer }: IProps) => {
                         color="error"
                         variant="dot"
                         overlap="circular"
-                        badgeContent={notifications}
+                        badgeContent={notifications?.length}
                       >
                         <NotificationsIcon />
                       </Badge>
                     </IconButton>
                     {tabletUp && (
                       <IconButton
+                        id="open-messages"
                         aria-label="messages"
                         component={Link}
+                        onClick={setAnchor}
                         to={tabletUp ? "#messages" : "/messages"}
                         sx={{ color: "text.secondary" }}
                       >
@@ -166,7 +176,7 @@ const TopBar = ({ openDrawer }: IProps) => {
                           color="error"
                           variant="dot"
                           overlap="circular"
-                          badgeContent={5}
+                          badgeContent={messages?.length}
                         >
                           <Email />
                         </Badge>
@@ -176,7 +186,7 @@ const TopBar = ({ openDrawer }: IProps) => {
                       <ButtonUnstyled component={MenuButton} onClick={openMenu}>
                         <Grid container spacing={1.5} alignItems="center">
                           <Grid item>
-                            <Avatar sx={{ width: 50, height: 50 }}>U</Avatar>
+                            <Avatar>U</Avatar>
                           </Grid>
                           <Grid
                             item
@@ -221,6 +231,9 @@ const TopBar = ({ openDrawer }: IProps) => {
           </Container>
           <Suspense fallback={<div />}>
             <Notifications anchorEl={notificationButton} />
+          </Suspense>
+          <Suspense fallback={<div />}>
+            <Messages anchorEl={messagesButton} />
           </Suspense>
           <Suspense fallback={<div />}>
             <MenuOptions anchorEl={menuButton} handleClose={closeMenu} />

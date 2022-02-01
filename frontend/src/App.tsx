@@ -7,8 +7,11 @@ import { Route, Routes } from "react-router-dom";
 import Landing from "./pages/Landing";
 import Layout from "./components/Layout";
 
+const Chat = lazy(() => import("./pages/Chat"));
 const Feed = lazy(() => import("./pages/Feed"));
+const Post = lazy(() => import("./pages/Post"));
 const Search = lazy(() => import("./pages/Search"));
+const Notification = lazy(() => import("./pages/Notification"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 
@@ -42,8 +45,13 @@ function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/*" element={<Layout />}>
-            <Route path="feed" element={<Feed />} />
+            <Route path="chat" element={<Chat />} />
+            <Route path="feed">
+              <Route index element={<Feed />} />
+              <Route path=":post_id" element={<Post />} />
+            </Route>
             <Route path="search" element={<Search />} />
+            <Route path="notifications" element={<Notification />} />
           </Route>
           <Route path="login/*" element={<Login />} />
           <Route path="register/*" element={<Register />} />

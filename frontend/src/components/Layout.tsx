@@ -29,9 +29,10 @@ const Layout = () => {
           <Sidebar open={isDrawerOpened} handleClose={closeDrawer} />
         </Suspense>
         <Container
-          disableGutters={desktopUp}
-          component="main"
           maxWidth="md"
+          component="main"
+          id="main-content"
+          disableGutters={desktopUp}
           sx={{ pt: 11 }}
         >
           <Outlet />
