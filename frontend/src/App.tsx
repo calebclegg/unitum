@@ -9,6 +9,7 @@ import Layout from "./components/Layout";
 
 const Chat = lazy(() => import("./pages/Chat"));
 const Feed = lazy(() => import("./pages/Feed"));
+const Post = lazy(() => import("./pages/Post"));
 const Search = lazy(() => import("./pages/Search"));
 const Notification = lazy(() => import("./pages/Notification"));
 const Login = lazy(() => import("./pages/Login"));
@@ -45,7 +46,10 @@ function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/*" element={<Layout />}>
             <Route path="chat" element={<Chat />} />
-            <Route path="feed" element={<Feed />} />
+            <Route path="feed">
+              <Route index element={<Feed />} />
+              <Route path=":post_id" element={<Post />} />
+            </Route>
             <Route path="search" element={<Search />} />
             <Route path="notifications" element={<Notification />} />
           </Route>

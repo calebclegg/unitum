@@ -21,8 +21,8 @@ import { darkTheme } from "../lib";
 import { useDisplaySize } from "../hooks";
 import { Link, useLocation } from "react-router-dom";
 import { lazy, Suspense, useEffect, useState } from "react";
-import { useUser } from "../hooks";
 import { useSocket } from "../context/Socket";
+import { useUser, useMessages } from "../hooks";
 
 const Search = lazy(() => import("./Search"));
 const MobileInput = lazy(() => import("./Search/MobileInput"));
@@ -48,7 +48,8 @@ interface IProps {
 }
 
 const TopBar = ({ openDrawer }: IProps) => {
-  const { user } = useUser();
+  const { user, notifications } = useUser();
+  const { messages } = useMessages();
   const { socket } = useSocket();
   const { pathname } = useLocation();
   const tabletUp = useDisplaySize("sm");
@@ -60,7 +61,6 @@ const TopBar = ({ openDrawer }: IProps) => {
     breakpoints.only("sm")
   );
 
-  const [notifications, setNotifications] = useState(0);
   const [searchMode, setSearchMode] = useState(false);
   const [menuButton, setMenuButton] = useState<HTMLButtonElement | null>(null);
   const [notificationButton, setNotificationButton] =
@@ -75,7 +75,7 @@ const TopBar = ({ openDrawer }: IProps) => {
   useEffect(() => {
     if (socket) {
       socket.on("notification:get", (notifications) => {
-        setNotifications(notifications.length);
+        console.log(notifications.length);
       });
     }
   }, [socket]);
@@ -158,7 +158,7 @@ const TopBar = ({ openDrawer }: IProps) => {
                         color="error"
                         variant="dot"
                         overlap="circular"
-                        badgeContent={notifications}
+                        badgeContent={notifications?.length}
                       >
                         <NotificationsIcon />
                       </Badge>
@@ -176,7 +176,7 @@ const TopBar = ({ openDrawer }: IProps) => {
                           color="error"
                           variant="dot"
                           overlap="circular"
-                          badgeContent={5}
+                          badgeContent={messages?.length}
                         >
                           <Email />
                         </Badge>

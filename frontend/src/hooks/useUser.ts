@@ -1,8 +1,8 @@
 import useSWR from "swr";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 import { clearToken, getToken, saveToken } from "../utils/store-token";
-import { getUrl } from "../utils";
+import { getUrl, fetcher } from "../utils";
 
 interface IUser {
   _id: string;
@@ -25,16 +25,6 @@ interface IUser {
     }[];
   };
 }
-
-const fetcher = async (endpoint: string, token?: string) => {
-  const { data } = await axios.get(`http://localhost:5000/api/${endpoint}`, {
-    headers: {
-      Authorization: token ? `Bearer ${token}` : ""
-    }
-  });
-
-  return data;
-};
 
 export const useUser = () => {
   const navigate = useNavigate();
@@ -93,5 +83,10 @@ export const useUser = () => {
     navigate("/login");
   };
 
-  return { user, token: tokens?.accessToken, logout };
+  const { data: notifications } = useSWR(
+    ["users/me/notifications", tokens?.accessToken],
+    fetcher
+  );
+
+  return { user, token: tokens?.accessToken, notifications, logout };
 };
