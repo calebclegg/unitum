@@ -1,4 +1,4 @@
-import mongoose, { connection } from "mongoose";
+import mongoose from "mongoose";
 const connectDB = async () => {
   const NODE_ENV = process.env.NODE_ENV;
   try {
