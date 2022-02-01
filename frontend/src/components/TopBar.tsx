@@ -27,7 +27,8 @@ import { useSocket } from "../context/Socket";
 const Search = lazy(() => import("./Search"));
 const MobileInput = lazy(() => import("./Search/MobileInput"));
 const MenuOptions = lazy(() => import("./MenuOptions"));
-const Notifications = lazy(() => import("./Notifications/Popper"));
+const Notifications = lazy(() => import("./Notifications"));
+const Messages = lazy(() => import("./Messages"));
 
 const MenuButton = styled("button")(({ theme }) => ({
   padding: theme.spacing(0.4, 1),
@@ -64,6 +65,8 @@ const TopBar = ({ openDrawer }: IProps) => {
   const [menuButton, setMenuButton] = useState<HTMLButtonElement | null>(null);
   const [notificationButton, setNotificationButton] =
     useState<HTMLButtonElement | null>(null);
+  const [messagesButton, setMessagesButton] =
+    useState<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     setSearchMode(pathname === "/search");
@@ -82,12 +85,16 @@ const TopBar = ({ openDrawer }: IProps) => {
 
   const closeMenu = () => setMenuButton(null);
 
-  const setNotificationAnchor = (
+  const setAnchor = (
     event: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>
   ) => {
-    setNotificationButton(
-      (event as React.MouseEvent<HTMLButtonElement>).currentTarget
-    );
+    event.currentTarget.id === "open-notifications"
+      ? setNotificationButton(
+          (event as React.MouseEvent<HTMLButtonElement>).currentTarget
+        )
+      : setMessagesButton(
+          (event as React.MouseEvent<HTMLButtonElement>).currentTarget
+        );
   };
 
   return (
@@ -140,9 +147,10 @@ const TopBar = ({ openDrawer }: IProps) => {
                       </IconButton>
                     )}
                     <IconButton
+                      id="open-notifications"
                       component={Link}
                       aria-label="notifications"
-                      onClick={setNotificationAnchor}
+                      onClick={setAnchor}
                       to={tabletUp ? "#notifications" : "/notifications"}
                       sx={{ color: "text.secondary" }}
                     >
@@ -157,8 +165,10 @@ const TopBar = ({ openDrawer }: IProps) => {
                     </IconButton>
                     {tabletUp && (
                       <IconButton
+                        id="open-messages"
                         aria-label="messages"
                         component={Link}
+                        onClick={setAnchor}
                         to={tabletUp ? "#messages" : "/messages"}
                         sx={{ color: "text.secondary" }}
                       >
@@ -176,7 +186,7 @@ const TopBar = ({ openDrawer }: IProps) => {
                       <ButtonUnstyled component={MenuButton} onClick={openMenu}>
                         <Grid container spacing={1.5} alignItems="center">
                           <Grid item>
-                            <Avatar sx={{ width: 50, height: 50 }}>U</Avatar>
+                            <Avatar>U</Avatar>
                           </Grid>
                           <Grid
                             item
@@ -221,6 +231,9 @@ const TopBar = ({ openDrawer }: IProps) => {
           </Container>
           <Suspense fallback={<div />}>
             <Notifications anchorEl={notificationButton} />
+          </Suspense>
+          <Suspense fallback={<div />}>
+            <Messages anchorEl={messagesButton} />
           </Suspense>
           <Suspense fallback={<div />}>
             <MenuOptions anchorEl={menuButton} handleClose={closeMenu} />

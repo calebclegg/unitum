@@ -1,19 +1,31 @@
 import Popover from "@mui/material/Popover";
-import NotificationsList from "./NotificationsList";
+import { useState } from "react";
 import { useOpenWithHash } from "../../hooks";
+import MessagesList from "./MessagesList";
 
 interface IProps {
   anchorEl: HTMLButtonElement | null;
 }
 
 const Notifications = ({ anchorEl }: IProps) => {
-  const { open, handleClose } = useOpenWithHash("#notifications");
+  const { open, handleClose } = useOpenWithHash("#messages");
+  const [secondaryTextEl, setSecondaryTextEl] =
+    useState<HTMLParagraphElement | null>(null);
 
   return (
     <Popover
-      id="notifications"
+      id="messages"
       open={Boolean(open && anchorEl)}
       anchorEl={anchorEl}
+      TransitionProps={{
+        onTransitionEnd: () => {
+          const el = document.querySelector<HTMLParagraphElement>(
+            "#messages .MuiListItemText-secondary"
+          );
+
+          el && setSecondaryTextEl(el);
+        }
+      }}
       onClose={handleClose}
       anchorOrigin={{
         vertical: "bottom",
@@ -31,7 +43,7 @@ const Notifications = ({ anchorEl }: IProps) => {
         }
       }}
     >
-      <NotificationsList />
+      <MessagesList secondaryTextEl={secondaryTextEl} />
     </Popover>
   );
 };
