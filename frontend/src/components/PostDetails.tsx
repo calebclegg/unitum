@@ -17,11 +17,9 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import useSWR from "swr";
 import { alpha, styled, Theme } from "@mui/material/styles";
 import { useState } from "react";
-import { useUser } from "../hooks";
-import { fetcher } from "../utils";
+import { useData, useToken } from "../hooks";
 import { API } from "../lib";
 
 const Form = styled("form")(({ theme }) => ({
@@ -59,16 +57,14 @@ const PostDetails = ({ id }: IProps) => {
   const laptopUp = useMediaQuery(({ breakpoints }: Theme) =>
     breakpoints.up("md")
   );
-  const { token } = useUser();
+  const { token } = useToken();
   const [vote, setVote] = useState({ upVote: false, downVote: false });
   const [postingComment, setPostingComment] = useState(false);
-  const { data: post, mutate: revalidatePosts } = useSWR(
-    token ? [`posts/${id}`, token] : null,
-    fetcher
+  const { data: post, mutate: revalidatePosts } = useData<Record<string, any>>(
+    `posts/${id}`
   );
-  const { data: comments, mutate: revalidateComments } = useSWR<IComment[]>(
-    token ? [`posts/${id}/comments`, token] : null,
-    fetcher
+  const { data: comments, mutate: revalidateComments } = useData<IComment[]>(
+    `posts/${id}/comments`
   );
 
   const sortedComments = laptopUp ? [...(comments || [])].reverse() : comments;

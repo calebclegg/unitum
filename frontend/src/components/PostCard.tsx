@@ -16,7 +16,7 @@ import { Theme } from "@mui/material/styles";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { API } from "../lib";
-import { useUser } from "../hooks";
+import { useToken } from "../hooks";
 
 export interface IProps {
   _id: number;
@@ -49,7 +49,7 @@ const PostCard = ({
   createdAt,
   revalidate
 }: Partial<IProps>) => {
-  const { token } = useUser();
+  const { token } = useToken();
   const tabletUp = useMediaQuery(({ breakpoints }: Theme) =>
     breakpoints.up("sm")
   );

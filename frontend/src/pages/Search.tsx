@@ -14,10 +14,10 @@ import { content, resultTypes } from "../components/Search/Result";
 import Empty from "../components/Search/Empty";
 import Failure from "../components/Search/Failure";
 import Tag from "../components/Tag";
-import { useUser } from "../hooks";
+import { useToken } from "../hooks";
 
 const Search = () => {
-  const { token } = useUser();
+  const { token } = useToken();
   const [searchParams, setSearchParams] = useSearchParams();
   const [filters, setFilters] = useState<string[]>([]);
   const query = useMemo(() => searchParams.get("keyword"), [searchParams]);

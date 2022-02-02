@@ -2,16 +2,10 @@ import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import PostCard, { IProps as IPost } from "../components/PostCard";
-import useSWR from "swr";
-import { fetcher } from "../utils";
-import { useUser } from "../hooks";
+import { useData } from "../hooks";
 
 const Feed = () => {
-  const { token } = useUser();
-  const { data: posts, mutate } = useSWR<IPost[]>(
-    token ? ["posts", token] : null,
-    fetcher
-  );
+  const { data: posts, mutate } = useData<IPost[]>("posts");
 
   return (
     <>
