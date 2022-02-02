@@ -17,7 +17,6 @@ import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import Box from "@mui/system/Box";
 import useSWR from "swr";
 import { alpha, styled } from "@mui/material/styles";
 import { useState } from "react";
@@ -25,13 +24,18 @@ import { useParams } from "react-router-dom";
 import { useUser } from "../hooks";
 import { fetcher } from "../utils";
 import { API } from "../lib";
+import ArrowBack from "@mui/icons-material/ArrowBack";
 
 const Form = styled("form")(({ theme }) => ({
   width: "100%",
   backgroundColor: "#fff",
   display: "flex",
   alignItems: "center",
-  gap: theme.spacing(0.1)
+  gap: theme.spacing(0.1),
+
+  [theme.breakpoints.up("sm")]: {
+    gap: theme.spacing(1)
+  }
 }));
 
 interface IComment {
@@ -73,22 +77,27 @@ const Post = () => {
             Authorization: `Bearer ${token}`
           }
         });
-        revalidatePosts?.();
 
         setVote((prevState) => ({
           upVote: !prevState.upVote,
           downVote: false
         }));
       } else {
+        await API.patch(`posts/${post_id}/downvote`, undefined, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
         setVote((prevState) => ({
           upVote: false,
           downVote: !prevState.downVote
         }));
       }
+
+      revalidatePosts?.();
     }
   };
-
-  console.log({ comments });
 
   const postComment = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -119,9 +128,19 @@ const Post = () => {
 
   return (
     <Dialog fullScreen open={Boolean(post_id)}>
+      <Stack direction="row">
+        <IconButton aria-label="go back" onClick={window.history.back}>
+          <ArrowBack />
+        </IconButton>
+      </Stack>
       <Card sx={{ p: 0, mb: 8 }}>
         <CardHeader
-          avatar={<Avatar aria-label="recipe">R</Avatar>}
+          avatar={
+            <Avatar
+              src={post?.author.profile.picture}
+              alt={post?.author.profile.fullName}
+            />
+          }
           title={post?.author.profile.fullName}
           subheader={post && new Date(post.createdAt).toDateString()}
         />
@@ -182,12 +201,15 @@ const Post = () => {
         ))}
       </List>
       <Stack
-        width="96%"
+        p={1.5}
+        width="100%"
+        borderTop={({ palette }) => `2px solid ${palette.divider}`}
+        bgcolor="#fff"
         direction="row"
         position="absolute"
         justifyContent="center"
         left="50%"
-        bottom={10}
+        bottom={0}
         sx={{ transform: "translateX(-50%)" }}
       >
         <Form id="comment-form" onSubmit={postComment}>

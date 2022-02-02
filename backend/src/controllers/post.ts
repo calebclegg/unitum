@@ -98,7 +98,7 @@ export const getPostDetails = async (req: any, res: Response) => {
       .populate([
         {
           path: "author",
-          select: "profile.fullName"
+          select: "profile.fullName profile.picture"
         },
         {
           path: "comments",
