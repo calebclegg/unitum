@@ -217,7 +217,11 @@ const TopBar = ({ openDrawer }: IProps) => {
                       </ButtonUnstyled>
                     ) : (
                       <IconButton aria-label="menu" onClick={openMenu}>
-                        <Avatar sx={{ width: 50, height: 50 }}>U</Avatar>
+                        <Avatar
+                          sx={{ width: 50, height: 50 }}
+                          src={user?.profile.picture}
+                          alt={user?.profile.fullName}
+                        />
                       </IconButton>
                     )}
                   </Stack>

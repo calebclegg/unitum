@@ -79,7 +79,7 @@ const BottomNav = () => {
           : "none"
       }}
     >
-      {smallMobile && (
+      {pathname === "/feed" && smallMobile && (
         <Stack mb={1.5} mr={1.5} direction="row" justifyContent="flex-end">
           <Fab color="primary" variant="extended" sx={{ borderRadius: 2 }}>
             <Add sx={{ mr: 1 }} />
@@ -104,7 +104,7 @@ const BottomNav = () => {
             icon={icon}
           />
         ))}
-        {largeMobile && (
+        {pathname === "/feed" && largeMobile && (
           <Box
             px={1}
             sx={{
