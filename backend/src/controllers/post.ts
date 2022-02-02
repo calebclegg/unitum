@@ -108,23 +108,21 @@ export const getPosts = async (req: any, res: Response) => {
 export const getPostDetails = async (req: any, res: Response) => {
   const postID = new Types.ObjectId(req.params.postID);
   try {
-    let post: any = await PostModel.findOne({ _id: postID })
-      .populate([
-        {
+    let post: any = await PostModel.findOne({ _id: postID }).populate([
+      {
+        path: "author",
+        select: "profile.fullName profile.picture"
+      },
+      {
+        path: "comments",
+        select: "-__v",
+        populate: {
           path: "author",
           select: "profile.fullName profile.picture"
-        },
-        {
-          path: "comments",
-          select: "-__v",
-          populate: {
-            path: "author",
-            select: "profile.fullName profile.picture"
-          }
-        },
-        { path: "communityID", select: "-__v -members" }
-      ])
-      .select("upvoteBy");
+        }
+      },
+      { path: "communityID", select: "-__v -members" }
+    ]);
     if (!post) return res.sendStatus(404);
     const upvoted = post.upvoteBy?.some((objectid: any) => {
       return objectid.equals(req.user._id);
@@ -223,7 +221,7 @@ export const addPostComment = async (req: any, res: Response) => {
 
   let errors;
   if (valData.error) {
-    errors = valData.error.details.map((error) => ({
+    errors = valData.error.details?.map((error) => ({
       label: error.context?.label,
       message: error.message
     }));

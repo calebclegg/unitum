@@ -33,9 +33,13 @@ export const importData = async () => {
 
     const savedCommunities = await CommunityModel.insertMany(communitiesL);
 
-    const postL = posts.map((post) => {
+    const postL = posts.map((post, index) => {
       let i = 0;
-      const pos = { ...post, author: createdUsers[i]._id };
+      const pos = {
+        ...post,
+        author: createdUsers[i]._id,
+        communityID: index ? savedCommunities[index]._id : undefined
+      };
       i++;
       return pos;
     });
