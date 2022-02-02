@@ -5,6 +5,7 @@ import userRoutes from "./routes/user";
 import communityRoutes from "./routes/community";
 import postRoutes from "./routes/post";
 import chatRoutes from "./routes/chat";
+import contactRoutes from "./routes/contact";
 import morgan from "morgan";
 import connectDB from "./config/db";
 import helmet from "helmet";
@@ -71,6 +72,7 @@ app.use("/api/community", communityRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api", searchRouter);
 app.use("/api/chat", chatRoutes);
+app.use("/api/contact", contactRoutes);
 //Mount api routes here
 
 httpServer.listen(process.env.PORT, () => {
