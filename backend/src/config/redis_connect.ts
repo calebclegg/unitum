@@ -10,9 +10,10 @@ export const redisConnect = async () => {
       console.log("Redis server running...");
     } catch (error) {
       while (limit > 0) {
+        limit--;
         console.log("Unable to connect to redis sever!!\n Reconnecting...");
         await redisConnect();
-        limit--;
+
         console.log(limit);
       }
     }
