@@ -8,10 +8,11 @@
   "scripts": {
     "install:client": "cd frontend && yarn",
     "install:server": "cd backend && yarn",
-    "preinstall": "yarn --only=dev && concurrently \"yarn install:client\" \"yarn install:server\"",
+    "install": "yarn install:client && yarn install:server",
     "client": "cd frontend && yarn start",
     "server": "cd backend && yarn dev",
-    "start": "concurrently \"yarn client\" \"yarn server\""
+    "start": "yarn server",
+    "build": "yarn --cwd frontend build && yarn --cwd backend build"
   },
   "devDependencies": {
     "concurrently": "^7.0.0"
