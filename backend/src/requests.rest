@@ -71,7 +71,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 
 PATCH http://localhost:3000/api/users/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzU2MTc4NiwiZXhwIjoxNjQzNTYyMzg2fQ.61N0Oe4Rx0OxABB-1XbA5uoatDU43q-IinRwMsC5rMc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0Mzc1ODU0OSwiZXhwIjoxNjQzNzU5MTQ5fQ.1s8Lil0Pb7Im1Nr77L0SJRTlwxL34WSkN9KpcZ-l3D0
 
 {
    "profile": {    
@@ -83,7 +83,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 ###
 POST http://localhost:3000/api/users/me/schoolWork
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzU2MTc4NiwiZXhwIjoxNjQzNTYyMzg2fQ.61N0Oe4Rx0OxABB-1XbA5uoatDU43q-IinRwMsC5rMc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0Mzc1ODU0OSwiZXhwIjoxNjQzNzU5MTQ5fQ.1s8Lil0Pb7Im1Nr77L0SJRTlwxL34WSkN9KpcZ-l3D0
 
 {
     "title": "New School Work 23",
@@ -189,7 +189,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 ###
 POST http://localhost:3000/api/users/me/education
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzU2MTc4NiwiZXhwIjoxNjQzNTYyMzg2fQ.61N0Oe4Rx0OxABB-1XbA5uoatDU43q-IinRwMsC5rMc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0Mzc1ODU0OSwiZXhwIjoxNjQzNzU5MTQ5fQ.1s8Lil0Pb7Im1Nr77L0SJRTlwxL34WSkN9KpcZ-l3D0
 
 {
     "school": {
@@ -204,7 +204,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 ###
 PATCH http://localhost:3000/api/users/me/education/61f6c24e49b30163d4ee90f8
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzU2MTc4NiwiZXhwIjoxNjQzNTYyMzg2fQ.61N0Oe4Rx0OxABB-1XbA5uoatDU43q-IinRwMsC5rMc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0Mzc1ODU0OSwiZXhwIjoxNjQzNzU5MTQ5fQ.1s8Lil0Pb7Im1Nr77L0SJRTlwxL34WSkN9KpcZ-l3D0
 
 {
     "degree": "Bsc. Mechanical"
@@ -212,28 +212,46 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 ###
 DELETE http://localhost:3000/api/users/me/education/61f6c24e49b30163d4ee90f8
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzU2MTc4NiwiZXhwIjoxNjQzNTYyMzg2fQ.61N0Oe4Rx0OxABB-1XbA5uoatDU43q-IinRwMsC5rMc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0Mzc1ODU0OSwiZXhwIjoxNjQzNzU5MTQ5fQ.1s8Lil0Pb7Im1Nr77L0SJRTlwxL34WSkN9KpcZ-l3D0
 ###
 
 GET http://localhost:3000/api/users/me/education/61f6c24e49b30163d4ee90f8
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzU2MTc4NiwiZXhwIjoxNjQzNTYyMzg2fQ.61N0Oe4Rx0OxABB-1XbA5uoatDU43q-IinRwMsC5rMc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0Mzc1ODU0OSwiZXhwIjoxNjQzNzU5MTQ5fQ.1s8Lil0Pb7Im1Nr77L0SJRTlwxL34WSkN9KpcZ-l3D0
 ###
 GET http://localhost:3000/api/auth/logout
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjA4MzQ3NCwiZXhwIjoxNjQyMDg0MDc0fQ.ZQB3xHPHQazlkICyqvinN7KeyV_1pDecloaIuNiGzGE
 
 ###
+GET http://localhost:3000/api/users/me/savedPosts
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0Mzc1ODU0OSwiZXhwIjoxNjQzNzU5MTQ5fQ.1s8Lil0Pb7Im1Nr77L0SJRTlwxL34WSkN9KpcZ-l3D0
 
+###
+POST http://localhost:3000/api/users/me/savedPosts
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0Mzc1ODU0OSwiZXhwIjoxNjQzNzU5MTQ5fQ.1s8Lil0Pb7Im1Nr77L0SJRTlwxL34WSkN9KpcZ-l3D0
+
+{
+    "postID": "61f96f3d3ac6fda9e2d53704"
+}
+###
+
+DELETE http://localhost:3000/api/users/me/savedPosts/61f9c0a888d2e1f9a67f1633
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0Mzc1ODU0OSwiZXhwIjoxNjQzNzU5MTQ5fQ.1s8Lil0Pb7Im1Nr77L0SJRTlwxL34WSkN9KpcZ-l3D0
+
+###
 GET http://localhost:3000/api/posts
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzczNTI4MiwiZXhwIjoxNjQzNzM1ODgyfQ.vte9Wo23CurEZgBbe3dHa8Et-d3Unj_9irmV089IgnI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0Mzc1ODU0OSwiZXhwIjoxNjQzNzU5MTQ5fQ.1s8Lil0Pb7Im1Nr77L0SJRTlwxL34WSkN9KpcZ-l3D0
 
 ###
 
 POST http://localhost:3000/api/posts
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjQyMzAwNiwiZXhwIjoxNjQyNDIzNjA2fQ.XNsT9MBpaxh6q5085TwQKMnTaUnSsp4UX-aGSeXsyCI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0Mzc1ODU0OSwiZXhwIjoxNjQzNzU5MTQ5fQ.1s8Lil0Pb7Im1Nr77L0SJRTlwxL34WSkN9KpcZ-l3D0
 
 {
     "body": "Artificail Intelligence"
@@ -253,13 +271,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 
 GET http://localhost:3000/api/posts
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjQyNDcyMCwiZXhwIjoxNjQyNDI1MzIwfQ.2x80SfUoMHQcKR7IwKAfqnwFADoPZwsPmb_iMQORu-Y
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0Mzc1OTE4MywiZXhwIjoxNjQzNzU5NzgzfQ.MNTwAWHSVy-FA1nxPmaEgX3RM-wkg9hla48wvYgGSqw
 
 ###
 
-GET http://localhost:3000/api/posts/61e5431eb9891b61558fcde5
+GET http://localhost:3000/api/posts/61f96f3d3ac6fda9e2d53704
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjQyNzYzNSwiZXhwIjoxNjQyNDI4MjM1fQ.qGJhqjW54gGm1bDMK769CZs0rROIA_NGELUbtOQNaNc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0Mzc1OTE4MywiZXhwIjoxNjQzNzU5NzgzfQ.MNTwAWHSVy-FA1nxPmaEgX3RM-wkg9hla48wvYgGSqw
 
 ###
 
@@ -290,6 +308,22 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 
 ###
 
-PATCH http://localhost:3000/api/posts/61e5431eb9891b61558fcde5/upvote
+PATCH http://localhost:3000/api/posts/61f96f3d3ac6fda9e2d53704/upvote
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjQyNjIxNywiZXhwIjoxNjQyNDI2ODE3fQ.yFapL6w6GQP5ARXuWL2WVbJTWu3Uvw565s9DVKZkWsA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0Mzc2MTE2NiwiZXhwIjoxNjQzNzYxNzY2fQ.z1T9Bt-5dlREsJ6H4NWlm2cyU0-3sd5uW3JEV4uCDyI
+
+###
+
+PATCH http://localhost:3000/api/posts/61f96f3d3ac6fda9e2d53704/downvote
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0Mzc2MTE2NiwiZXhwIjoxNjQzNzYxNzY2fQ.z1T9Bt-5dlREsJ6H4NWlm2cyU0-3sd5uW3JEV4uCDyI
+
+###
+POST http://localhost:3000/api/contact
+Content-Type: application/json
+
+{
+    "email": "kyeisamuel931@gmail.com",
+    "name": "Kyei Samuel",
+    "message": "Hi, Broke Boys😁😂"
+}
