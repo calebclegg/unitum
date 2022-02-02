@@ -23,10 +23,14 @@ export interface IProps {
   upvotes: number;
   media: string;
   numberOfComments: number;
-  community: string;
+  communityID: {
+    _id: string;
+    name: string;
+  };
   author: {
     profile: {
       _id: string;
+      picture: string;
       fullName: string;
     };
   };
@@ -41,7 +45,7 @@ const PostCard = ({
   upvotes,
   body,
   numberOfComments,
-  community,
+  communityID,
   createdAt,
   revalidate
 }: Partial<IProps>) => {
