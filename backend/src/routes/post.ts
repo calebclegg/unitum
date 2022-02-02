@@ -22,7 +22,8 @@ router.get("/:postID/comments", getUser, controller.getPostComments);
 
 router.post("/:postID/comments", getUser, controller.addPostComment);
 
-router.patch("/:postID/upvote", getUser, controller.postLikes);
+router.patch("/:postID/upvote", getUser, controller.postUpVote);
+router.patch("/:postID/downvote", getUser, controller.postDownVote);
 router.delete("/comments/:commentID", getUser, controller.deleteComment);
 
 export default router;

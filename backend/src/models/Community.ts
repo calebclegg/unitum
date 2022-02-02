@@ -3,7 +3,7 @@ import { ICommunity } from "../types/community";
 import { postSchema } from "../models/Post";
 
 const membersSchema = new Schema({
-  memberID: {
+  info: {
     type: Schema.Types.ObjectId,
     ref: "User"
   },

@@ -11,11 +11,13 @@ export interface IPost {
   author: Types.ObjectId;
   communityID: Types.ObjectId;
   body: string;
-  media: string[];
+  media: string;
   numberOfComments?: number;
   comments?: Types.ObjectId[];
   upvotes?: number;
+  downvotes?: number;
   upvoteBy?: Types.ObjectId[];
+  downVoteBy?: Types.ObjectId[];
   createdAt?: Date;
   updatedAt?: Date;
 }

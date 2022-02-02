@@ -15,26 +15,41 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { Theme } from "@mui/material/styles";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { API } from "../lib";
+import { useUser } from "../hooks";
 
 export interface IProps {
-  id?: number;
-  upvotes?: number;
-  comments?: number;
-  community?: string;
-  author?: string;
-  content?: string;
-  publishedDate?: string;
+  _id: number;
+  upvotes: number;
+  media: string;
+  numberOfComments: number;
+  communityID: {
+    _id: string;
+    name: string;
+  };
+  author: {
+    profile: {
+      _id: string;
+      picture: string;
+      fullName: string;
+    };
+  };
+  body: string;
+  createdAt: string;
+  revalidate?: () => void;
 }
 
 const PostCard = ({
-  id,
+  _id,
   author,
   upvotes,
-  content,
-  comments,
-  community,
-  publishedDate
-}: IProps) => {
+  body,
+  numberOfComments,
+  communityID,
+  createdAt,
+  revalidate
+}: Partial<IProps>) => {
+  const { token } = useUser();
   const tabletUp = useMediaQuery(({ breakpoints }: Theme) =>
     breakpoints.up("sm")
   );
@@ -43,16 +58,36 @@ const PostCard = ({
 
   const toggleSaved = () => setSaved(!saved);
 
-  const toggleVote = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const addVote = async (event: React.MouseEvent<HTMLButtonElement>) => {
     const { vote }: { vote?: "upVote" | "downVote" } =
       event.currentTarget.dataset;
 
     if (vote) {
-      setVote((prevState) =>
-        vote === "upVote"
-          ? { upVote: !prevState.upVote, downVote: false }
-          : { upVote: false, downVote: !prevState.downVote }
-      );
+      if (vote === "upVote") {
+        await API.patch(`posts/${_id}/upvote`, undefined, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        setVote((prevState) => ({
+          upVote: !prevState.upVote,
+          downVote: false
+        }));
+      } else {
+        await API.patch(`posts/${_id}/downvote`, undefined, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        setVote((prevState) => ({
+          upVote: false,
+          downVote: !prevState.downVote
+        }));
+      }
+
+      revalidate?.();
     }
   };
 
@@ -60,9 +95,11 @@ const PostCard = ({
     <Card variant="outlined" sx={{ p: tabletUp ? 1 : 0 }}>
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: "rgb(255, 0, 0)" }} aria-label="recipe">
-            {community?.charAt(0).toUpperCase()}
-          </Avatar>
+          <Avatar
+            src={author?.profile.picture}
+            alt={author?.profile.fullName}
+            sx={{ bgcolor: "rgb(255, 0, 0)" }}
+          />
         }
         action={
           <IconButton
@@ -73,25 +110,29 @@ const PostCard = ({
             {saved ? <Bookmark /> : <BookmarkOutlined />}
           </IconButton>
         }
-        title={community}
+        title={author?.profile.fullName}
         subheader={
           <>
-            <span
-              style={
-                tabletUp
-                  ? undefined
-                  : {
-                      width: 80,
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis"
-                    }
-              }
-            >
-              {author}
-            </span>
-            <span>&bull;</span>
-            <span>{publishedDate}</span>
+            {communityID?.name && (
+              <>
+                <span
+                  style={
+                    tabletUp
+                      ? undefined
+                      : {
+                          width: 80,
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis"
+                        }
+                  }
+                >
+                  {communityID.name}
+                </span>
+                <span>&bull;</span>
+              </>
+            )}
+            <span>{createdAt && new Date(createdAt).toDateString()}</span>
           </>
         }
         titleTypographyProps={{ fontWeight: 500, variant: "h6" }}
@@ -104,35 +145,43 @@ const PostCard = ({
             color={vote.upVote ? "secondary" : "default"}
             aria-label="up vote"
             data-vote="upVote"
-            onClick={toggleVote}
+            onClick={addVote}
           >
-            <Forward transform="rotate(-90)" />
+            <Forward fontSize="small" transform="rotate(-90)" />
           </IconButton>
-          <Typography>{upvotes}</Typography>
+          <Typography variant="caption">{upvotes}</Typography>
           <IconButton
             size="small"
             color={vote.downVote ? "secondary" : "default"}
             aria-label="down vote"
             data-vote="downVote"
-            onClick={toggleVote}
+            onClick={addVote}
           >
-            <Forward transform="rotate(90)" />
+            <Forward fontSize="small" transform="rotate(90)" />
           </IconButton>
         </Stack>
         <div>
-          <CardContent sx={{ pt: 0.5 }}>
+          <CardContent sx={{ py: 0.5 }}>
             <MuiLink
               component={Link}
-              to={`/feed/${id}`}
+              to={`/feed/${_id}`}
               color="textSecondary"
               underline="none"
             >
-              {content}
+              {body}
             </MuiLink>
           </CardContent>
           <CardActions>
-            <Button variant="text" component={Link} to={`/feed/${id}#comments`}>
-              {comments ? <>Comments ({comments})</> : <>No comments yet</>}
+            <Button
+              variant="text"
+              component={Link}
+              to={`/feed/${_id}#comments`}
+            >
+              {numberOfComments ? (
+                <>Comments ({numberOfComments})</>
+              ) : (
+                <>No comments yet</>
+              )}
             </Button>
           </CardActions>
         </div>

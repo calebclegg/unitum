@@ -36,7 +36,7 @@ export const postSchema = new Schema<IPost>(
       required: true
     },
     media: {
-      type: [String]
+      type: String
     },
     numberOfComments: {
       type: Number,
@@ -51,7 +51,16 @@ export const postSchema = new Schema<IPost>(
       required: false,
       default: 0
     },
+    downvotes: {
+      type: Number,
+      required: false,
+      default: 0
+    },
     upvoteBy: {
+      type: [Schema.Types.ObjectId],
+      ref: "User"
+    },
+    downVoteBy: {
       type: [Schema.Types.ObjectId],
       ref: "User"
     }
