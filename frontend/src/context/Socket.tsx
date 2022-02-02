@@ -28,9 +28,7 @@ const SocketProvider = ({ children }: IProviderProps) => {
         }
       });
 
-      socketInit.on("connect", () => console.log("connected"));
-
-      setSocket(socketInit);
+      socketInit.on("connect", () => setSocket(socketInit));
     }
   }, [token, socket]);
 

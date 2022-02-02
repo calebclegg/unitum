@@ -65,18 +65,25 @@ const PostCard = ({
             Authorization: `Bearer ${token}`
           }
         });
-        revalidate?.();
 
         setVote((prevState) => ({
           upVote: !prevState.upVote,
           downVote: false
         }));
       } else {
+        await API.patch(`posts/${_id}/downvote`, undefined, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
         setVote((prevState) => ({
           upVote: false,
           downVote: !prevState.downVote
         }));
       }
+
+      revalidate?.();
     }
   };
 
@@ -84,9 +91,11 @@ const PostCard = ({
     <Card variant="outlined" sx={{ p: tabletUp ? 1 : 0 }}>
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: "rgb(255, 0, 0)" }} aria-label="recipe">
-            {community?.charAt(0).toUpperCase()}
-          </Avatar>
+          <Avatar
+            src={author?.profile.picture}
+            alt={author?.profile.fullName}
+            sx={{ bgcolor: "rgb(255, 0, 0)" }}
+          />
         }
         action={
           <IconButton
@@ -97,25 +106,29 @@ const PostCard = ({
             {saved ? <Bookmark /> : <BookmarkOutlined />}
           </IconButton>
         }
-        title={community}
+        title={author?.profile.fullName}
         subheader={
           <>
-            <span
-              style={
-                tabletUp
-                  ? undefined
-                  : {
-                      width: 80,
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis"
-                    }
-              }
-            >
-              {author?.profile.fullName}
-            </span>
-            <span>&bull;</span>
-            <span>{createdAt}</span>
+            {communityID?.name && (
+              <>
+                <span
+                  style={
+                    tabletUp
+                      ? undefined
+                      : {
+                          width: 80,
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis"
+                        }
+                  }
+                >
+                  {communityID.name}
+                </span>
+                <span>&bull;</span>
+              </>
+            )}
+            <span>{createdAt && new Date(createdAt).toDateString()}</span>
           </>
         }
         titleTypographyProps={{ fontWeight: 500, variant: "h6" }}
