@@ -16,7 +16,8 @@
     "dev": "concurrently \"yarn client\" \"yarn server\"",
     "start": "yarn --cwd backend start ",
     "build": "yarn --cwd frontend build  && yarn --cwd backend build",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false yarn install:client &&  yarn install:server && yarn build"
+    "heroku-postinstall": "yarn build",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false yarn install:client &&  yarn install:server"
   },
   "devDependencies": {
     "concurrently": "^7.0.0"
