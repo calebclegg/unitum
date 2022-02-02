@@ -57,20 +57,16 @@ io.on("connection", onConnection);
 connectDB();
 redisConnect();
 
-//Body parser setup
-app.use(express.json());
-
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.resolve("../frontend/build")));
-  console.log(path.resolve("../frontend/build"));
-  app.get("*", (req, res) =>
-    res.sendFile(path.resolve("../frontend", "build", "index.html"))
-  );
-} else {
-  app.get("/", (req, res) => {
-    res.send("API is running....");
+  // Serve any static files
+  app.use(express.static(path.join(__dirname, "frontend/build")));
+  // Handle React routing, return all requests to React app
+  app.get("*", function (req, res) {
+    res.sendFile(path.join(__dirname, "frontend/build", "index.html"));
   });
 }
+//Body parser setup
+app.use(express.json());
 
 app.use(
   cors({
