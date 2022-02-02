@@ -2,6 +2,7 @@ import { Response } from "express";
 import { Types } from "mongoose";
 import CommunityModel from "../models/Community";
 import { CommentModel, PostModel } from "../models/Post";
+import { SavedPost } from "../models/SavedPost";
 import { notification } from "../types/notification";
 import { IPost } from "../types/post";
 import { sendNotification } from "../utils/notification";
@@ -91,12 +92,19 @@ export const getPosts = async (req: any, res: Response) => {
         .skip(skip)
         .limit(limit);
     }
+    const savedPosts = await SavedPost.findOne({ userID: user._id });
     const posts = dbPosts.map((post: any) => {
       const upvoted = post.upvoteBy?.some((objectid: any) => {
-        return objectid.equals(req.user._id);
+        return objectid.equals(user._id);
       });
+      let saved;
+      if (savedPosts) {
+        saved = savedPosts.posts.some((objectid: Types.ObjectId) => {
+          return objectid.equals(post._id);
+        });
+      }
       delete post.upvoteBy;
-      return { ...post.toObject(), upvoted: upvoted };
+      return { ...post.toObject(), upvoted: upvoted, saved: saved };
     });
     return res.status(200).json(posts);
   } catch (error) {
@@ -108,28 +116,33 @@ export const getPosts = async (req: any, res: Response) => {
 export const getPostDetails = async (req: any, res: Response) => {
   const postID = new Types.ObjectId(req.params.postID);
   try {
-    let post: any = await PostModel.findOne({ _id: postID })
-      .populate([
-        {
+    let post: any = await PostModel.findOne({ _id: postID }).populate([
+      {
+        path: "author",
+        select: "profile.fullName profile.picture"
+      },
+      {
+        path: "comments",
+        select: "-__v",
+        populate: {
           path: "author",
-          select: "profile.fullName"
-        },
-        {
-          path: "comments",
-          select: "-__v",
-          populate: {
-            path: "author",
-            select: "profile.fullName profile.picture"
-          }
-        },
-        { path: "communityID", select: "-__v -members" }
-      ])
-      .select("upvoteBy");
+          select: "profile.fullName profile.picture"
+        }
+      },
+      { path: "communityID", select: "-__v -members" }
+    ]);
     if (!post) return res.sendStatus(404);
+    const savedPosts = await SavedPost.findOne({ userID: req.user._id });
+    let saved;
+    if (savedPosts) {
+      saved = savedPosts.posts.some((objectid: Types.ObjectId) => {
+        return objectid.equals(post._id);
+      });
+    }
     const upvoted = post.upvoteBy?.some((objectid: any) => {
       return objectid.equals(req.user._id);
     });
-    post = { ...post.toObject(), upvoted: upvoted };
+    post = { ...post.toObject(), upvoted: upvoted, saved: saved };
     delete post.upvoteBy;
     return res.status(200).json(post);
   } catch (error) {
@@ -243,16 +256,7 @@ export const addPostComment = async (req: any, res: Response) => {
       userID: post.author._id,
       post: post._id
     };
-    res.status(201).json(
-      newComment.populate({
-        path: "comments",
-        select: "-__v",
-        populate: {
-          path: "author",
-          select: "profile.fullName profile.picture"
-        }
-      })
-    );
+    res.sendStatus(201);
     await sendNotification(
       req.socket,
       notificationInfo,

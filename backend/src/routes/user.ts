@@ -1,5 +1,6 @@
 import { Router } from "express";
 import * as controller from "../controllers/user";
+import * as sveController from "../controllers/savedPost";
 import { getUser } from "../middlewares/user.middleware";
 const router = Router();
 
@@ -28,5 +29,11 @@ router.delete(
   getUser,
   controller.deleteNotification
 );
+
+router.get("/me/savedPosts", getUser, sveController.getSavedPosts);
+
+router.post("/me/savedPosts", getUser, sveController.saveAPost);
+
+router.delete("/me/savedPosts/:postID", getUser, sveController.unsavePost);
 
 export default router;
