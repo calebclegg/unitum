@@ -189,7 +189,12 @@ const PostDetails = ({ id }: IProps) => {
                 size="small"
                 name="comment"
                 id="comment-input"
+                autoComplete="off"
                 disabled={postingComment}
+                inputProps={{
+                  placeholder: "Enter your comment here",
+                  "aria-label": "Comment"
+                }}
                 sx={{ bgcolor: ({ palette }) => alpha(palette.grey[600], 0.1) }}
               />
             </FormControl>
@@ -253,7 +258,12 @@ const PostDetails = ({ id }: IProps) => {
                 size="small"
                 name="comment"
                 id="comment-input"
+                autoComplete="off"
                 disabled={postingComment}
+                inputProps={{
+                  placeholder: "Enter your comment here",
+                  "aria-label": "Comment"
+                }}
                 sx={{ bgcolor: ({ palette }) => alpha(palette.grey[600], 0.1) }}
               />
             </FormControl>

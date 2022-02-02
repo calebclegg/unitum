@@ -65,7 +65,7 @@ const Result = ({ anchorEl, query }: IProps) => {
     () => {
       if (query) {
         const params = new URLSearchParams();
-        params.set("query", query);
+        params.set("keyword", query);
 
         filters.forEach((type) => {
           params.set(type, "1");

@@ -11,7 +11,7 @@ const MobileInput = () => {
     const { value } = event.target;
 
     const searchParams = new URLSearchParams(window.location.search);
-    value ? searchParams.set("query", value) : searchParams.delete("query");
+    value ? searchParams.set("keyword", value) : searchParams.delete("keyword");
     setSearchParams(searchParams.toString(), { replace: true, state: value });
   };
 
@@ -19,7 +19,7 @@ const MobileInput = () => {
     <OutlinedInput
       id="search-combo-box"
       type="search"
-      defaultValue={searchParams.get("query")}
+      defaultValue={searchParams.get("keyword")}
       onChange={debounce(handleChange, 600)}
       startAdornment={
         <InputAdornment position="start">
