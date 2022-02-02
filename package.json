@@ -13,7 +13,7 @@
     "install:server": "cd backend && yarn",
     "client": "cd frontend && yarn start",
     "server": "cd backend && yarn dev",
-    "install": "yarn install:server && yarn:install client",
+    "install": "yarn install:server && yarn install:client",
     "dev": "concurrently \"yarn client\" \"yarn server\"",
     "start": "yarn --cwd backend start ",
     "build": "yarn --cwd frontend build  && yarn --cwd backend build",
