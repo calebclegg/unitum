@@ -75,7 +75,7 @@ export const getPosts = async (req: any, res: Response) => {
         .sort("createdAt")
         .select("-comments +upvoteBy")
         .populate([
-          { path: "author", select: "profile.fullName" },
+          { path: "author", select: "profile.fullName profile.picture" },
           { path: "communityID", select: "-__v -members" }
         ])
         .skip(skip)
@@ -85,7 +85,7 @@ export const getPosts = async (req: any, res: Response) => {
         .sort("createdAt")
         .select("-comments +upvoteBy")
         .populate([
-          { path: "author", select: "profile.fullName" },
+          { path: "author", select: "profile.fullName profile.picture" },
           { path: "communityID", select: "-__v -members" }
         ])
         .skip(skip)
