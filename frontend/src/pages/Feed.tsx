@@ -1,7 +1,7 @@
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import Post, { IProps as IPost } from "../components/Post";
+import PostCard, { IProps as IPost } from "../components/PostCard";
 import useSWR from "swr";
 import { fetcher } from "../utils";
 import { useUser } from "../hooks";
@@ -39,7 +39,7 @@ const Feed = () => {
         }}
       >
         {posts?.map((post) => (
-          <Post key={post._id} {...post} revalidate={mutate} />
+          <PostCard key={post._id} {...post} revalidate={mutate} />
         ))}
       </Stack>
     </>
