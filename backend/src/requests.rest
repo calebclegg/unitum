@@ -79,7 +79,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
    } 
 }
 
+###
 
+GET http://localhost:3000/api/users/me/posts
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzgyOTI4MSwiZXhwIjoxNjQzODI5ODgxfQ.HH60VWF72DRkWEuro3x4IJTm1HPKJw8j0dDX0jTaTNw
 ###
 POST http://localhost:3000/api/users/me/schoolWork
 Content-Type: application/json
