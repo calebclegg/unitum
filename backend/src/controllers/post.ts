@@ -2,6 +2,7 @@ import { Response } from "express";
 import { Types } from "mongoose";
 import CommunityModel from "../models/Community";
 import { CommentModel, PostModel } from "../models/Post";
+import { SavedPost } from "../models/SavedPost";
 import { notification } from "../types/notification";
 import { IPost } from "../types/post";
 import { sendNotification } from "../utils/notification";
@@ -75,7 +76,7 @@ export const getPosts = async (req: any, res: Response) => {
         .sort("createdAt")
         .select("-comments +upvoteBy")
         .populate([
-          { path: "author", select: "profile.fullName profile.picture" },
+          { path: "author", select: "profile.fullName" },
           { path: "communityID", select: "-__v -members" }
         ])
         .skip(skip)
@@ -85,19 +86,36 @@ export const getPosts = async (req: any, res: Response) => {
         .sort("createdAt")
         .select("-comments +upvoteBy")
         .populate([
-          { path: "author", select: "profile.fullName profile.picture" },
+          { path: "author", select: "profile.fullName" },
           { path: "communityID", select: "-__v -members" }
         ])
         .skip(skip)
         .limit(limit);
     }
+    const savedPosts = await SavedPost.findOne({ userID: user._id });
     const posts = dbPosts.map((post: any) => {
       const upvoted = post.upvoteBy?.some((objectid: any) => {
+        return objectid.equals(user._id);
+      });
+
+      const downvoted = post.downVoteBy?.some((objectid: any) => {
         return objectid.equals(req.user._id);
       });
+      let saved;
+      if (savedPosts) {
+        saved = savedPosts.posts.some((objectid: Types.ObjectId) => {
+          return objectid.equals(post._id);
+        });
+      }
       delete post.upvoteBy;
-      return { ...post.toObject(), upvoted: upvoted };
+      return {
+        ...post.toObject(),
+        upvoted: upvoted,
+        downvoted: downvoted,
+        saved: saved
+      };
     });
+    console.log(posts);
     return res.status(200).json(posts);
   } catch (error) {
     return res.sendStatus(500);
@@ -124,11 +142,28 @@ export const getPostDetails = async (req: any, res: Response) => {
       { path: "communityID", select: "-__v -members" }
     ]);
     if (!post) return res.sendStatus(404);
+    const savedPosts = await SavedPost.findOne({ userID: req.user._id });
+    let saved = false;
+    if (savedPosts) {
+      saved = savedPosts.posts.some((objectid: Types.ObjectId) => {
+        return objectid.equals(post._id);
+      });
+    }
     const upvoted = post.upvoteBy?.some((objectid: any) => {
       return objectid.equals(req.user._id);
     });
-    post = { ...post.toObject(), upvoted: upvoted };
+
+    const downvoted = post.downVoteBy?.some((objectid: any) => {
+      return objectid.equals(req.user._id);
+    });
+    post = {
+      ...post.toObject(),
+      upvoted: upvoted,
+      downvoted: downvoted,
+      saved: saved
+    };
     delete post.upvoteBy;
+    console.log(post);
     return res.status(200).json(post);
   } catch (error) {
     return res.sendStatus(500);
@@ -193,11 +228,7 @@ export const getPostComments = async (req: any, res: Response) => {
     const comments = await CommentModel.find({ postID: postID })
       .skip(skip)
       .limit(limit)
-      .select(["-__v"])
-      .populate({
-        path: "author",
-        select: "profile.fullName profile.picture"
-      });
+      .select(["-__v"]);
     return res.status(200).json(comments);
   } catch (error) {
     return res.sendStatus(500);
@@ -221,7 +252,7 @@ export const addPostComment = async (req: any, res: Response) => {
 
   let errors;
   if (valData.error) {
-    errors = valData.error.details?.map((error) => ({
+    errors = valData.error.details.map((error) => ({
       label: error.context?.label,
       message: error.message
     }));
@@ -245,16 +276,7 @@ export const addPostComment = async (req: any, res: Response) => {
       userID: post.author._id,
       post: post._id
     };
-    res.status(201).json(
-      newComment.populate({
-        path: "comments",
-        select: "-__v",
-        populate: {
-          path: "author",
-          select: "profile.fullName profile.picture"
-        }
-      })
-    );
+    res.sendStatus(201);
     await sendNotification(
       req.socket,
       notificationInfo,
@@ -281,10 +303,27 @@ export const postUpVote = async (req: any, res: Response) => {
   const upvoted = post.upvoteBy?.some((objectid) => {
     return objectid.equals(req.user._id);
   });
-  if (!upvoted) {
+
+  const downVoted = post.downVoteBy?.some((objectid) => {
+    return objectid.equals(req.user._id);
+  });
+  if (downVoted) {
+    const result = post.downVoteBy?.filter(
+      (objectID) => objectID.toString() !== req.user._id.toString()
+    );
+    post.downVoteBy = result;
     post.upvoteBy?.push(req.user._id);
-    post.upvotes! += 1;
   }
+  if (upvoted) {
+    const result = post.upvoteBy?.filter(
+      (objectID) => objectID.toString() !== req.user._id.toString()
+    );
+    post.upvoteBy = result;
+  } else {
+    post.upvoteBy?.push(req.user._id);
+  }
+  post.upvotes! = post.upvoteBy?.length || 0;
+  post.downvotes! = post.downVoteBy?.length || 0;
   try {
     await post.save();
     const notificationInfo: notification = {
@@ -318,13 +357,30 @@ export const postDownVote = async (req: any, res: Response) => {
     if (!userCommunities.includes(post.communityID.toString))
       return res.status(401).json({ message: "Cannot Like this post" });
   }
+  const upvoted = post.upvoteBy?.some((objectid) => {
+    return objectid.equals(req.user._id);
+  });
 
-  const result = post.upvoteBy?.filter(
-    (objectID) => objectID.toString() !== req.user._id.toString()
-  );
-  post.upvoteBy = result;
+  const downVoted = post.downVoteBy?.some((objectid) => {
+    return objectid.equals(req.user._id);
+  });
+
+  if (upvoted) {
+    const result = post.upvoteBy?.filter(
+      (objectID) => objectID.toString() !== req.user._id.toString()
+    );
+    post.upvoteBy = result;
+  }
+  if (downVoted) {
+    const result = post.downVoteBy?.filter(
+      (objectID) => objectID.toString() !== req.user._id.toString()
+    );
+    post.downVoteBy = result;
+  } else {
+    post.downVoteBy?.push(req.user._id);
+  }
   post.upvotes! = post.upvoteBy?.length || 0;
-
+  post.downvotes! = post.downVoteBy?.length || 0;
   try {
     await post.save();
     res.sendStatus(200);

@@ -5,6 +5,7 @@ import userRoutes from "./routes/user";
 import communityRoutes from "./routes/community";
 import postRoutes from "./routes/post";
 import chatRoutes from "./routes/chat";
+import contactRoutes from "./routes/contact";
 import morgan from "morgan";
 import connectDB from "./config/db";
 import helmet from "helmet";
@@ -17,6 +18,7 @@ import { Notification } from "./models/Notification";
 import { notificationHandler } from "./eventHandlers/notification";
 import { chatHandler } from "./eventHandlers/chat";
 import searchRouter from "./routes/search";
+import path from "path";
 //dotenv conf
 dotenv();
 
@@ -46,7 +48,9 @@ const onConnection = async (socket: any) => {
 
   notificationHandler(io, socket);
   chatHandler(io, socket);
-  socket.on("disconnect", () => {});
+  socket.on("disconnect", () => {
+    console.log("Socket disconnected");
+  });
 };
 
 io.on("connection", onConnection);
@@ -54,12 +58,21 @@ io.on("connection", onConnection);
 connectDB();
 redisConnect();
 
+if (process.env.NODE_ENV === "production") {
+  // Serve any static files
+  app.use(express.static(path.join(__dirname, "../../frontend/build")));
+  // Handle React routing, return all requests to React app
+  app.get("/", function (req, res) {
+    res.sendFile(path.join(__dirname, "../../frontend/build", "index.html"));
+  });
+}
 //Body parser setup
 app.use(express.json());
 
 app.use(
   cors({
-    origin: "*"
+    origin: "*",
+    allowedHeaders: ["http://localhost:3000", "unitum.vercel.app"]
   })
 );
 app.use(helmet());
@@ -71,6 +84,7 @@ app.use("/api/community", communityRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api", searchRouter);
 app.use("/api/chat", chatRoutes);
+app.use("/api/contact", contactRoutes);
 //Mount api routes here
 
 httpServer.listen(process.env.PORT, () => {

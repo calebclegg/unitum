@@ -9,7 +9,6 @@ interface IUser {
   email: string;
   profile: {
     _id: string;
-    picture: string;
     fullName: string;
     schoolWork: string[];
     communities: string[];
@@ -73,8 +72,7 @@ export const useUser = () => {
 
   const { data: user, mutate: updateUser } = useSWR<IUser | null>(
     tokens ? ["users/me", tokens?.accessToken] : null,
-    fetcher,
-    { revalidateOnFocus: false }
+    fetcher
   );
 
   const logout = async () => {
@@ -87,8 +85,7 @@ export const useUser = () => {
 
   const { data: notifications } = useSWR(
     ["users/me/notifications", tokens?.accessToken],
-    fetcher,
-    { revalidateOnFocus: false }
+    fetcher
   );
 
   return { user, token: tokens?.accessToken, notifications, logout };

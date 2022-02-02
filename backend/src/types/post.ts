@@ -15,7 +15,9 @@ export interface IPost {
   numberOfComments?: number;
   comments?: Types.ObjectId[];
   upvotes?: number;
+  downvotes?: number;
   upvoteBy?: Types.ObjectId[];
+  downVoteBy?: Types.ObjectId[];
   createdAt?: Date;
   updatedAt?: Date;
 }
