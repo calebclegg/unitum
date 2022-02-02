@@ -5,19 +5,13 @@
   "repository": "https://github.com/jaybarnes33/unitum.git",
   "author": "",
   "license": "MIT",
-  "engines": {
-    "node": "14.x"
-  },
   "scripts": {
-    "install:client": "cd frontend && yarn --only=dev && yarn",
-    "install:server": "cd backend && yarn --only=dev && yarn",
+    "install:client": "cd frontend && yarn",
+    "install:server": "cd backend && yarn",
+    "preinstall": "yarn --only=dev && concurrently \"yarn install:client\" \"yarn install:server\"",
     "client": "cd frontend && yarn start",
     "server": "cd backend && yarn dev",
-    "install": "yarn install:server && yarn install:client",
-    "dev": "concurrently \"yarn client\" \"yarn server\"",
-    "start": "yarn --cwd backend start ",
-    "build": "yarn --cwd frontend build  && yarn --cwd backend build && yarn --cwd backend start",
-    "heroku-postinstall": "yarn build"
+    "start": "concurrently \"yarn client\" \"yarn server\""
   },
   "devDependencies": {
     "concurrently": "^7.0.0"
