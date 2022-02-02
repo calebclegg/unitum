@@ -16,9 +16,8 @@
     "install": "yarn install:server && yarn install:client",
     "dev": "concurrently \"yarn client\" \"yarn server\"",
     "start": "yarn --cwd backend start ",
-    "build": "yarn --cwd frontend build  && yarn --cwd backend build",
-    "heroku-postinstall": "yarn build",
-    "heroku-postbuild": "yarn cwd --backend start"
+    "build": "yarn --cwd frontend build  && yarn --cwd backend build && yarn --cwd backend start",
+    "heroku-postinstall": "yarn build"
   },
   "devDependencies": {
     "concurrently": "^7.0.0"
