@@ -107,13 +107,15 @@ export const getPosts = async (req: any, res: Response) => {
           return objectid.equals(post._id);
         });
       }
-      delete post.upvoteBy;
-      return {
+      post = {
         ...post.toObject(),
         upvoted: upvoted,
         downvoted: downvoted,
         saved: saved
       };
+      delete post.upvoteBy;
+      delete post.downVoteBy;
+      return post;
     });
     console.log(posts);
     return res.status(200).json(posts);
@@ -163,7 +165,7 @@ export const getPostDetails = async (req: any, res: Response) => {
       saved: saved
     };
     delete post.upvoteBy;
-    console.log(post);
+    delete post.downVoteBy;
     return res.status(200).json(post);
   } catch (error) {
     return res.sendStatus(500);
@@ -211,7 +213,7 @@ export const updatePost = async (req: any, res: Response) => {
     const updatedPost = await PostModel.findOneAndUpdate(
       { _id: postID },
       valData.value
-    );
+    ).select("-upvoteBy -downVoteBy");
     if (!updatedPost) return res.sendStatus(404);
     return res.status(200).json(updatedPost);
   } catch (error) {
@@ -311,18 +313,17 @@ export const postUpVote = async (req: any, res: Response) => {
     const result = post.downVoteBy?.filter(
       (objectID) => objectID.toString() !== req.user._id.toString()
     );
-    post.downVoteBy = result;
-    post.upvoteBy?.push(req.user._id);
+    post.downVoteBy = [...new Set(result)];
   }
   if (upvoted) {
-    const result = post.upvoteBy?.filter(
+    let result: any = post.upvoteBy?.filter(
       (objectID) => objectID.toString() !== req.user._id.toString()
     );
     post.upvoteBy = result;
   } else {
     post.upvoteBy?.push(req.user._id);
   }
-  post.upvotes! = post.upvoteBy?.length || 0;
+  post.upvotes! = post.upvoteBy?.length! - post.downVoteBy?.length! || 0;
   post.downvotes! = post.downVoteBy?.length || 0;
   try {
     await post.save();
@@ -379,7 +380,7 @@ export const postDownVote = async (req: any, res: Response) => {
   } else {
     post.downVoteBy?.push(req.user._id);
   }
-  post.upvotes! = post.upvoteBy?.length || 0;
+  post.upvotes! = post.upvoteBy?.length! - post.downVoteBy?.length! || 0;
   post.downvotes! = post.downVoteBy?.length || 0;
   try {
     await post.save();
