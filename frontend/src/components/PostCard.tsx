@@ -70,6 +70,7 @@ const PostCard = ({
           }
         });
 
+
         setVote((prevState) => ({
           upVote: !prevState.upVote,
           downVote: false
@@ -81,13 +82,8 @@ const PostCard = ({
           }
         });
 
-        setVote((prevState) => ({
-          upVote: false,
-          downVote: !prevState.downVote
-        }));
-      }
-
       revalidate?.();
+
     }
   };
 
@@ -100,6 +96,7 @@ const PostCard = ({
             alt={author?.profile.fullName}
             sx={{ bgcolor: "rgb(255, 0, 0)" }}
           />
+
         }
         action={
           <IconButton
@@ -110,6 +107,7 @@ const PostCard = ({
             {saved ? <Bookmark /> : <BookmarkOutlined />}
           </IconButton>
         }
+
         title={author?.profile.fullName}
         subheader={
           <>
@@ -133,6 +131,7 @@ const PostCard = ({
               </>
             )}
             <span>{createdAt && new Date(createdAt).toDateString()}</span>
+
           </>
         }
         titleTypographyProps={{ fontWeight: 500, variant: "h6" }}
