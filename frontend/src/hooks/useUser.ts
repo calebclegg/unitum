@@ -73,7 +73,8 @@ export const useUser = () => {
 
   const { data: user, mutate: updateUser } = useSWR<IUser | null>(
     tokens ? ["users/me", tokens?.accessToken] : null,
-    fetcher
+    fetcher,
+    { revalidateOnFocus: false }
   );
 
   const logout = async () => {
