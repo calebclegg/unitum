@@ -76,7 +76,7 @@ export const getPosts = async (req: any, res: Response) => {
         .sort("createdAt")
         .select("-comments +upvoteBy")
         .populate([
-          { path: "author", select: "profile.fullName profile.picture" },
+          { path: "author", select: "profile.fullName" },
           { path: "communityID", select: "-__v -members" }
         ])
         .skip(skip)
@@ -86,7 +86,7 @@ export const getPosts = async (req: any, res: Response) => {
         .sort("createdAt")
         .select("-comments +upvoteBy")
         .populate([
-          { path: "author", select: "profile.fullName profile.picture" },
+          { path: "author", select: "profile.fullName" },
           { path: "communityID", select: "-__v -members" }
         ])
         .skip(skip)
@@ -208,11 +208,7 @@ export const getPostComments = async (req: any, res: Response) => {
     const comments = await CommentModel.find({ postID: postID })
       .skip(skip)
       .limit(limit)
-      .select(["-__v"])
-      .populate({
-        path: "author",
-        select: "profile.fullName profile.picture"
-      });
+      .select(["-__v"]);
     return res.status(200).json(comments);
   } catch (error) {
     return res.sendStatus(500);
@@ -236,7 +232,7 @@ export const addPostComment = async (req: any, res: Response) => {
 
   let errors;
   if (valData.error) {
-    errors = valData.error.details?.map((error) => ({
+    errors = valData.error.details.map((error) => ({
       label: error.context?.label,
       message: error.message
     }));

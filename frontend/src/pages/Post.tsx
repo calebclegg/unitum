@@ -1,39 +1,32 @@
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import CardContent from "@mui/material/CardContent";
 import Dialog from "@mui/material/Dialog";
-import IconButton from "@mui/material/IconButton";
-import Paper from "@mui/material/Paper";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import Stack from "@mui/material/Stack";
-import { Theme } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
+import useSWR from "swr";
 import { useParams } from "react-router-dom";
-import ArrowBack from "@mui/icons-material/ArrowBack";
-import PostDetails from "../components/PostDetails";
+import { useUser } from "../hooks";
+import { fetcher } from "../utils";
 
 const Post = () => {
+  const { token } = useUser();
   const { post_id } = useParams<{ post_id: string }>();
-  const laptopUp = useMediaQuery(({ breakpoints }: Theme) =>
-    breakpoints.up("md")
+  const { data: post } = useSWR(
+    token ? [`posts/${post_id}`, token] : null,
+    fetcher
   );
+  console.log({ post });
 
   return (
-    <>
-      {laptopUp ? (
-        <Paper variant="outlined" sx={{ mb: 12, position: "relative" }}>
-          <PostDetails id={post_id} />
-        </Paper>
-      ) : (
-        <Dialog fullScreen open={Boolean(post_id)}>
-          <Stack direction="row">
-            <IconButton
-              aria-label="go back"
-              onClick={() => window.history.back()}
-            >
-              <ArrowBack />
-            </IconButton>
-          </Stack>
-          <PostDetails id={post_id} />
-        </Dialog>
-      )}
-    </>
+    <Dialog open={Boolean(post_id)} fullScreen>
+      <Card>
+        <CardHeader></CardHeader>
+        <CardContent>
+          <Typography>{post?.body}</Typography>
+          <section id="comments"></section>
+        </CardContent>
+      </Card>
+    </Dialog>
   );
 };
 
