@@ -8,6 +8,8 @@ router.get("/me", getUser, controller.userInfo);
 
 router.patch("/me", getUser, controller.updateUserInfo);
 
+router.get("/me/posts", getUser, controller.getUserPosts);
+
 router.get("/me/education/:edID", getUser, controller.getEducation);
 
 router.post("/me/education", getUser, controller.addNewEducation);

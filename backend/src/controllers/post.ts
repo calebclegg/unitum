@@ -3,6 +3,7 @@ import { Types } from "mongoose";
 import CommunityModel from "../models/Community";
 import { CommentModel, PostModel } from "../models/Post";
 import { SavedPost } from "../models/SavedPost";
+import User from "../models/User";
 import { notification } from "../types/notification";
 import { IPost } from "../types/post";
 import { sendNotification } from "../utils/notification";
@@ -291,7 +292,7 @@ export const addPostComment = async (req: any, res: Response) => {
 
 export const postUpVote = async (req: any, res: Response) => {
   const postID = new Types.ObjectId(req.params.postID);
-  const post = await PostModel.findOne({ _id: postID });
+  const post = await PostModel.findOne({ _id: postID }).select("+nextCoyn");
   if (!post) return res.status(404).json({ message: "Post not found" });
   if (post.communityID) {
     const userCommunities = req.user.communities.map(
@@ -313,7 +314,7 @@ export const postUpVote = async (req: any, res: Response) => {
     const result = post.downVoteBy?.filter(
       (objectID) => objectID.toString() !== req.user._id.toString()
     );
-    post.downVoteBy = [...new Set(result)];
+    post.downVoteBy = result;
   }
   if (upvoted) {
     let result: any = post.upvoteBy?.filter(
@@ -340,6 +341,24 @@ export const postUpVote = async (req: any, res: Response) => {
       notificationInfo,
       post.author._id.toString()
     );
+    if (post.upvoteBy?.length === post.nextCoyn) {
+      const user = await User.findOne({ _id: post.author });
+      if (user?.profile) user.profile.unicoyn += 1;
+      post.nextCoyn! += 100;
+      await user?.save();
+      await post.save();
+      const notificationInfo: notification = {
+        message: `Congratulations, you have received 1 unicoyn`,
+        userID: post.author,
+        type: "post",
+        post: post.id
+      };
+      await sendNotification(
+        req.io,
+        notificationInfo,
+        post.author._id.toString()
+      );
+    }
   } catch (error) {
     return res.sendStatus(500);
   }
