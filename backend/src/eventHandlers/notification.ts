@@ -5,9 +5,7 @@ export const notificationHandler = async (io: Server, socket: any) => {
   const deleteNotification = async (notificationID: string) => {
     try {
       await Notification.findOneAndDelete({ _id: notificationID });
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   };
 
   socket.on("notification:delete", deleteNotification);

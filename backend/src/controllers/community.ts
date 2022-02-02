@@ -258,8 +258,6 @@ export const leaveCommunity = async (req: any, res: Response) => {
     return res.status(404).json({ message: "Community not found" });
 
   const isMember = community.members?.some((member) => {
-    console.log(member.info, user?._id);
-    console.log(member);
     return member?.info?.equals(user?._id.toString());
   });
 

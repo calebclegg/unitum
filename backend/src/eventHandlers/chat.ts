@@ -41,7 +41,6 @@ export const chatHandler = async (io: Server, socket: any) => {
 
       socket.to(newMessage.chatID.toString()).emit("new message", newMessage);
     } catch (error) {
-      console.log(error);
       callback({
         status: "500"
       });
@@ -72,7 +71,6 @@ export const chatHandler = async (io: Server, socket: any) => {
       });
       socket.to(user._id).emit("all chats", chats);
     } catch (error) {
-      console.log(error);
       return callback({
         status: "500"
       });
@@ -89,13 +87,11 @@ export const chatHandler = async (io: Server, socket: any) => {
     try {
       chat = await Chat.findOne({ _id: chatID });
     } catch (error) {
-      console.log(error);
       return callback({
         status: "500"
       });
     }
     if (!chat) {
-      console.log(`Chat with id ${chatID} not found`);
       return callback({
         status: "404",
         message: "Chat not found"
@@ -117,7 +113,6 @@ export const chatHandler = async (io: Server, socket: any) => {
         });
       chat.delete();
     } catch (e) {
-      console.log(e);
       return callback({
         status: "500"
       });
