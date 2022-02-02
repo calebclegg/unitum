@@ -21,9 +21,9 @@ const redisConnect = () => __awaiter(void 0, void 0, void 0, function* () {
         }
         catch (error) {
             while (limit > 0) {
+                limit--;
                 console.log("Unable to connect to redis sever!!\n Reconnecting...");
                 yield (0, exports.redisConnect)();
-                limit--;
                 console.log(limit);
             }
         }
