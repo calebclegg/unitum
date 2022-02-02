@@ -9,8 +9,8 @@
     "node": "14.x"
   },
   "scripts": {
-    "install:client": "cd frontend && yarn",
-    "install:server": "cd backend && yarn",
+    "install:client": "cd frontend && yarn --only=dev && yarn",
+    "install:server": "cd backend && yarn --only=dev && yarn",
     "client": "cd frontend && yarn start",
     "server": "cd backend && yarn dev",
     "install": "yarn install:server && yarn install:client",
