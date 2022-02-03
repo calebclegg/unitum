@@ -8,6 +8,7 @@ import BottomNav from "./BottomNav";
 import TopBar from "./TopBar";
 import Sidebar from "./Sidebar";
 import SocketProvider from "../context/Socket";
+import CommunitiesBrief from "./CommunitiesBrief";
 
 const Layout = () => {
   const [isDrawerOpened, setIsDrawerOpened] = useState(false);
@@ -33,10 +34,11 @@ const Layout = () => {
           component="main"
           id="main-content"
           disableGutters={desktopUp}
-          sx={{ pt: 11 }}
+          sx={{ pt: 11, width: "unset", flexGrow: 1 }}
         >
           <Outlet />
         </Container>
+        {tabletUp && <CommunitiesBrief />}
       </Stack>
       {!tabletUp && <BottomNav />}
     </SocketProvider>

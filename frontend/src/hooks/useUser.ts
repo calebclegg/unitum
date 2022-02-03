@@ -11,7 +11,7 @@ interface IUser {
     picture: string;
     fullName: string;
     schoolWork: string[];
-    communities: any[];
+    communities: Record<string, any>[];
     dob: string;
     unicoyn: string;
     education: {
