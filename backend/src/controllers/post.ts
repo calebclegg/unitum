@@ -48,7 +48,7 @@ export const createPost = async (req: any, res: Response) => {
     if (community) {
       const notificationInfo: notification = {
         message: `${req.user.profile.fullName} added a new post in ${community.name}`,
-        type: "community",
+        type: "post",
         user: user._id,
         post: newPost._id
       };
@@ -275,7 +275,7 @@ export const addPostComment = async (req: any, res: Response) => {
     const notificationInfo: notification = {
       message: `${req.user.profile.fullName} commented on your post`,
       user: req.user._id,
-      type: "post",
+      type: "comment",
       userID: post.author._id,
       post: post._id
     };
@@ -331,7 +331,7 @@ export const postUpVote = async (req: any, res: Response) => {
     const notificationInfo: notification = {
       message: `${req.user.profile.fullName} liked your post`,
       user: req.user._id,
-      type: "post",
+      type: "like",
       userID: post.author._id,
       post: post._id
     };
