@@ -36,7 +36,7 @@ router.delete(
 
 router.get("/me/savedPosts", getUser, sveController.getSavedPosts);
 
-router.post("/me/savedPosts", getUser, sveController.saveAPost);
+router.post("/me/savedPost", getUser, sveController.saveAPost);
 
 router.delete("/me/savedPosts/:postID", getUser, sveController.unsavePost);
 
