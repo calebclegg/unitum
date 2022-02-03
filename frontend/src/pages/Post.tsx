@@ -5,11 +5,11 @@ import Dialog from "@mui/material/Dialog";
 import Typography from "@mui/material/Typography";
 import useSWR from "swr";
 import { useParams } from "react-router-dom";
-import { useUser } from "../hooks";
+import { useToken } from "../hooks";
 import { fetcher } from "../utils";
 
 const Post = () => {
-  const { token } = useUser();
+  const { token } = useToken();
   const { post_id } = useParams<{ post_id: string }>();
   const { data: post } = useSWR(
     token ? [`posts/${post_id}`, token] : null,

@@ -18,10 +18,11 @@ import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Logo from "./Logo";
 import { darkTheme } from "../lib";
-import { useData, useDisplaySize, useUser } from "../hooks";
+import { useData, useDisplaySize } from "../hooks";
 import { Link, useLocation } from "react-router-dom";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { useSocket } from "../context/Socket";
+import { useUser } from "../hooks";
 
 const Search = lazy(() => import("./Search"));
 const MobileInput = lazy(() => import("./Search/MobileInput"));
@@ -185,14 +186,17 @@ const TopBar = ({ openDrawer }: IProps) => {
                       <ButtonUnstyled component={MenuButton} onClick={openMenu}>
                         <Grid container spacing={1.5} alignItems="center">
                           <Grid item>
-                            <Avatar>U</Avatar>
+                            <Avatar
+                              src={user?.profile.picture}
+                              alt={user?.profile.fullName}
+                            />
                           </Grid>
                           <Grid
                             item
                             container
                             width="fit-content"
                             direction="column"
-                            alignItems="center"
+                            alignItems="flex-start"
                             gap={0.25}
                           >
                             <Typography color="text.primary">
