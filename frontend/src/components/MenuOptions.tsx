@@ -31,6 +31,11 @@ interface IProps {
 const MenuOptions = ({ anchorEl, handleClose }: IProps) => {
   const { logout } = useUser();
 
+  const handleLogout = () => {
+    logout();
+    handleClose();
+  };
+
   return (
     <Menu
       open={Boolean(anchorEl)}
@@ -52,14 +57,14 @@ const MenuOptions = ({ anchorEl, handleClose }: IProps) => {
       }}
     >
       {menuItems.map(({ path, label, icon }) => (
-        <MenuItem key={path} component={Link} to={path}>
+        <MenuItem key={path} component={Link} to={path} onClick={handleClose}>
           <ListItemIcon>{icon}</ListItemIcon>
           <ListItemText>{label}</ListItemText>
         </MenuItem>
       ))}
       <Divider variant="middle" light />
       <MenuItem
-        onClick={logout}
+        onClick={handleLogout}
         sx={{
           "& .MuiListItemText-primary, & .MuiListItemIcon-root": {
             color: "error.main"

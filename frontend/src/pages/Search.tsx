@@ -14,19 +14,25 @@ import { content, resultTypes } from "../components/Search/Result";
 import Empty from "../components/Search/Empty";
 import Failure from "../components/Search/Failure";
 import Tag from "../components/Tag";
+import { useToken } from "../hooks";
 
 const Search = () => {
+  const { token } = useToken();
   const [searchParams, setSearchParams] = useSearchParams();
   const [filters, setFilters] = useState<string[]>([]);
-  const query = useMemo(() => searchParams.get("query"), [searchParams]);
+  const query = useMemo(() => searchParams.get("keyword"), [searchParams]);
   const result = useMemo(
     () =>
       query ? content.replaceAll(query, `<mark>${query}</mark>`) : content,
     [query]
   );
 
-  const { data, error, isValidating } = useSWR(
-    query ? "search?" + searchParams.toString() : null,
+  const {
+    data: searchResults,
+    error,
+    isValidating
+  } = useSWR(
+    query ? ["search?" + searchParams.toString(), token] : null,
     fetcher,
     {
       shouldRetryOnError: false
@@ -35,7 +41,7 @@ const Search = () => {
 
   useEffect(() => {
     const params = new URLSearchParams();
-    query && params.set("query", query);
+    query && params.set("keyword", query);
 
     filters.forEach((type) => {
       params.set(type, "1");
@@ -84,7 +90,7 @@ const Search = () => {
       />
       {query && !error ? (
         <List role="listbox">
-          {[1, 2, 3, 4].map((i) => (
+          {searchResults?.map((i: any) => (
             <ListItem key={i} role="option" id={`item-${i}`} button>
               <ListItemText
                 primary={

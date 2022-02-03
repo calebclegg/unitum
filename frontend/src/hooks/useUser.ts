@@ -1,17 +1,17 @@
-import useSWR from "swr";
-import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
-import { clearToken, getToken, saveToken } from "../utils/store-token";
-import { getUrl, fetcher } from "../utils";
+import { clearToken } from "../utils/store-token";
+import { fetcher } from "../utils";
+import { useData, useToken } from ".";
 
 interface IUser {
   _id: string;
   email: string;
   profile: {
     _id: string;
+    picture: string;
     fullName: string;
     schoolWork: string[];
-    communities: string[];
+    communities: Record<string, any>[];
     dob: string;
     unicoyn: string;
     education: {
@@ -28,65 +28,23 @@ interface IUser {
 
 export const useUser = () => {
   const navigate = useNavigate();
-  const isOnAuthPage = ["/register", "/login"].includes(
-    window.location.pathname
-  );
-  const { data: tokens, mutate: updateToken } = useSWR<
-    {
-      accessToken: string;
-      refreshToken: string;
-    } | null,
-    AxiosError
-  >(
-    () => {
-      const refreshToken = getToken();
-      return ["auth/token", refreshToken];
-    },
-    fetcher,
-    {
-      onSuccess: (data) => {
-        if (isOnAuthPage) {
-          navigate("/feed", { replace: true });
-        }
+  const { token, updateToken } = useToken();
 
-        saveToken(data?.refreshToken);
-      },
-      onErrorRetry: (error, _, __, revalidate, { retryCount }) => {
-        if (error.response?.status === 400 || retryCount >= 10) return;
-
-        setTimeout(() => revalidate({ retryCount }), 5000);
-      },
-      onError: () => {
-        if (!isOnAuthPage) {
-          navigate("/login", {
-            replace: true,
-            state: {
-              condition: "auth-error",
-              from: getUrl()
-            }
-          });
-        }
-      }
-    }
-  );
-
-  const { data: user, mutate: updateUser } = useSWR<IUser | null>(
-    tokens ? ["users/me", tokens?.accessToken] : null,
-    fetcher
-  );
+  const { data: user, mutate: updateUser } = useData<IUser | null>("users/me", {
+    revalidateOnFocus: false
+  });
 
   const logout = async () => {
-    await fetcher("auth/logout", tokens?.accessToken);
+    await fetcher("auth/logout", token);
     updateToken(null);
     updateUser(null);
     clearToken();
     navigate("/login");
   };
 
-  const { data: notifications } = useSWR(
-    ["users/me/notifications", tokens?.accessToken],
-    fetcher
-  );
+  const { data: notifications } = useData<any>("users/me/notifications", {
+    revalidateOnFocus: false
+  });
 
-  return { user, token: tokens?.accessToken, notifications, logout };
+  return { user, notifications, logout };
 };
