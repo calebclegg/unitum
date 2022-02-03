@@ -13,7 +13,7 @@ const notificationSchema = new Schema<notification>(
     },
     type: {
       type: String,
-      enum: ["post", "message", "like", "comment"],
+      enum: ["post", "message", "like", "comment", "community"],
       required: true
     },
     user: {

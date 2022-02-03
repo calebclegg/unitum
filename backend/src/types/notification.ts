@@ -5,7 +5,7 @@ export interface notification {
   message: String;
   createdAt?: Date;
   user?: Types.ObjectId;
-  type: "message" | "post" | "like" | "comment";
+  type: "message" | "post" | "like" | "comment" | "community";
   post?: Types.ObjectId;
   community?: Types.ObjectId;
 }
