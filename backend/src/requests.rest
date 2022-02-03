@@ -48,8 +48,8 @@ POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
-   "email": "rexosei111@gmail.com",
-   "password": "rexosei111"
+   "email": "ohenesetwumasi@gmail.com",
+   "password": "jaybarnes3319"
 }
 
 ###
@@ -65,7 +65,7 @@ Content-Type: application/json
 
 GET http://localhost:3000/api/users/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzU2NDQ4MiwiZXhwIjoxNjQzNTY1MDgyfQ.JDAzvIzrZSqd5wOmre2whOIIosaaPbosfxFInDcL8-4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJvaGVuZXNldHd1bWFzaUBnbWFpbC5jb20iLCJpc3MiOiJ1bml0dW06cGxhdGZvcm0iLCJpYXQiOjE2NDM4NDY3NzYsImV4cCI6MTY0Mzg0NzM3Nn0.nm4ITHTwgDBU6tdy_iBPRIgMsxjJIqdPPckr1A019ZA
 
 ###
 
@@ -84,6 +84,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 GET http://localhost:3000/api/users/me/posts
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzgyOTI4MSwiZXhwIjoxNjQzODI5ODgxfQ.HH60VWF72DRkWEuro3x4IJTm1HPKJw8j0dDX0jTaTNw
+###
+GET http://localhost:3000/api/users/me/communities
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJvaGVuZXNldHd1bWFzaUBnbWFpbC5jb20iLCJpc3MiOiJ1bml0dW06cGxhdGZvcm0iLCJpYXQiOjE2NDM4NDY3NzYsImV4cCI6MTY0Mzg0NzM3Nn0.nm4ITHTwgDBU6tdy_iBPRIgMsxjJIqdPPckr1A019ZA
+###
+
 ###
 POST http://localhost:3000/api/users/me/schoolWork
 Content-Type: application/json

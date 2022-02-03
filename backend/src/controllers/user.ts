@@ -296,3 +296,20 @@ export const getUserPosts = async (req: any, res: Response) => {
     return res.sendStatus(500);
   }
 };
+
+export const getUserCommunities = async (req: any, res: Response) => {
+  try {
+    const user = await User.findOne({ _id: req.user._id }).populate({
+      path: "profile.communities",
+      select: "-__v -members",
+      populate: {
+        path: "admin",
+        select: "profile.fullName profile.picture"
+      }
+    });
+    const communities = user.profile?.communities;
+    return res.json(communities);
+  } catch (error) {
+    return res.sendStatus(500);
+  }
+};
