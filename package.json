@@ -9,10 +9,10 @@
     "install:client": "cd frontendv2 && yarn",
     "install:server": "cd backend && yarn",
     "install": "YARN_PRODUCTION=false yarn install:client && YARN_PRODUCTION=false yarn install:server",
-    "client": "cd frontend && yarn start",
+    "client": "cd frontendv2 && yarn start",
     "server": "cd backend && yarn dev",
     "start": "yarn server",
-    "build": "YARN_PRODUCTION=false yarn --cwd frontend build && YARN_PRODUCTION=false yarn --cwd backend build"
+    "build": "YARN_PRODUCTION=false yarn --cwd frontendv2 build && YARN_PRODUCTION=false yarn --cwd backend build"
   },
   "devDependencies": {
     "concurrently": "^7.0.0"
