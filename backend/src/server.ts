@@ -71,8 +71,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "*",
-    allowedHeaders: ["http://localhost:3000", "unitum.vercel.app"]
+    origin: "*"
   })
 );
 app.use(helmet());

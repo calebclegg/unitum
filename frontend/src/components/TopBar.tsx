@@ -18,11 +18,10 @@ import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Logo from "./Logo";
 import { darkTheme } from "../lib";
-import { useData, useDisplaySize } from "../hooks";
+import { useData, useDisplaySize, useUser } from "../hooks";
 import { Link, useLocation } from "react-router-dom";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { useSocket } from "../context/Socket";
-import { useUser } from "../hooks";
 
 const Search = lazy(() => import("./Search"));
 const MobileInput = lazy(() => import("./Search/MobileInput"));
