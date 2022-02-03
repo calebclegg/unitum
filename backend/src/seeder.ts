@@ -33,6 +33,10 @@ export const importData = async () => {
 
     const savedCommunities = await CommunityModel.insertMany(communitiesL);
 
+    const user = createdUsers[0];
+    user.profile?.communities?.push(savedCommunities[1]._id);
+    await user.save();
+
     const postL = posts.map((post) => {
       let i = 0;
       const pos = { ...post, author: createdUsers[i]._id };

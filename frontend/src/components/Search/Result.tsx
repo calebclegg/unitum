@@ -12,7 +12,8 @@ import Tag from "../Tag";
 import useSWR from "swr";
 import { useTheme } from "@mui/material/styles";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { fetcher } from "../../utils/fetcher";
+import { useToken } from "../../hooks";
+import { fetcher } from "../../utils";
 import Empty from "./Empty";
 import Failure from "./Failure";
 
@@ -45,6 +46,7 @@ interface IProps {
 }
 
 const Result = ({ anchorEl, query }: IProps) => {
+  const { token } = useToken();
   const { transitions, zIndex } = useTheme();
   const paperRef = useRef<HTMLDivElement>(null);
   const open = Boolean(anchorEl);
@@ -59,7 +61,7 @@ const Result = ({ anchorEl, query }: IProps) => {
     () => {
       if (query) {
         const params = new URLSearchParams();
-        params.set("query", query);
+        params.set("keyword", query);
 
         filters.forEach((type) => {
           params.set(type, "1");

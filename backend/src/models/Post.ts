@@ -60,6 +60,11 @@ export const postSchema = new Schema<IPost>(
       type: [Schema.Types.ObjectId],
       ref: "User"
     },
+    nextCoyn: {
+      type: Number,
+      default: 100,
+      select: false
+    },
     downVoteBy: {
       type: [Schema.Types.ObjectId],
       ref: "User"

@@ -18,6 +18,7 @@ export interface IPost {
   downvotes?: number;
   upvoteBy?: Types.ObjectId[];
   downVoteBy?: Types.ObjectId[];
+  nextCoyn?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }

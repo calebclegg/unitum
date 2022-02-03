@@ -18,11 +18,10 @@ import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Logo from "./Logo";
 import { darkTheme } from "../lib";
-import { useDisplaySize } from "../hooks";
+import { useData, useDisplaySize, useUser } from "../hooks";
 import { Link, useLocation } from "react-router-dom";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { useSocket } from "../context/Socket";
-import { useUser, useMessages } from "../hooks";
 
 const Search = lazy(() => import("./Search"));
 const MobileInput = lazy(() => import("./Search/MobileInput"));
@@ -49,7 +48,7 @@ interface IProps {
 
 const TopBar = ({ openDrawer }: IProps) => {
   const { user, notifications } = useUser();
-  const { messages } = useMessages();
+  const { data: messages } = useData<any>("chat/messages/unread");
   const { socket } = useSocket();
   const { pathname } = useLocation();
   const tabletUp = useDisplaySize("sm");
@@ -214,7 +213,11 @@ const TopBar = ({ openDrawer }: IProps) => {
                       </ButtonUnstyled>
                     ) : (
                       <IconButton aria-label="menu" onClick={openMenu}>
-                        <Avatar sx={{ width: 50, height: 50 }}>U</Avatar>
+                        <Avatar
+                          sx={{ width: 50, height: 50 }}
+                          src={user?.profile.picture}
+                          alt={user?.profile.fullName}
+                        />
                       </IconButton>
                     )}
                   </Stack>

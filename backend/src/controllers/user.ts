@@ -15,6 +15,7 @@ import {
   validateEducationEditData,
   validateUserUpdate
 } from "../validators/user.validator";
+import { PostModel } from "../models/Post";
 
 // interface IReq extends Request {
 //   user: Document<any, any, IUser> &
@@ -277,5 +278,38 @@ export const deleteNotification = async (req: any, res: Response) => {
     return res.sendStatus(200);
   } catch (error) {
     res.sendStatus(500);
+  }
+};
+
+export const getUserPosts = async (req: any, res: Response) => {
+  const limit = +req.query.limit || 10;
+  const skip = +req.query.skip || 0;
+  try {
+    const posts = await PostModel.find({ author: req.user._id })
+      .sort("createdAt")
+      .select("-comments -upvoteBy -downVoteBy -author")
+      .populate([{ path: "communityID", select: "-__v -members" }])
+      .skip(skip)
+      .limit(limit);
+    return res.json(posts);
+  } catch (error) {
+    return res.sendStatus(500);
+  }
+};
+
+export const getUserCommunities = async (req: any, res: Response) => {
+  try {
+    const user = await User.findOne({ _id: req.user._id }).populate({
+      path: "profile.communities",
+      select: "-__v -members",
+      populate: {
+        path: "admin",
+        select: "profile.fullName profile.picture"
+      }
+    });
+    const communities = user.profile?.communities;
+    return res.json(communities);
+  } catch (error) {
+    return res.sendStatus(500);
   }
 };
