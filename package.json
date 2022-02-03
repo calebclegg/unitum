@@ -6,7 +6,7 @@
   "author": "",
   "license": "MIT",
   "scripts": {
-    "install:client": "cd frontend && yarn",
+    "install:client": "cd frontendv2 && yarn",
     "install:server": "cd backend && yarn",
     "install": "YARN_PRODUCTION=false yarn install:client && YARN_PRODUCTION=false yarn install:server",
     "client": "cd frontend && yarn start",
