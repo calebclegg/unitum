@@ -36,8 +36,10 @@ On successful connection,
   - **createdAt**: The timestamp of the notification
   - **type**: This is the type of notification. there are three types of notifications; (required)
     - **_message_**: private message notification
-    - **_post_**: post like or comment notification
-    - **_community_**: community activity such as new post, post like or comment.
+    - **_post_**: post was made to a community
+    - **_like_**: post was upvoted
+    - **_comment_**: post was commented on
+    - **_community_**: community details was updated or a new member was added
   - **postID**: the id of the post the action("comment", "like") happened.
   - **community**: the id of the community in which the action ("create", "comment", "like") happened
 
