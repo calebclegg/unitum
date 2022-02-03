@@ -18,7 +18,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { alpha, styled, Theme } from "@mui/material/styles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useData, useToken } from "../hooks";
 import { API } from "../lib";
 
@@ -68,6 +68,12 @@ const PostDetails = ({ id }: IProps) => {
   );
 
   const sortedComments = laptopUp ? [...(comments || [])].reverse() : comments;
+
+  useEffect(() => {
+    if (post) {
+      setVote({ upVote: post.upvoted, downVote: post.downvoted });
+    }
+  }, [post]);
 
   const addVote = async (event: React.MouseEvent<HTMLButtonElement>) => {
     const { vote }: { vote?: "upVote" | "downVote" } =

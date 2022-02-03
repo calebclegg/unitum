@@ -3,7 +3,6 @@ import { Types } from "mongoose";
 import CommunityModel from "../models/Community";
 import { CommentModel, PostModel } from "../models/Post";
 import { SavedPost } from "../models/SavedPost";
-import User from "../models/User";
 import { notification } from "../types/notification";
 import { IPost } from "../types/post";
 import { sendNotification } from "../utils/notification";
@@ -77,7 +76,7 @@ export const getPosts = async (req: any, res: Response) => {
         .sort("createdAt")
         .select("-comments +upvoteBy")
         .populate([
-          { path: "author", select: "profile.fullName" },
+          { path: "author", select: "profile.fullName profile.picture" },
           { path: "communityID", select: "-__v -members" }
         ])
         .skip(skip)
@@ -87,7 +86,7 @@ export const getPosts = async (req: any, res: Response) => {
         .sort("createdAt")
         .select("-comments +upvoteBy")
         .populate([
-          { path: "author", select: "profile.fullName" },
+          { path: "author", select: "profile.fullName profile.picture" },
           { path: "communityID", select: "-__v -members" }
         ])
         .skip(skip)
@@ -231,7 +230,11 @@ export const getPostComments = async (req: any, res: Response) => {
     const comments = await CommentModel.find({ postID: postID })
       .skip(skip)
       .limit(limit)
-      .select(["-__v"]);
+      .select(["-__v"])
+      .populate({
+        path: "author",
+        select: "profile.fullName profile.picture"
+      });
     return res.status(200).json(comments);
   } catch (error) {
     return res.sendStatus(500);
@@ -255,7 +258,7 @@ export const addPostComment = async (req: any, res: Response) => {
 
   let errors;
   if (valData.error) {
-    errors = valData.error.details.map((error) => ({
+    errors = valData.error.details?.map((error) => ({
       label: error.context?.label,
       message: error.message
     }));
@@ -341,24 +344,6 @@ export const postUpVote = async (req: any, res: Response) => {
       notificationInfo,
       post.author._id.toString()
     );
-    if (post.upvoteBy?.length === post.nextCoyn) {
-      const user = await User.findOne({ _id: post.author });
-      if (user?.profile) user.profile.unicoyn += 1;
-      post.nextCoyn! += 100;
-      await user?.save();
-      await post.save();
-      const notificationInfo: notification = {
-        message: `Congratulations, you have received 1 unicoyn`,
-        userID: post.author,
-        type: "post",
-        post: post.id
-      };
-      await sendNotification(
-        req.io,
-        notificationInfo,
-        post.author._id.toString()
-      );
-    }
   } catch (error) {
     return res.sendStatus(500);
   }
