@@ -186,17 +186,14 @@ const TopBar = ({ openDrawer }: IProps) => {
                       <ButtonUnstyled component={MenuButton} onClick={openMenu}>
                         <Grid container spacing={1.5} alignItems="center">
                           <Grid item>
-                            <Avatar
-                              src={user?.profile.picture}
-                              alt={user?.profile.fullName}
-                            />
+                            <Avatar>U</Avatar>
                           </Grid>
                           <Grid
                             item
                             container
                             width="fit-content"
                             direction="column"
-                            alignItems="flex-start"
+                            alignItems="center"
                             gap={0.25}
                           >
                             <Typography color="text.primary">

@@ -57,11 +57,7 @@ const Result = ({ anchorEl, query }: IProps) => {
     [query]
   );
 
-  const {
-    data: searchResult,
-    error,
-    isValidating
-  } = useSWR(
+  const { data, error, isValidating } = useSWR(
     () => {
       if (query) {
         const params = new URLSearchParams();
@@ -71,7 +67,7 @@ const Result = ({ anchorEl, query }: IProps) => {
           params.set(type, "1");
         });
 
-        return ["search?" + params.toString(), token];
+        return "search?" + params.toString();
       }
 
       return null;
@@ -81,8 +77,6 @@ const Result = ({ anchorEl, query }: IProps) => {
       shouldRetryOnError: false
     }
   );
-
-  console.log({ searchResult });
 
   useEffect(() => {
     if (paperRef.current) {

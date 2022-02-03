@@ -53,10 +53,14 @@ const About = () => {
             Get To Know Us
           </Typography>
           <Typography sx={{ mt: 4 }} align={tabletUp ? undefined : "center"}>
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam
-            maxime earum nostrum, assumenda voluptatum veritatis, temporibus
-            numquam molestiae sed vero voluptatem! Reprehenderit, dolorum! Fuga
-            repellat numquam perspiciatis reprehenderit aliquam atque.
+            Unitum exists for students to learn, earn, collaborate and
+            socialise. It’s a platform that aims to streamline student life by
+            making all student necessities accessible, at the click of a button.
+            The main objective of unitum is to remove the barriers that separate
+            different universities and their student body’s and create a student
+            environment where there is commonality. Doing this will allow
+            students to interact academically and socially. Currently the
+            platform is open to all tertiary education/ third level students.
           </Typography>
         </Stack>
       </Stack>

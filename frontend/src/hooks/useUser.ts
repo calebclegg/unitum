@@ -8,7 +8,6 @@ interface IUser {
   email: string;
   profile: {
     _id: string;
-    picture: string;
     fullName: string;
     schoolWork: string[];
     communities: Record<string, any>[];
