@@ -1,8 +1,6 @@
-import useSWR from "swr";
-import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
-import { clearToken, getToken, saveToken } from "../utils/store-token";
-import { getUrl, fetcher } from "../utils";
+import { clearToken } from "../utils/store-token";
+import { fetcher } from "../utils";
 import { useData, useToken } from ".";
 
 interface IUser {
@@ -13,7 +11,7 @@ interface IUser {
     picture: string;
     fullName: string;
     schoolWork: string[];
-    communities: string[];
+    communities: any[];
     dob: string;
     unicoyn: string;
     education: {
