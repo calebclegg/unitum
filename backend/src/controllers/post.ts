@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Response } from "express";
 import { Types } from "mongoose";
 import CommunityModel from "../models/Community";
 import { CommentModel, PostModel } from "../models/Post";
 import { SavedPost } from "../models/SavedPost";
+import User from "../models/User";
 import { notification } from "../types/notification";
-import { IPost } from "../types/post";
 import { sendNotification } from "../utils/notification";
 import {
   validateCommentCreateData,
@@ -110,7 +112,6 @@ export const getPosts = async (req: any, res: Response) => {
     });
     console.log(posts);
     return res.status(200).json(posts);
-
   }
   const savedPosts = await SavedPost.findOne({ userID: user._id });
   const posts = dbPosts.map((post: any) => {
@@ -189,8 +190,8 @@ export const getPostDetails = async (req: any, res: Response) => {
 export const deletePost = async (req: any, res: Response) => {
   const user = req.user;
   const postID = new Types.ObjectId(req.params.postID);
-  let post;
-  post = await PostModel.findOne({ _id: postID });
+
+  const post = await PostModel.findOne({ _id: postID });
   if (!post) return res.sendStatus(404);
   if (post?.author.toString() !== user._id.toString())
     return res.sendStatus(401);
@@ -227,17 +228,17 @@ export const updatePost = async (req: any, res: Response) => {
 };
 
 export const getPostComments = async (req: any, res: Response) => {
-  const user = req.user;
   const postID = new Types.ObjectId(req.params.postID);
   const limit = req.query.limit || 20;
   const skip = req.query.skip || 0;
   const comments = await CommentModel.find({ postID: postID })
     .skip(skip)
     .limit(limit)
-    .select(["-__v"]).populate({
-        path: "author",
-        select: "profile.fullName profile.picture"
-      });
+    .select(["-__v"])
+    .populate({
+      path: "author",
+      select: "profile.fullName profile.picture"
+    });
   return res.status(200).json(comments);
 };
 
@@ -316,14 +317,14 @@ export const postUpVote = async (req: any, res: Response) => {
     post.downVoteBy = result;
   }
   if (upvoted) {
-    let result: any = post.upvoteBy?.filter(
+    const result = post.upvoteBy?.filter(
       (objectID) => objectID.toString() !== req.user._id.toString()
     );
     post.upvoteBy = result;
   } else {
     post.upvoteBy?.push(req.user._id);
   }
-  post.upvotes! = post.upvoteBy?.length! - post.downVoteBy?.length! || 0;
+  post.upvotes! = post.upvoteBy!.length - post.downVoteBy!.length || 0;
   post.downvotes! = post.downVoteBy?.length || 0;
   await post.save();
   const notificationInfo: notification = {
@@ -352,6 +353,7 @@ export const postUpVote = async (req: any, res: Response) => {
       notificationInfo,
       post.author._id.toString()
     );
+  }
 };
 
 export const postDownVote = async (req: any, res: Response) => {
@@ -389,7 +391,7 @@ export const postDownVote = async (req: any, res: Response) => {
   } else {
     post.downVoteBy?.push(req.user._id);
   }
-  post.upvotes! = post.upvoteBy?.length! - post.downVoteBy?.length! || 0;
+  post.upvotes! = post.upvoteBy!.length - post.downVoteBy!.length || 0;
   post.downvotes! = post.downVoteBy?.length || 0;
   await post.save();
   res.sendStatus(200);
