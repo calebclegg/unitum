@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Response, NextFunction } from "express";
 import { config as dotenv } from "dotenv-flow";
 import authRoutes from "./routes/auth";
 import userRoutes from "./routes/user";
@@ -85,6 +85,11 @@ app.use("/api/posts", postRoutes);
 app.use("/api", searchRouter);
 app.use("/api/chat", chatRoutes);
 app.use("/api/contact", contactRoutes);
+
+app.use((err: Error, req: any, res: Response, next: NextFunction) => {
+  // console.log(err);
+  res.status(500).json({ message: "Something went wrong" });
+});
 //Mount api routes here
 
 httpServer.listen(process.env.PORT, () => {

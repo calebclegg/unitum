@@ -48,8 +48,8 @@ POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
-   "email": "ohenesetwumasi@gmail.com",
-   "password": "jaybarnes3319"
+   "email": "rexosei111@gmail.com",
+   "password": "rexosei111"
 }
 
 ###
@@ -65,7 +65,7 @@ Content-Type: application/json
 
 GET http://localhost:3000/api/users/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJvaGVuZXNldHd1bWFzaUBnbWFpbC5jb20iLCJpc3MiOiJ1bml0dW06cGxhdGZvcm0iLCJpYXQiOjE2NDM4NDY3NzYsImV4cCI6MTY0Mzg0NzM3Nn0.nm4ITHTwgDBU6tdy_iBPRIgMsxjJIqdPPckr1A019ZA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NDAxMDMyOCwiZXhwIjoxNjQ0MDEwOTI4fQ.jQqC4NCqRJ4IQSVvzFw--Al6hl3EZR1Sc2kBaTvLknA
 
 ###
 
@@ -83,7 +83,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 
 GET http://localhost:3000/api/users/me/posts
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzgyOTI4MSwiZXhwIjoxNjQzODI5ODgxfQ.HH60VWF72DRkWEuro3x4IJTm1HPKJw8j0dDX0jTaTNw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NDAxMDMyOCwiZXhwIjoxNjQ0MDEwOTI4fQ.jQqC4NCqRJ4IQSVvzFw--Al6hl3EZR1Sc2kBaTvLknA
 ###
 GET http://localhost:3000/api/users/me/communities
 Content-Type: application/json
@@ -93,7 +93,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJvaGVuZXNld
 ###
 POST http://localhost:3000/api/users/me/schoolWork
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0Mzc1ODU0OSwiZXhwIjoxNjQzNzU5MTQ5fQ.1s8Lil0Pb7Im1Nr77L0SJRTlwxL34WSkN9KpcZ-l3D0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NDAxMDMyOCwiZXhwIjoxNjQ0MDEwOTI4fQ.jQqC4NCqRJ4IQSVvzFw--Al6hl3EZR1Sc2kBaTvLknA
 
 {
     "title": "New School Work 23",
@@ -137,7 +137,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 
 POST http://localhost:3000/api/community/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzU2NDQ4MiwiZXhwIjoxNjQzNTY1MDgyfQ.JDAzvIzrZSqd5wOmre2whOIIosaaPbosfxFInDcL8-4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NDAxMDMyOCwiZXhwIjoxNjQ0MDEwOTI4fQ.jQqC4NCqRJ4IQSVvzFw--Al6hl3EZR1Sc2kBaTvLknA
 
 {
     "name": "new Channel",
