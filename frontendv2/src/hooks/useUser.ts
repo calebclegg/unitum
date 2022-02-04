@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { clearToken } from "../utils/store-token";
+import { clearRefreshToken } from "../utils";
 import { fetcher } from "../utils";
-import { useData, useToken } from ".";
+import { useData } from ".";
+import { useAuth } from "../context/Auth";
 
 interface IUser {
   _id: string;
@@ -28,17 +29,17 @@ interface IUser {
 
 export const useUser = () => {
   const navigate = useNavigate();
-  const { token, updateToken } = useToken();
+  const { updateToken } = useAuth();
 
   const { data: user, mutate: updateUser } = useData<IUser | null>("users/me", {
     revalidateOnFocus: false
   });
 
   const logout = async () => {
-    await fetcher("auth/logout", token);
-    updateToken(null);
+    clearRefreshToken();
+    await fetcher("auth/logout");
+    updateToken();
     updateUser(null);
-    clearToken();
     navigate("/login");
   };
 

@@ -9,15 +9,15 @@ import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { fetcher } from "../utils";
 import { content, resultTypes } from "../components/Search/Result";
+import { fetcher } from "../utils";
+import { useAuth } from "../context/Auth";
 import Empty from "../components/Search/Empty";
 import Failure from "../components/Search/Failure";
 import Tag from "../components/Tag";
-import { useToken } from "../hooks";
 
 const Search = () => {
-  const { token } = useToken();
+  const { token } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const [filters, setFilters] = useState<string[]>([]);
   const query = useMemo(() => searchParams.get("keyword"), [searchParams]);

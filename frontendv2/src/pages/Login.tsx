@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { API, loginSchema, loginValues, TLoginValues } from "../lib";
 import { camelToCapitalized } from "../utils";
-import { saveToken } from "../utils/store-token";
+import { saveRefreshToken } from "../utils/store-token";
 import CustomInput from "../components/CustomInput";
 import FormLayout from "../components/FormLayout";
 import { getRedirectUrlFromState, TState } from "../utils/get-url";
@@ -22,7 +22,7 @@ const Login = () => {
   ) => {
     try {
       const { data } = await API.post("auth/login", values);
-      saveToken(data?.refreshToken);
+      saveRefreshToken(data?.refreshToken);
       navigate(getRedirectUrlFromState(state as TState), { replace: true });
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {

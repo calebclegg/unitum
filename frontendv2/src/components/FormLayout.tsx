@@ -21,7 +21,6 @@ import { kebabToCapitalized } from "../utils";
 import { useDisplaySize } from "../hooks";
 import { useEffect, useState } from "react";
 import { TState, getAlertTypeFromCondition } from "../utils";
-import { useToken } from "../hooks";
 import AuthProviders from "./AuthProviders";
 
 interface IProps {
@@ -48,7 +47,6 @@ const FormLayout = ({
   initialValues,
   validationSchema
 }: IProps) => {
-  useToken();
   const laptopUp = useDisplaySize("md");
   const { state } = useLocation();
   const [{ type, message }, setMessage] = useState<{

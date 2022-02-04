@@ -19,7 +19,8 @@ import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { alpha, styled, Theme } from "@mui/material/styles";
 import { useEffect, useState } from "react";
-import { useData, useToken } from "../hooks";
+import { useAuth } from "../context/Auth";
+import { useData } from "../hooks";
 import { API } from "../lib";
 
 const Form = styled("form")(({ theme }) => ({
@@ -54,10 +55,10 @@ interface IProps {
 }
 
 const PostDetails = ({ id }: IProps) => {
+  const { token } = useAuth();
   const laptopUp = useMediaQuery(({ breakpoints }: Theme) =>
     breakpoints.up("md")
   );
-  const { token } = useToken();
   const [vote, setVote] = useState({ upVote: false, downVote: false });
   const [postingComment, setPostingComment] = useState(false);
   const { data: post, mutate: revalidatePosts } = useData<Record<string, any>>(
@@ -82,9 +83,7 @@ const PostDetails = ({ id }: IProps) => {
     if (vote) {
       if (vote === "upVote") {
         await API.patch(`posts/${id}/upvote`, undefined, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+          headers: { Authorization: `Bearer ${token}` }
         });
 
         setVote((prevState) => ({
@@ -93,9 +92,7 @@ const PostDetails = ({ id }: IProps) => {
         }));
       } else {
         await API.patch(`posts/${id}/downvote`, undefined, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+          headers: { Authorization: `Bearer ${token}` }
         });
 
         setVote((prevState) => ({
@@ -119,11 +116,7 @@ const PostDetails = ({ id }: IProps) => {
         {
           text: formData.get("comment")
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       revalidateComments?.();

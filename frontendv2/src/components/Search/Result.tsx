@@ -12,7 +12,7 @@ import Tag from "../Tag";
 import useSWR from "swr";
 import { useTheme } from "@mui/material/styles";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useToken } from "../../hooks";
+import { useAuth } from "../../context/Auth";
 import { fetcher } from "../../utils";
 import Empty from "./Empty";
 import Failure from "./Failure";
@@ -46,7 +46,7 @@ interface IProps {
 }
 
 const Result = ({ anchorEl, query }: IProps) => {
-  const { token } = useToken();
+  const { token } = useAuth();
   const { transitions, zIndex } = useTheme();
   const paperRef = useRef<HTMLDivElement>(null);
   const open = Boolean(anchorEl);
