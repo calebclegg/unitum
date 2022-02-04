@@ -28,37 +28,29 @@ export const createPost = async (req: any, res: Response) => {
   }
   let community;
   if (valData.value.communityID) {
-    try {
-      community = await CommunityModel.findOne({
-        _id: valData.value.communityID
-      });
-      if (!community)
-        return res.status(404).json({ message: "Community not found" });
-    } catch (e) {
-      return res.sendStatus(500);
-    }
+    community = await CommunityModel.findOne({
+      _id: valData.value.communityID
+    });
+    if (!community)
+      return res.status(404).json({ message: "Community not found" });
   }
-  try {
-    const newPost = await new PostModel({
-      ...valData.value,
-      author: user._id
-    }).save();
-    res.status(201).json(newPost);
-    if (community) {
-      const notificationInfo: notification = {
-        message: `${req.user.profile.fullName} added a new post in ${community.name}`,
-        type: "post",
-        user: user._id,
-        post: newPost._id
-      };
-      await sendNotification(
-        req.socket,
-        notificationInfo,
-        community._id.toString()
-      );
-    }
-  } catch (error) {
-    return res.sendStatus(500);
+  const newPost = await new PostModel({
+    ...valData.value,
+    author: user._id
+  }).save();
+  res.status(201).json(newPost);
+  if (community) {
+    const notificationInfo: notification = {
+      message: `${req.user.profile.fullName} added a new post in ${community.name}`,
+      type: "post",
+      user: user._id,
+      post: newPost._id
+    };
+    await sendNotification(
+      req.socket,
+      notificationInfo,
+      community._id.toString()
+    );
   }
 };
 
@@ -70,28 +62,27 @@ export const getPosts = async (req: any, res: Response) => {
   const limit = +req.query.limit || 20;
 
   let dbPosts;
-  try {
-    if (communityID) {
-      dbPosts = await PostModel.find({ communityID: communityID })
-        .sort("createdAt")
-        .select("-comments +upvoteBy")
-        .populate([
-          { path: "author", select: "profile.fullName profile.picture" },
-          { path: "communityID", select: "-__v -members" }
-        ])
-        .skip(skip)
-        .limit(limit);
-    } else {
-      dbPosts = await PostModel.find({})
-        .sort("createdAt")
-        .select("-comments +upvoteBy")
-        .populate([
-          { path: "author", select: "profile.fullName profile.picture" },
-          { path: "communityID", select: "-__v -members" }
-        ])
-        .skip(skip)
-        .limit(limit);
-    }
+  if (communityID) {
+    dbPosts = await PostModel.find({ communityID: communityID })
+      .sort("createdAt")
+      .select("-comments +upvoteBy")
+      .populate([
+        { path: "author", select: "profile.fullName" },
+        { path: "communityID", select: "-__v -members" }
+      ])
+      .skip(skip)
+      .limit(limit);
+  } else {
+    dbPosts = await PostModel.find({})
+      .sort("createdAt")
+      .select("-comments +upvoteBy")
+      .populate([
+        { path: "author", select: "profile.fullName" },
+        { path: "communityID", select: "-__v -members" }
+      ])
+      .skip(skip)
+      .limit(limit);
+
     const savedPosts = await SavedPost.findOne({ userID: user._id });
     const posts = dbPosts.map((post: any) => {
       const upvoted = post.upvoteBy?.some((objectid: any) => {
@@ -119,45 +110,23 @@ export const getPosts = async (req: any, res: Response) => {
     });
     console.log(posts);
     return res.status(200).json(posts);
-  } catch (error) {
-    return res.sendStatus(500);
-  }
-};
 
-// get post details
-export const getPostDetails = async (req: any, res: Response) => {
-  const postID = new Types.ObjectId(req.params.postID);
-  try {
-    let post: any = await PostModel.findOne({ _id: postID }).populate([
-      {
-        path: "author",
-        select: "profile.fullName profile.picture"
-      },
-      {
-        path: "comments",
-        select: "-__v",
-        populate: {
-          path: "author",
-          select: "profile.fullName profile.picture"
-        }
-      },
-      { path: "communityID", select: "-__v -members" }
-    ]);
-    if (!post) return res.sendStatus(404);
-    const savedPosts = await SavedPost.findOne({ userID: req.user._id });
-    let saved = false;
-    if (savedPosts) {
-      saved = savedPosts.posts.some((objectid: Types.ObjectId) => {
-        return objectid.equals(post._id);
-      });
-    }
+  }
+  const savedPosts = await SavedPost.findOne({ userID: user._id });
+  const posts = dbPosts.map((post: any) => {
     const upvoted = post.upvoteBy?.some((objectid: any) => {
-      return objectid.equals(req.user._id);
+      return objectid.equals(user._id);
     });
 
     const downvoted = post.downVoteBy?.some((objectid: any) => {
       return objectid.equals(req.user._id);
     });
+    let saved;
+    if (savedPosts) {
+      saved = savedPosts.posts.some((objectid: Types.ObjectId) => {
+        return objectid.equals(post._id);
+      });
+    }
     post = {
       ...post.toObject(),
       upvoted: upvoted,
@@ -166,10 +135,54 @@ export const getPostDetails = async (req: any, res: Response) => {
     };
     delete post.upvoteBy;
     delete post.downVoteBy;
-    return res.status(200).json(post);
-  } catch (error) {
-    return res.sendStatus(500);
+    return post;
+  });
+  console.log(posts);
+  return res.status(200).json(posts);
+};
+
+// get post details
+export const getPostDetails = async (req: any, res: Response) => {
+  const postID = new Types.ObjectId(req.params.postID);
+  let post: any = await PostModel.findOne({ _id: postID }).populate([
+    {
+      path: "author",
+      select: "profile.fullName profile.picture"
+    },
+    {
+      path: "comments",
+      select: "-__v",
+      populate: {
+        path: "author",
+        select: "profile.fullName profile.picture"
+      }
+    },
+    { path: "communityID", select: "-__v -members" }
+  ]);
+  if (!post) return res.sendStatus(404);
+  const savedPosts = await SavedPost.findOne({ userID: req.user._id });
+  let saved = false;
+  if (savedPosts) {
+    saved = savedPosts.posts.some((objectid: Types.ObjectId) => {
+      return objectid.equals(post._id);
+    });
   }
+  const upvoted = post.upvoteBy?.some((objectid: any) => {
+    return objectid.equals(req.user._id);
+  });
+
+  const downvoted = post.downVoteBy?.some((objectid: any) => {
+    return objectid.equals(req.user._id);
+  });
+  post = {
+    ...post.toObject(),
+    upvoted: upvoted,
+    downvoted: downvoted,
+    saved: saved
+  };
+  delete post.upvoteBy;
+  delete post.downVoteBy;
+  return res.status(200).json(post);
 };
 
 // delete a post
@@ -177,11 +190,7 @@ export const deletePost = async (req: any, res: Response) => {
   const user = req.user;
   const postID = new Types.ObjectId(req.params.postID);
   let post;
-  try {
-    post = await PostModel.findOne({ _id: postID });
-  } catch (error) {
-    return res.sendStatus(500);
-  }
+  post = await PostModel.findOne({ _id: postID });
   if (!post) return res.sendStatus(404);
   if (post?.author.toString() !== user._id.toString())
     return res.sendStatus(401);
@@ -204,21 +213,17 @@ export const updatePost = async (req: any, res: Response) => {
       .status(400)
       .json({ message: "Some fields are invalid/required", errors: errors });
   }
-  try {
-    const post = await PostModel.findOne({ _id: postID });
-    if (!post) return res.sendStatus(404);
+  const post = await PostModel.findOne({ _id: postID });
+  if (!post) return res.sendStatus(404);
 
-    if (post?.author.toString() !== user._id.toString())
-      return res.sendStatus(401);
-    const updatedPost = await PostModel.findOneAndUpdate(
-      { _id: postID },
-      valData.value
-    ).select("-upvoteBy -downVoteBy");
-    if (!updatedPost) return res.sendStatus(404);
-    return res.status(200).json(updatedPost);
-  } catch (error) {
-    return res.sendStatus(500);
-  }
+  if (post?.author.toString() !== user._id.toString())
+    return res.sendStatus(401);
+  const updatedPost = await PostModel.findOneAndUpdate(
+    { _id: postID },
+    valData.value
+  ).select("-upvoteBy -downVoteBy");
+  if (!updatedPost) return res.sendStatus(404);
+  return res.status(200).json(updatedPost);
 };
 
 export const getPostComments = async (req: any, res: Response) => {
@@ -226,19 +231,14 @@ export const getPostComments = async (req: any, res: Response) => {
   const postID = new Types.ObjectId(req.params.postID);
   const limit = req.query.limit || 20;
   const skip = req.query.skip || 0;
-  try {
-    const comments = await CommentModel.find({ postID: postID })
-      .skip(skip)
-      .limit(limit)
-      .select(["-__v"])
-      .populate({
+  const comments = await CommentModel.find({ postID: postID })
+    .skip(skip)
+    .limit(limit)
+    .select(["-__v"]).populate({
         path: "author",
         select: "profile.fullName profile.picture"
       });
-    return res.status(200).json(comments);
-  } catch (error) {
-    return res.sendStatus(500);
-  }
+  return res.status(200).json(comments);
 };
 
 export const addPostComment = async (req: any, res: Response) => {
@@ -266,31 +266,27 @@ export const addPostComment = async (req: any, res: Response) => {
       .status(400)
       .json({ message: "Some fields are invalid/required", errors: errors });
   }
-  try {
-    const newComment = await new CommentModel({
-      ...valData.value,
-      postID: postID,
-      author: req.user._id
-    }).save();
-    post.comments?.push(newComment._id);
-    post.numberOfComments! += 1;
-    await post.save();
-    const notificationInfo: notification = {
-      message: `${req.user.profile.fullName} commented on your post`,
-      user: req.user._id,
-      type: "comment",
-      userID: post.author._id,
-      post: post._id
-    };
-    res.sendStatus(201);
-    await sendNotification(
-      req.socket,
-      notificationInfo,
-      post.author._id.toString()
-    );
-  } catch (error) {
-    return res.sendStatus(500);
-  }
+  const newComment = await new CommentModel({
+    ...valData.value,
+    postID: postID,
+    author: req.user._id
+  }).save();
+  post.comments?.push(newComment._id);
+  post.numberOfComments! += 1;
+  await post.save();
+  const notificationInfo: notification = {
+    message: `${req.user.profile.fullName} commented on your post`,
+    user: req.user._id,
+    type: "comment",
+    userID: post.author._id,
+    post: post._id
+  };
+  res.sendStatus(201);
+  await sendNotification(
+    req.socket,
+    notificationInfo,
+    post.author._id.toString()
+  );
 };
 
 export const postUpVote = async (req: any, res: Response) => {
@@ -329,24 +325,33 @@ export const postUpVote = async (req: any, res: Response) => {
   }
   post.upvotes! = post.upvoteBy?.length! - post.downVoteBy?.length! || 0;
   post.downvotes! = post.downVoteBy?.length || 0;
-  try {
+  await post.save();
+  const notificationInfo: notification = {
+    message: `${req.user.profile.fullName} liked your post`,
+    user: req.user._id,
+    type: "like",
+    userID: post.author._id,
+    post: post._id
+  };
+  res.sendStatus(200);
+  await sendNotification(req.io, notificationInfo, post.author._id.toString());
+  if (post.upvoteBy?.length === post.nextCoyn) {
+    const user = await User.findOne({ _id: post.author });
+    if (user?.profile) user.profile.unicoyn += 1;
+    post.nextCoyn! += 100;
+    await user?.save();
     await post.save();
     const notificationInfo: notification = {
-      message: `${req.user.profile.fullName} liked your post`,
-      user: req.user._id,
-      type: "like",
-      userID: post.author._id,
-      post: post._id
+      message: `Congratulations, you have received 1 unicoyn`,
+      userID: post.author,
+      type: "post",
+      post: post.id
     };
-    res.sendStatus(200);
     await sendNotification(
       req.io,
       notificationInfo,
       post.author._id.toString()
     );
-  } catch (error) {
-    return res.sendStatus(500);
-  }
 };
 
 export const postDownVote = async (req: any, res: Response) => {
@@ -386,12 +391,8 @@ export const postDownVote = async (req: any, res: Response) => {
   }
   post.upvotes! = post.upvoteBy?.length! - post.downVoteBy?.length! || 0;
   post.downvotes! = post.downVoteBy?.length || 0;
-  try {
-    await post.save();
-    res.sendStatus(200);
-  } catch (error) {
-    return res.sendStatus(500);
-  }
+  await post.save();
+  res.sendStatus(200);
 };
 
 export const deleteComment = async (req: any, res: Response) => {
@@ -402,10 +403,6 @@ export const deleteComment = async (req: any, res: Response) => {
     return res
       .status(401)
       .json({ message: "You are unauthorized to delete this comment" });
-  try {
-    await comment.delete();
-    return res.sendStatus(200);
-  } catch (error) {
-    return res.sendStatus(500);
-  }
+  await comment.delete();
+  return res.sendStatus(200);
 };

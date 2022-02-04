@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { NextFunction, Router, Response } from "express";
 import * as controller from "../controllers/auth";
 
 import { getUser } from "../middlewares/user.middleware";
@@ -7,19 +7,20 @@ import {
   validateUserRegData,
   validateUserLogData
 } from "../middlewares/auth.middleware";
+import { use } from "../utils/use";
 
 const router = Router();
 //set route and it's controller
-router.post("/register", validateUserRegData, controller.register);
+router.post("/register", validateUserRegData, use(controller.register));
 
-router.post("/login", validateUserLogData, controller.login);
+router.post("/login", validateUserLogData, use(controller.login));
 
-router.post("/authProvider", controller.checkAuthProvider);
+router.post("/authProvider", use(controller.checkAuthProvider));
 
-router.post("/oauth", controller.externalAuth);
+router.post("/oauth", use(controller.externalAuth));
 
-router.get("/token", controller.getNewAccessToken);
+router.get("/token", use(controller.getNewAccessToken));
 
-router.get("/logout", getUser, controller.logout);
+router.get("/logout", getUser, use(controller.logout));
 
 export default router;

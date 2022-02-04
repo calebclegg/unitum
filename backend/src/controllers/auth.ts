@@ -16,17 +16,12 @@ export const register = async (req: Request, res: Response) => {
     authProvider: req.body.authProvider || "LOCAL",
     role: "active"
   });
-  try {
-    const savedUser = await newUser.save();
-    const accessToken = await createToken(savedUser);
-    const refreshToken = await createRefreshToken(savedUser);
-    try {
-      await saveRefreshToken(req.body.email, refreshToken);
-    } catch (error) {}
-    res.status(201).json({ accessToken, refreshToken });
-  } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
-  }
+  const savedUser = await newUser.save();
+  const accessToken = await createToken(savedUser);
+  const refreshToken = await createRefreshToken(savedUser);
+
+  await saveRefreshToken(req.body.email, refreshToken);
+  res.status(201).json({ accessToken, refreshToken });
 };
 
 export const login = async (req: any, res: Response) => {
@@ -37,9 +32,7 @@ export const login = async (req: any, res: Response) => {
 
   const accessToken = await createToken(user);
   const refreshToken = await createRefreshToken(user);
-  try {
-    await saveRefreshToken(user.email, refreshToken);
-  } catch (error) {}
+  await saveRefreshToken(user.email, refreshToken);
   return res.status(200).json({ accessToken, refreshToken });
 };
 
@@ -52,13 +45,10 @@ export const checkAuthProvider = async (req: Request, res: Response) => {
     });
   }
   let dbUser;
-  try {
-    dbUser = await User.findOne({ email: valData.value.email }).select(
-      "+authProvider"
-    );
-  } catch (error) {
-    return res.status(500).json({ message: "Something went wrong" });
-  }
+  dbUser = await User.findOne({ email: valData.value.email }).select(
+    "+authProvider"
+  );
+
   if (!dbUser)
     return res
       .status(404)
@@ -81,29 +71,23 @@ export const externalAuth = async (req: any, res: Response) => {
   }
 
   let dbUser;
-  try {
-    dbUser = await User.findOne({ email: userData?.email }).select(
-      "+authProvider"
-    );
-  } catch (error) {
-    return res.status(500).json({ message: "Something went wrong" });
-  }
+
+  dbUser = await User.findOne({ email: userData?.email }).select(
+    "+authProvider"
+  );
   let accessToken, refreshToken;
   if (!dbUser) {
     const newUser = new User({
       ...userData
     });
-    try {
-      const savedUser = await newUser.save();
-      accessToken = await createToken(savedUser);
-      refreshToken = await createRefreshToken(savedUser);
-      try {
-        await saveRefreshToken(savedUser.email!, refreshToken);
-      } catch (error) {}
-      return res.status(201).json({ accessToken, refreshToken });
-    } catch (error) {
-      return res.status(500).json({ message: "Something went wrong" });
-    }
+
+    const savedUser = await newUser.save();
+    accessToken = await createToken(savedUser);
+    refreshToken = await createRefreshToken(savedUser);
+
+    await saveRefreshToken(savedUser.email!, refreshToken);
+
+    return res.status(201).json({ accessToken, refreshToken });
   }
   if (dbUser.authProvider !== userData?.authProvider) {
     return res.status(409).json({
@@ -113,10 +97,7 @@ export const externalAuth = async (req: any, res: Response) => {
 
   accessToken = await createToken(dbUser);
   refreshToken = await createRefreshToken(dbUser);
-  try {
-    await saveRefreshToken(dbUser.email!, refreshToken);
-  } catch (error) {}
-
+  await saveRefreshToken(dbUser.email!, refreshToken);
   return res.status(200).json({ accessToken, refreshToken });
 };
 
@@ -131,37 +112,23 @@ export const getNewAccessToken = async (req: any, res: Response) => {
     return res.status(400).json({ message: "Invalid Token" });
   }
   let redisToken;
-  try {
-    redisToken = await retrieveRefreshToken(tokenData.sub?.toString()!);
-  } catch (error) {
-    return res.sendStatus(500);
-  }
+  redisToken = await retrieveRefreshToken(tokenData.sub?.toString()!);
   if (redisToken !== refreshToken) {
     return res.sendStatus(401);
   }
   let dbUser;
-  try {
-    dbUser = await User.findOne({ email: tokenData.sub }).select([
-      "+authProvider",
-      "+password"
-    ]);
-  } catch (error) {
-    return res.status(500).json({ message: "Something went wrong" });
-  }
+  dbUser = await User.findOne({ email: tokenData.sub }).select([
+    "+authProvider",
+    "+password"
+  ]);
   const accessToken = await createToken(dbUser!);
   const newRefreshToken = await createRefreshToken(dbUser!);
-  try {
-    await saveRefreshToken(tokenData.sub?.toString()!, refreshToken);
-  } catch (error) {}
+  await saveRefreshToken(tokenData.sub?.toString()!, refreshToken);
   return res.status(200).json({ accessToken, newRefreshToken });
 };
 
 export const logout = async (req: any, res: Response) => {
   const user = req.user;
-  try {
-    await deleteRefreshToken(user.email);
-    return res.sendStatus(200);
-  } catch (error) {
-    return res.sendStatus(500);
-  }
+  await deleteRefreshToken(user.email);
+  return res.sendStatus(200);
 };
