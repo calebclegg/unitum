@@ -3,7 +3,6 @@ import { Types } from "mongoose";
 import CommunityModel from "../models/Community";
 import { CommentModel, PostModel } from "../models/Post";
 import { SavedPost } from "../models/SavedPost";
-import User from "../models/User";
 import { notification } from "../types/notification";
 import { IPost } from "../types/post";
 import { sendNotification } from "../utils/notification";
@@ -83,6 +82,35 @@ export const getPosts = async (req: any, res: Response) => {
       ])
       .skip(skip)
       .limit(limit);
+
+    const savedPosts = await SavedPost.findOne({ userID: user._id });
+    const posts = dbPosts.map((post: any) => {
+      const upvoted = post.upvoteBy?.some((objectid: any) => {
+        return objectid.equals(user._id);
+      });
+
+      const downvoted = post.downVoteBy?.some((objectid: any) => {
+        return objectid.equals(req.user._id);
+      });
+      let saved;
+      if (savedPosts) {
+        saved = savedPosts.posts.some((objectid: Types.ObjectId) => {
+          return objectid.equals(post._id);
+        });
+      }
+      post = {
+        ...post.toObject(),
+        upvoted: upvoted,
+        downvoted: downvoted,
+        saved: saved
+      };
+      delete post.upvoteBy;
+      delete post.downVoteBy;
+      return post;
+    });
+    console.log(posts);
+    return res.status(200).json(posts);
+
   }
   const savedPosts = await SavedPost.findOne({ userID: user._id });
   const posts = dbPosts.map((post: any) => {
@@ -206,7 +234,10 @@ export const getPostComments = async (req: any, res: Response) => {
   const comments = await CommentModel.find({ postID: postID })
     .skip(skip)
     .limit(limit)
-    .select(["-__v"]);
+    .select(["-__v"]).populate({
+        path: "author",
+        select: "profile.fullName profile.picture"
+      });
   return res.status(200).json(comments);
 };
 
@@ -227,7 +258,7 @@ export const addPostComment = async (req: any, res: Response) => {
 
   let errors;
   if (valData.error) {
-    errors = valData.error.details.map((error) => ({
+    errors = valData.error.details?.map((error) => ({
       label: error.context?.label,
       message: error.message
     }));
@@ -321,7 +352,6 @@ export const postUpVote = async (req: any, res: Response) => {
       notificationInfo,
       post.author._id.toString()
     );
-  }
 };
 
 export const postDownVote = async (req: any, res: Response) => {

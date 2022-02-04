@@ -7,9 +7,9 @@ import { matchSorter } from "match-sorter";
 
 export const search = async (req: Request, res: Response) => {
   const queryTypes = Object.keys(req.query).filter((key: string) => {
-    return key !== "search";
+    return key !== "keyword";
   });
-  const searchString = req.query.search;
+  const searchString = req.query.keyword;
   const dbqueries: Record<string, any> = {
     user: User.find({
       $or: [{ "profile.fullName": { $regex: searchString, $options: "i" } }]
