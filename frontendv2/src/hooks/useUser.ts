@@ -4,6 +4,18 @@ import { fetcher } from "../utils";
 import { useData } from ".";
 import { useAuth } from "../context/Auth";
 
+interface ICommunity {
+  _id: string;
+  name: string;
+  picture: string;
+  description: string;
+  numberOfMembers: number;
+  members: {
+    info: any;
+    role: string;
+  }[];
+}
+
 interface IUser {
   _id: string;
   email: string;
@@ -12,7 +24,7 @@ interface IUser {
     picture: string;
     fullName: string;
     schoolWork: string[];
-    communities: Record<string, any>[];
+    communities: ICommunity[];
     dob: string;
     unicoyn: string;
     education: {

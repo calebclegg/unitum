@@ -8,16 +8,28 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import IconButton from "@mui/material/IconButton";
+import Slide from "@mui/material/Slide";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Box from "@mui/system/Box";
-import React, { useEffect, useRef, useState } from "react";
+import SelectCommunity from "./SelectCommunity";
+import { TransitionProps } from "@mui/material/transitions";
 import { styled, Theme } from "@mui/material/styles";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getUrl } from "../utils";
 import { API } from "../lib";
 import { useAuth } from "../context/Auth";
+
+const Transition = forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<any, any>;
+  },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const MediaPreview = styled("img")`
   object-fit: cover;
@@ -38,6 +50,7 @@ const CreatePost = () => {
   const [mediaPreview, setMediaPreview] = useState<(string | ArrayBuffer)[]>(
     []
   );
+  const [files, setFiles] = useState<File[]>([]);
   const navigate = useNavigate();
   const [creatingPost, setCreatingPost] = useState(false);
   const [open, setOpen] = useState(false);
@@ -48,6 +61,7 @@ const CreatePost = () => {
   }, [hash]);
 
   const handleClose = () => {
+    setFiles([]);
     setMediaPreview([]);
     navigate(getUrl().replace(hash, ""));
   };
@@ -69,6 +83,7 @@ const CreatePost = () => {
 
     if (files?.length) {
       Array.from(files).forEach((file) => {
+        setFiles((prev) => [...prev, file]);
         const reader = new FileReader();
 
         reader.addEventListener("load", (event) => {
@@ -97,14 +112,24 @@ const CreatePost = () => {
     try {
       const formData = new FormData(event.currentTarget);
 
+      if (formData.get("communityID") === "wall") {
+        formData.delete("communityID");
+      }
+
+      formData.delete("media");
+      for (const file of files) {
+        formData.append("media", file);
+      }
+
       setCreatingPost(true);
       const { data } = await API.post("posts", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/x-www-form-urlencoded"
+          "Content-Type": "multipart/form-data"
         }
       });
 
+      event.currentTarget.reset();
       navigate(data._id);
       handleClose();
     } catch (error) {
@@ -119,13 +144,20 @@ const CreatePost = () => {
       open={open}
       onClose={handleClose}
       PaperProps={{
+        id: "create-post",
         sx: {
           width: ({ breakpoints }) => `min(${breakpoints.values.sm}px, 100%)`
         }
       }}
-      fullScreen={!laptopUp}
+      fullScreen={!tabletUp}
+      TransitionComponent={tabletUp ? undefined : Transition}
     >
-      <form method="post" action="#" onSubmit={createPost}>
+      <form
+        method="post"
+        action="#"
+        encType="multipart/form-data"
+        onSubmit={createPost}
+      >
         <Stack>
           <DialogTitle>Create new post</DialogTitle>
           <DialogContent>
@@ -133,16 +165,19 @@ const CreatePost = () => {
               multiline
               fullWidth
               autoFocus
-              rows={2}
+              minRows={2}
               id="post"
-              name="content"
+              name="body"
               variant="standard"
-              label="Type something here"
-              inputProps={{ required: true }}
+              inputProps={{
+                required: true,
+                "aria-label": "post content",
+                placeholder: "Type Something here"
+              }}
               sx={{ mb: 1.4 }}
             />
             <Collapse in={Boolean(mediaPreview?.length)}>
-              <Stack direction="row" spacing={tabletUp ? 1 : 2} my={1.4}>
+              <Stack direction="row" spacing={tabletUp ? 1 : 2} my={1.5}>
                 {mediaPreview?.map((preview) => (
                   <Box
                     key={preview.toString()}
@@ -189,25 +224,34 @@ const CreatePost = () => {
                 ))}
               </Stack>
             </Collapse>
-            <input
-              multiple
-              type="file"
-              name="media"
-              id="post-media"
-              accept="image/*"
-              ref={uploadRef}
-              onChange={uploadFile}
-              hidden
-            />
-            <Button
-              size="small"
-              type="button"
-              variant="outlined"
-              onClick={selectMedia}
-              startIcon={<AddPhotoAlternateIcon />}
+            <Stack
+              spacing={3}
+              direction={tabletUp ? "row" : "column"}
+              alignItems="stretch"
             >
-              Add image
-            </Button>
+              <div>
+                <input
+                  multiple
+                  type="file"
+                  name="media"
+                  id="post-media"
+                  accept="image/*"
+                  ref={uploadRef}
+                  onChange={uploadFile}
+                  hidden
+                />
+                <Button
+                  sx={{ height: "100%" }}
+                  type="button"
+                  variant="outlined"
+                  onClick={selectMedia}
+                  startIcon={<AddPhotoAlternateIcon />}
+                >
+                  <span>Add image</span>
+                </Button>
+              </div>
+              <SelectCommunity />
+            </Stack>
           </DialogContent>
         </Stack>
         <DialogActions>
