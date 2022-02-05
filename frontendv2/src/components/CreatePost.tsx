@@ -1,3 +1,4 @@
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import Close from "@mui/icons-material/Close";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Button from "@mui/material/Button";
@@ -9,10 +10,10 @@ import DialogContent from "@mui/material/DialogContent";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import Box from "@mui/system/Box";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import React, { useEffect, useRef, useState } from "react";
-import { styled } from "@mui/material/styles";
+import { styled, Theme } from "@mui/material/styles";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getUrl } from "../utils";
 import { API } from "../lib";
@@ -26,6 +27,12 @@ const MediaPreview = styled("img")`
 
 const CreatePost = () => {
   const uploadRef = useRef<HTMLInputElement | null>(null);
+  const tabletUp = useMediaQuery(({ breakpoints }: Theme) =>
+    breakpoints.up("sm")
+  );
+  const laptopUp = useMediaQuery(({ breakpoints }: Theme) =>
+    breakpoints.up("md")
+  );
   const { token } = useAuth();
   const { hash } = useLocation();
   const [mediaPreview, setMediaPreview] = useState<(string | ArrayBuffer)[]>(
@@ -116,6 +123,7 @@ const CreatePost = () => {
           width: ({ breakpoints }) => `min(${breakpoints.values.sm}px, 100%)`
         }
       }}
+      fullScreen={!laptopUp}
     >
       <form method="post" action="#" onSubmit={createPost}>
         <Stack>
@@ -134,7 +142,7 @@ const CreatePost = () => {
               sx={{ mb: 1.4 }}
             />
             <Collapse in={Boolean(mediaPreview?.length)}>
-              <Stack direction="row" spacing={1} my={1.4}>
+              <Stack direction="row" spacing={tabletUp ? 1 : 2} my={1.4}>
                 {mediaPreview?.map((preview) => (
                   <Box
                     key={preview.toString()}

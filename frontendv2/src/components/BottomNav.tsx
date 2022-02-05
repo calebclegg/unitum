@@ -45,7 +45,7 @@ const BottomNav = () => {
   );
 
   const [scrollingDown, setScrollingDown] = useState(false);
-  const smallMobile = useMediaQuery("@media (max-width: 389.99px)");
+  const smallMobile = useMediaQuery("@media (max-width: 389px)");
   const largeMobile = useMediaQuery(
     ({ breakpoints }: Theme) =>
       `@media (min-width: 390px) and ${breakpoints
@@ -81,7 +81,12 @@ const BottomNav = () => {
     >
       {pathname === "/feed" && smallMobile && (
         <Stack mb={1.5} mr={1.5} direction="row" justifyContent="flex-end">
-          <Fab color="primary" variant="extended" sx={{ borderRadius: 2 }}>
+          <Fab
+            color="primary"
+            variant="extended"
+            href="#create-post"
+            sx={{ borderRadius: 2 }}
+          >
             <Add sx={{ mr: 1 }} />
             Create Post
           </Fab>
@@ -117,6 +122,7 @@ const BottomNav = () => {
             }}
           >
             <Fab
+              href="#create-post"
               color="primary"
               sx={{ transform: "scale(1.2) translate(-18%, -50%)" }}
             >
