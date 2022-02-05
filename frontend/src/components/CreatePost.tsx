@@ -116,21 +116,41 @@ const CreatePost = () => {
         formData.delete("communityID");
       }
 
-      formData.delete("media");
+      const uploadData = new FormData();
       for (const file of files) {
-        formData.append("media", file);
+        uploadData.append("media", file);
       }
 
       setCreatingPost(true);
-      const { data } = await API.post("posts", formData, {
+      const { data: imgURLs } = await API.post<string[]>(
+        "uploads",
+        uploadData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data"
+          }
+        }
+      );
+
+      const requestData: Record<string, unknown> = {};
+
+      for (const [key, value] of formData.entries()) {
+        if (key === "communityID" && value === "wall") continue;
+        if (key === "media") {
+          requestData[key] = imgURLs;
+          continue;
+        }
+
+        requestData[key] = value;
+      }
+
+      await API.post("posts", requestData, {
         headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data"
+          Authorization: `Bearer ${token}`
         }
       });
 
-      event.currentTarget.reset();
-      navigate(data._id);
       handleClose();
     } catch (error) {
       console.log(error);

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import dotenv from "dotenv";
+import dotenv from "dotenv-flow";
 dotenv.config();
 import express, { Request, Response } from "express";
 import path from "path";
@@ -12,6 +12,8 @@ type FileNameCallback = (error: Error | null, filename: string) => void;
 type RequestWithFile = Express.Request & {
   file: Express.Multer.File & { location: string };
 };
+
+console.log("bucket", process.env.BUCKET);
 
 aws.config.update({
   secretAccessKey: process.env.AWS_KEY,
