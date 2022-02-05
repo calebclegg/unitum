@@ -1,4 +1,7 @@
 import Helmet from "react-helmet";
+import Close from "@mui/icons-material/Close";
+import Check from "@mui/icons-material/Check";
+import Message from "@mui/icons-material/Message";
 import Edit from "@mui/icons-material/Edit";
 import Link from "@mui/icons-material/Link";
 import Chip from "@mui/material/Chip";
@@ -7,16 +10,36 @@ import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/system/Box";
+import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { useRef } from "react";
+import InputAdornment from "@mui/material/InputAdornment";
+import { lazy, Suspense, useRef, useState } from "react";
 import { useUser } from "../hooks";
 import UserPosts from "../components/UserPosts";
-import { Message } from "@mui/icons-material";
+
+const EditEducation = lazy(() => import("../components/EditEducation"));
 
 const Profile = () => {
   const avatarRef = useRef<HTMLDivElement>(null);
   const { user } = useUser();
+  const [updating, setUpdating] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+
+  const toggleMode = () => setEditMode(!editMode);
+
+  const update = async () => {
+    try {
+      setUpdating(true);
+      console.log("trying");
+      toggleMode();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      console.log("done");
+      setUpdating(false);
+    }
+  };
 
   return (
     <>
@@ -46,9 +69,43 @@ const Profile = () => {
           justifyContent="space-between"
         >
           <Stack spacing={1}>
-            <Typography variant="h4" fontWeight="500" component="h1">
-              {user?.profile.fullName}
-            </Typography>
+            {editMode ? (
+              <TextField
+                name="fullName"
+                label="Full Name"
+                value={user?.profile.fullName}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        size="small"
+                        aria-label="cancel"
+                        onClick={toggleMode}
+                      >
+                        <Close fontSize="small" />
+                      </IconButton>
+                      <IconButton
+                        size="small"
+                        color="success"
+                        aria-label="save"
+                        onClick={update}
+                      >
+                        <Check fontSize="small" />
+                      </IconButton>
+                    </InputAdornment>
+                  )
+                }}
+                sx={{
+                  "& input": {
+                    py: 1
+                  }
+                }}
+              />
+            ) : (
+              <Typography variant="h4" fontWeight="500" component="h1">
+                {user?.profile.fullName}
+              </Typography>
+            )}
             <Stack direction="row" alignItems="center" spacing={2}>
               <Button size="small" startIcon={<Message />}>
                 Start Chat
@@ -59,7 +116,7 @@ const Profile = () => {
               />
             </Stack>
           </Stack>
-          <IconButton>
+          <IconButton aria-label="edit user name" onClick={toggleMode}>
             <Edit />
           </IconButton>
         </Grid>
@@ -69,7 +126,11 @@ const Profile = () => {
           <Typography variant="h4" fontWeight={500} component="h2">
             Education
           </Typography>
-          <IconButton size="small">
+          <IconButton
+            size="small"
+            href="#edit-education"
+            aria-label="edit education"
+          >
             <Edit fontSize="small" />
           </IconButton>
         </Stack>
@@ -142,6 +203,9 @@ const Profile = () => {
         </Stack>
       </Box>
       <UserPosts />
+      <Suspense fallback={<div />}>
+        <EditEducation updating={updating} update={update} />
+      </Suspense>
     </>
   );
 };

@@ -28,6 +28,7 @@ const CommunitiesBrief = () => {
       position="relative"
       top={0}
       flexGrow={1}
+      display={tabletLaptop ? "none" : undefined}
       visibility={pathname !== "/feed" ? "hidden" : "visible"}
       ml={tabletLaptop ? "0 !important" : undefined}
     >
