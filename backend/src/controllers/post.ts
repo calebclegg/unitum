@@ -108,7 +108,7 @@ export const getPosts = async (req: any, res: Response) => {
     const downvoted = post.downVoteBy?.some((objectid: any) => {
       return objectid.equals(req.user._id);
     });
-    let saved;
+    let saved = false;
     if (savedPosts) {
       saved = savedPosts.posts.some((objectid: Types.ObjectId) => {
         return objectid.equals(post._id);
