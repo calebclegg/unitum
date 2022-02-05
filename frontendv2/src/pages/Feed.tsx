@@ -3,12 +3,15 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import PostCard, { IProps as IPost } from "../components/PostCard";
 import { useData } from "../hooks";
-
+import Helmet from "react-helmet";
 const Feed = () => {
   const { data: posts, mutate } = useData<IPost[]>("posts");
 
   return (
     <>
+      <Helmet>
+        <title>Feed</title>
+      </Helmet>
       <Paper
         square
         variant="outlined"

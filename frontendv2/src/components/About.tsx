@@ -32,9 +32,13 @@ const About = () => {
           src={discussing}
           alt="two people sitting and facing each other"
           width="400"
+          data-aos="fade-up-right"
+          data-aos-duration="400"
         />
         <Stack width={tabletUp ? "50%" : "100%"}>
           <Typography
+            data-aos="fade-down-left"
+            data-aos-duration="400"
             id="about-us-heading"
             variant="h3"
             component="h2"
@@ -44,6 +48,8 @@ const About = () => {
             About Us
           </Typography>
           <Typography
+            data-aos="fade-down-left"
+            data-aos-duration="400"
             color="secondary"
             variant="h6"
             component="p"
@@ -52,11 +58,20 @@ const About = () => {
           >
             Get To Know Us
           </Typography>
-          <Typography sx={{ mt: 4 }} align={tabletUp ? undefined : "center"}>
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quisquam
-            maxime earum nostrum, assumenda voluptatum veritatis, temporibus
-            numquam molestiae sed vero voluptatem! Reprehenderit, dolorum! Fuga
-            repellat numquam perspiciatis reprehenderit aliquam atque.
+          <Typography
+            sx={{ mt: 4 }}
+            align={tabletUp ? undefined : "center"}
+            data-aos="fade-down-right"
+            data-aos-duration="400"
+          >
+            Unitum exists for students to learn, earn, collaborate and
+            socialise. It’s a platform that aims to streamline student life by
+            making all student necessities accessible, at the click of a button.
+            The main objective of unitum is to remove the barriers that separate
+            different universities and their student body’s and create a student
+            environment where there is commonality. Doing this will allow
+            students to interact academically and socially. Currently the
+            platform is open to all tertiary education/ third level students.
           </Typography>
         </Stack>
       </Stack>
