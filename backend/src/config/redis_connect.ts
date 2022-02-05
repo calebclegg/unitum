@@ -13,9 +13,10 @@ export const redisConnect = async () => {
         limit--;
         console.log("Unable to connect to redis sever!!\n Reconnecting...");
         await redisConnect();
-
         console.log(limit);
       }
+      console.log("Couldn't connect to redis");
+      process.exit(1);
     }
   }
 };

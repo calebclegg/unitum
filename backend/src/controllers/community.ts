@@ -27,14 +27,10 @@ export const createCommunity = async (req: any, res: Response) => {
     admin: user._id,
     ...valData.value
   });
-  try {
-    const savedCommunity = await newCommunity.save();
-    user.profile.communities.push(savedCommunity._id);
-    user.save();
-    return res.status(201).json(savedCommunity);
-  } catch (error) {
-    return res.sendStatus(500);
-  }
+  const savedCommunity = await newCommunity.save();
+  user.profile.communities.push(savedCommunity._id);
+  await user.save();
+  return res.status(201).json(savedCommunity);
 };
 
 export const editCommunity = async (req: any, res: Response) => {
@@ -60,26 +56,22 @@ export const editCommunity = async (req: any, res: Response) => {
       .status(400)
       .json({ message: "Some fields are invalid/required", errors: errors });
   }
-  try {
-    const updatedCommunity = await CommunityModel.findByIdAndUpdate(
-      { _id: commID },
-      valData.value,
-      { new: true }
-    );
-    res.status(200).json(updatedCommunity);
-    const admin = await User.findOne({ _id: dbCommunity.admin._id }).select(
-      "profile.fullName"
-    );
-    const notification: notification = {
-      message: `${admin?.profile?.fullName} updated ${dbCommunity.name} community`,
-      type: "community",
-      user: dbCommunity.admin._id,
-      community: dbCommunity._id
-    };
-    await sendNotification(req.socket, notification, dbCommunity._id);
-  } catch (error) {
-    return res.sendStatus(500);
-  }
+  const updatedCommunity = await CommunityModel.findByIdAndUpdate(
+    { _id: commID },
+    valData.value,
+    { new: true }
+  );
+  res.status(200).json(updatedCommunity);
+  const admin = await User.findOne({ _id: dbCommunity.admin._id }).select(
+    "profile.fullName"
+  );
+  const notification: notification = {
+    message: `${admin?.profile?.fullName} updated ${dbCommunity.name} community`,
+    type: "community",
+    user: dbCommunity.admin._id,
+    community: dbCommunity._id
+  };
+  await sendNotification(req.socket, notification, dbCommunity._id);
 };
 
 export const viewCommunity = async (req: any, res: Response) => {
@@ -110,12 +102,8 @@ export const deleteCommunity = async (req: any, res: Response) => {
   if (!community) return res.sendStatus(404);
   if (community && community._id.toString() !== req.user._id.toString())
     return res.sendStatus(403);
-  try {
-    await community?.delete();
-    return res.sendStatus(200);
-  } catch (error) {
-    return res.sendStatus(500);
-  }
+  await community?.delete();
+  return res.sendStatus(200);
 };
 
 export const searchCommunity = async (req: any, res: Response) => {
@@ -182,25 +170,21 @@ export const addMember = async (req: any, res: Response) => {
   user.profile?.communities?.push(community._id);
   community.members?.push({ info: userID, role: "member" });
   community.numberOfMembers! += 1;
-  try {
-    user.save();
-    community.save();
-    res.status(200).json({ message: "New Member has been added successfully" });
+  user.save();
+  community.save();
+  res.status(200).json({ message: "New Member has been added successfully" });
 
-    const admin = await User.findOne({ _id: community.admin._id }).select(
-      "profile.fullName"
-    );
-    const notification: notification = {
-      message: `${admin?.profile?.fullName} added you to ${community.name}`,
-      type: "community",
-      user: community.admin._id,
-      community: community._id,
-      userID: user._id
-    };
-    await sendNotification(req.socket, notification, user._id);
-  } catch (error) {
-    return res.sendStatus(500);
-  }
+  const admin = await User.findOne({ _id: community.admin._id }).select(
+    "profile.fullName"
+  );
+  const notification: notification = {
+    message: `${admin?.profile?.fullName} added you to ${community.name}`,
+    type: "community",
+    user: community.admin._id,
+    community: community._id,
+    userID: user._id
+  };
+  await sendNotification(req.socket, notification, user._id);
 };
 
 export const removeMember = async (req: any, res: Response) => {
@@ -239,13 +223,9 @@ export const removeMember = async (req: any, res: Response) => {
   if (user?.profile?.communities) {
     user.profile.communities = newCommunityList;
   }
-  try {
-    community.save();
-    user!.save();
-    return res.sendStatus(200);
-  } catch (error) {
-    return res.sendStatus(500);
-  }
+  community.save();
+  user!.save();
+  return res.sendStatus(200);
 };
 
 export const leaveCommunity = async (req: any, res: Response) => {
@@ -277,11 +257,7 @@ export const leaveCommunity = async (req: any, res: Response) => {
   if (user?.profile?.communities) {
     user.profile.communities = newCommunityList;
   }
-  try {
-    community.save();
-    user!.save();
-    return res.sendStatus(200);
-  } catch (error) {
-    return res.sendStatus(500);
-  }
+  community.save();
+  user!.save();
+  return res.sendStatus(200);
 };
