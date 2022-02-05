@@ -2,16 +2,20 @@ import Helmet from "react-helmet";
 import Edit from "@mui/icons-material/Edit";
 import Link from "@mui/icons-material/Link";
 import Chip from "@mui/material/Chip";
+import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/system/Box";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
+import { useRef } from "react";
 import { useUser } from "../hooks";
 import UserPosts from "../components/UserPosts";
+import { Message } from "@mui/icons-material";
 
 const Profile = () => {
+  const avatarRef = useRef<HTMLDivElement>(null);
   const { user } = useUser();
 
   return (
@@ -20,17 +24,23 @@ const Profile = () => {
         <title>{`${user?.profile.fullName} | Profile`}</title>
       </Helmet>
       <Grid container spacing={2} alignItems="center">
-        <Grid item xs={4}>
+        <Grid item flexGrow="0 !important" width="fit-content" xs>
           <Avatar
+            ref={avatarRef}
             variant="rounded"
             src={user?.profile.picture}
             alt={user?.profile.fullName}
-            sx={{ width: "100%", borderRadius: 3, minHeight: 100 }}
+            sx={{
+              width: 100,
+              height: avatarRef.current?.getBoundingClientRect().width,
+              borderRadius: 3,
+              minHeight: 100
+            }}
           />
         </Grid>
         <Grid
           item
-          xs={8}
+          xs
           container
           alignItems="flex-start"
           justifyContent="space-between"
@@ -39,10 +49,15 @@ const Profile = () => {
             <Typography variant="h4" fontWeight="500" component="h1">
               {user?.profile.fullName}
             </Typography>
-            <Chip
-              label={`Unicoyn ${user?.profile.unicoyn}`}
-              sx={{ width: "fit-content" }}
-            />
+            <Stack direction="row" alignItems="center" spacing={2}>
+              <Button size="small" startIcon={<Message />}>
+                Start Chat
+              </Button>
+              <Chip
+                label={`Unicoyn ${user?.profile.unicoyn}`}
+                sx={{ width: "fit-content" }}
+              />
+            </Stack>
           </Stack>
           <IconButton>
             <Edit />

@@ -16,7 +16,7 @@ import { Theme } from "@mui/material/styles";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { API } from "../lib";
-import { useToken } from "../hooks";
+import { useAuth } from "../context/Auth";
 
 export interface IProps {
   _id: number;
@@ -53,7 +53,7 @@ const PostCard = ({
   createdAt,
   revalidate
 }: Partial<IProps>) => {
-  const { token } = useToken();
+  const { token } = useAuth();
   const tabletUp = useMediaQuery(({ breakpoints }: Theme) =>
     breakpoints.up("sm")
   );
@@ -66,7 +66,31 @@ const PostCard = ({
     }
   }, [upvoted, downvoted]);
 
-  const toggleSaved = () => setSaved(!saved);
+  const toggleSaved = async () => {
+    setSaved(!saved);
+
+    try {
+      if (saved) {
+        await API.delete(`users/me/savedPosts/${_id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        revalidate?.();
+      } else {
+        await API.post(
+          "users/me/savedPosts",
+          { postID: _id },
+          {
+            headers: { Authorization: `Bearer ${token}` }
+          }
+        );
+
+        revalidate?.();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const addVote = async (event: React.MouseEvent<HTMLButtonElement>) => {
     const { vote }: { vote?: "upVote" | "downVote" } =
@@ -75,9 +99,7 @@ const PostCard = ({
     if (vote) {
       if (vote === "upVote") {
         await API.patch(`posts/${_id}/upvote`, undefined, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+          headers: { Authorization: `Bearer ${token}` }
         });
 
         setVote((prevState) => ({
@@ -86,9 +108,7 @@ const PostCard = ({
         }));
       } else {
         await API.patch(`posts/${_id}/downvote`, undefined, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+          headers: { Authorization: `Bearer ${token}` }
         });
 
         setVote((prevState) => ({

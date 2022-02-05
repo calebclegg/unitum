@@ -48,12 +48,12 @@ const CommunitiesBrief = () => {
           Communities
         </Typography>
         <List>
-          {user?.profile.communities.map(({ id, name, path }) => (
+          {user?.profile.communities.map(({ _id, name }) => (
             <ListItem
-              key={id}
+              key={_id}
               button
               component={Link}
-              to={`/communities/${path}`}
+              to={`/communities/${_id}`}
               sx={{ my: 2 }}
             >
               <ListItemAvatar>

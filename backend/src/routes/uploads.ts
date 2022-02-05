@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import dotenv from "dotenv";
+import dotenv from "dotenv-flow";
 dotenv.config();
 import express, { Request, Response } from "express";
 import path from "path";

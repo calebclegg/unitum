@@ -4,6 +4,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { visuallyHidden } from "@mui/utils";
 import { lazy, Suspense, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
+import Auth from "./context/Auth";
 import Landing from "./pages/Landing";
 import Layout from "./components/Layout";
 import AOS from "aos";
@@ -49,7 +50,14 @@ function App() {
       <Suspense fallback="Loading">
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/*" element={<Layout />}>
+          <Route
+            path="/*"
+            element={
+              <Auth>
+                <Layout />
+              </Auth>
+            }
+          >
             <Route path="chat" element={<Chat />} />
             <Route path="profile" element={<Profile />} />
             <Route path="feed">
