@@ -40,7 +40,19 @@ export const createPost = async (req: any, res: Response) => {
     ...valData.value,
     author: user._id
   }).save();
-  res.status(201).json(newPost);
+  const post = {
+    ...newPost.toObject(),
+    author: {
+      profile: {
+        fullName: user.profile.fullName,
+        picture: user.profile.picture
+      }
+    }
+  };
+  delete post.upvoteBy;
+  delete post.downVoteBy;
+  delete post.nextCoyn;
+  res.status(201).json(post);
   if (community) {
     const notificationInfo: notification = {
       message: `${req.user.profile.fullName} added a new post in ${community.name}`,
