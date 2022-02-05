@@ -13,7 +13,7 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Theme } from "@mui/material/styles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { API } from "../lib";
 import { useToken } from "../hooks";
@@ -21,6 +21,8 @@ import { useToken } from "../hooks";
 export interface IProps {
   _id: number;
   upvotes: number;
+  upvoted: boolean;
+  downvoted: boolean;
   media: string;
   numberOfComments: number;
   communityID: {
@@ -42,6 +44,8 @@ export interface IProps {
 const PostCard = ({
   _id,
   author,
+  upvoted,
+  downvoted,
   upvotes,
   body,
   numberOfComments,
@@ -55,6 +59,12 @@ const PostCard = ({
   );
   const [saved, setSaved] = useState(false);
   const [vote, setVote] = useState({ upVote: false, downVote: false });
+
+  useEffect(() => {
+    if (upvoted !== undefined && downvoted !== undefined) {
+      setVote({ upVote: upvoted, downVote: downvoted });
+    }
+  }, [upvoted, downvoted]);
 
   const toggleSaved = () => setSaved(!saved);
 

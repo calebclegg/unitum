@@ -18,7 +18,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { alpha, styled, Theme } from "@mui/material/styles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useData, useToken } from "../hooks";
 import { API } from "../lib";
 
@@ -30,7 +30,8 @@ const Form = styled("form")(({ theme }) => ({
   gap: theme.spacing(0.1),
 
   [theme.breakpoints.up("sm")]: {
-    alignItems: "stretch",
+    alignItems: "flex-end",
+    flexDirection: "column",
     gap: theme.spacing(2)
   }
 }));
@@ -68,6 +69,12 @@ const PostDetails = ({ id }: IProps) => {
   );
 
   const sortedComments = laptopUp ? [...(comments || [])].reverse() : comments;
+
+  useEffect(() => {
+    if (post) {
+      setVote({ upVote: post.upvoted, downVote: post.downvoted });
+    }
+  }, [post]);
 
   const addVote = async (event: React.MouseEvent<HTMLButtonElement>) => {
     const { vote }: { vote?: "upVote" | "downVote" } =
@@ -182,10 +189,13 @@ const PostDetails = ({ id }: IProps) => {
             <FormControl sx={{ width: "inherit" }}>
               <OutlinedInput
                 fullWidth
+                multiline
+                rows={3}
                 size="small"
                 name="comment"
                 id="comment-input"
                 autoComplete="off"
+                inputComponent="textarea"
                 disabled={postingComment}
                 inputProps={{
                   placeholder: "Enter your comment here",
@@ -194,6 +204,7 @@ const PostDetails = ({ id }: IProps) => {
                 sx={{ bgcolor: ({ palette }) => alpha(palette.grey[600], 0.1) }}
               />
             </FormControl>
+
             <LoadingButton
               type="submit"
               color="primary"

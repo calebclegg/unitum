@@ -44,6 +44,8 @@ export const Hero = () => {
             component="h1"
             fontWeight={700}
             align={tabletUp ? undefined : "center"}
+            data-aos="fade-up"
+            data-aos-duration="400"
           >
             Education Made Easy
           </Typography>
@@ -51,6 +53,8 @@ export const Hero = () => {
             color="secondary"
             variant="h6"
             component="p"
+            data-aos="fade-up"
+            data-aos-duration="400"
             align={tabletUp ? undefined : "center"}
           >
             Unitum is here to support you through your academic journey
@@ -68,6 +72,8 @@ export const Hero = () => {
           <Stack spacing={1.5} direction="row">
             {socialLinks.map(({ icon, href, label }) => (
               <IconButton
+                data-aos="fade-right"
+                data-aos-duration="400"
                 key={href}
                 href={href}
                 target="_blank"

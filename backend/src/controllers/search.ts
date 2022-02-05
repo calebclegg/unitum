@@ -42,22 +42,17 @@ export const search = async (req: Request, res: Response) => {
   } else {
     types = queryTypes;
   }
-
-  try {
-    let dbData = new Array();
-    for (const type of types) {
-      let items = await dbqueries[type];
-      items = items.map((item: any) => ({
-        ...item.toObject(),
-        type: type
-      }));
-      dbData.push(...items);
-    }
-    matchSorter(dbData, searchString?.toString()!, {
-      keys: ["profile.fullName", "name", "body", "title", "description"]
-    });
-    return res.status(200).json(dbData);
-  } catch (error) {
-    return res.sendStatus(500);
+  let dbData = new Array();
+  for (const type of types) {
+    let items = await dbqueries[type];
+    items = items.map((item: any) => ({
+      ...item.toObject(),
+      type: type
+    }));
+    dbData.push(...items);
   }
+  matchSorter(dbData, searchString?.toString()!, {
+    keys: ["profile.fullName", "name", "body", "title", "description"]
+  });
+  return res.status(200).json(dbData);
 };
