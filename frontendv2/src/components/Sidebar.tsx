@@ -89,7 +89,13 @@ const Sidebar = ({ open, handleClose }: IProps) => {
         </Stack>
       )}
       <Box p={6}>
-        <Button fullWidth color="primary" startIcon={<Add />} sx={{ mb: 4 }}>
+        <Button
+          fullWidth
+          color="primary"
+          startIcon={<Add />}
+          href="#create-post"
+          sx={{ mb: 4 }}
+        >
           Create Post
         </Button>
         <List sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
