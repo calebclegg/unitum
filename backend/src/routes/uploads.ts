@@ -13,8 +13,6 @@ type RequestWithFile = Express.Request & {
   file: Express.Multer.File & { location: string };
 };
 
-console.log("bucket", process.env.BUCKET);
-
 aws.config.update({
   secretAccessKey: process.env.AWS_KEY,
   accessKeyId: process.env.AWS_KEY_ID,
