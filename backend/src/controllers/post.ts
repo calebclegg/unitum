@@ -85,7 +85,8 @@ export const getPosts = async (req: any, res: Response) => {
         { path: "communityID", select: "-__v -members" }
       ])
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .sort({ createdAt: -1 });
   } else {
     dbPosts = await PostModel.find({})
       .sort("createdAt")
@@ -95,7 +96,8 @@ export const getPosts = async (req: any, res: Response) => {
         { path: "communityID", select: "-__v -members" }
       ])
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .sort({ createdAt: -1 });
   }
   const savedPosts = await SavedPost.findOne({ userID: user._id });
   const posts = dbPosts.map((post: any) => {
@@ -140,7 +142,8 @@ export const getPostDetails = async (req: any, res: Response) => {
       populate: {
         path: "author",
         select: "profile.fullName profile.picture"
-      }
+      },
+      sort: { createdAt: -1 }
     },
     { path: "communityID", select: "-__v -members" }
   ]);
@@ -222,7 +225,8 @@ export const getPostComments = async (req: any, res: Response) => {
     .populate({
       path: "author",
       select: "profile.fullName profile.picture"
-    });
+    })
+    .sort({ createdAt: -1 });
   return res.status(200).json(comments);
 };
 
