@@ -2,11 +2,12 @@ import "@fontsource/inter";
 import Link from "@mui/material/Link";
 import CssBaseline from "@mui/material/CssBaseline";
 import { visuallyHidden } from "@mui/utils";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import Landing from "./pages/Landing";
 import Layout from "./components/Layout";
-
+import AOS from "aos";
+import "aos/dist/aos.css";
 const Chat = lazy(() => import("./pages/Chat"));
 const Feed = lazy(() => import("./pages/Feed"));
 const Post = lazy(() => import("./pages/Post"));
@@ -17,6 +18,9 @@ const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 
 function App() {
+  useEffect(() => {
+    AOS.init();
+  });
   return (
     <>
       <CssBaseline />

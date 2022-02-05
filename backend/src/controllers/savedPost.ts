@@ -70,7 +70,7 @@ export const unsavePost = async (req: any, res: Response) => {
   const postID = req.params.postID;
   const savedPost = await SavedPost.findOne({ userID: user._id });
   if (!savedPost) return res.status(200).json([]);
-  let posts = savedPost?.posts.filter((objectid: Types.ObjectId) => {
+  const posts = savedPost?.posts.filter((objectid: Types.ObjectId) => {
     return objectid.toString() !== postID.toString();
   });
   if (savedPost?.posts) savedPost.posts = posts;

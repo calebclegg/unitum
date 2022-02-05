@@ -47,6 +47,8 @@ const Contact = () => {
     >
       <Stack gap={2} width={tabletUp ? "52%" : "100%"}>
         <Typography
+          data-aos="fade-down-left"
+          data-aos-duration="400"
           id="contact-us-heading"
           variant="h3"
           component="h2"
@@ -56,6 +58,8 @@ const Contact = () => {
           Contact Us
         </Typography>
         <Typography
+          data-aos="fade-down-left"
+          data-aos-duration="400"
           color="secondary"
           variant="h6"
           component="p"
@@ -64,6 +68,8 @@ const Contact = () => {
           Get In Touch
         </Typography>
         <Paper
+          data-aos="fade-up-left"
+          data-aos-duration="400"
           variant="outlined"
           sx={{ p: 6, mt: 3, mb: 5, borderColor: "secondary.main" }}
         >
@@ -140,7 +146,16 @@ const Contact = () => {
           </Formik>
         </Paper>
       </Stack>
-      {tabletUp && <ChatImage src={chat} alt="" width="500" loading="lazy" />}
+      {tabletUp && (
+        <ChatImage
+          src={chat}
+          alt=""
+          width="500"
+          loading="lazy"
+          data-aos="fade-up-right"
+          data-aos-duration="400"
+        />
+      )}
     </Stack>
   );
 };

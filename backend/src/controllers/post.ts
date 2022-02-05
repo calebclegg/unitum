@@ -69,7 +69,7 @@ export const getPosts = async (req: any, res: Response) => {
       .sort("createdAt")
       .select("-comments +upvoteBy")
       .populate([
-        { path: "author", select: "profile.fullName" },
+        { path: "author", select: "profile.fullName profile.picture" },
         { path: "communityID", select: "-__v -members" }
       ])
       .skip(skip)
@@ -79,39 +79,11 @@ export const getPosts = async (req: any, res: Response) => {
       .sort("createdAt")
       .select("-comments +upvoteBy")
       .populate([
-        { path: "author", select: "profile.fullName" },
+        { path: "author", select: "profile.fullName profile.picture" },
         { path: "communityID", select: "-__v -members" }
       ])
       .skip(skip)
       .limit(limit);
-
-    const savedPosts = await SavedPost.findOne({ userID: user._id });
-    const posts = dbPosts.map((post: any) => {
-      const upvoted = post.upvoteBy?.some((objectid: any) => {
-        return objectid.equals(user._id);
-      });
-
-      const downvoted = post.downVoteBy?.some((objectid: any) => {
-        return objectid.equals(req.user._id);
-      });
-      let saved;
-      if (savedPosts) {
-        saved = savedPosts.posts.some((objectid: Types.ObjectId) => {
-          return objectid.equals(post._id);
-        });
-      }
-      post = {
-        ...post.toObject(),
-        upvoted: upvoted,
-        downvoted: downvoted,
-        saved: saved
-      };
-      delete post.upvoteBy;
-      delete post.downVoteBy;
-      return post;
-    });
-    console.log(posts);
-    return res.status(200).json(posts);
   }
   const savedPosts = await SavedPost.findOne({ userID: user._id });
   const posts = dbPosts.map((post: any) => {
