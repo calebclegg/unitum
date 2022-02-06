@@ -139,7 +139,7 @@ const PostCard = ({
           <CardContent sx={{ py: 0.5 }}>
             <MuiLink
               component={Link}
-              to={`/feed/${_id}`}
+              to={`/posts/${_id}`}
               color="textSecondary"
               underline="none"
             >
@@ -150,7 +150,7 @@ const PostCard = ({
             <Button
               variant="text"
               component={Link}
-              to={`/feed/${_id}#comments`}
+              to={`/posts/${_id}#comments`}
             >
               {numberOfComments ? (
                 <>Comments ({numberOfComments})</>
