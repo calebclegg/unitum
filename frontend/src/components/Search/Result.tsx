@@ -82,8 +82,6 @@ const Result = ({ anchorEl, query }: IProps) => {
     }
   );
 
-  console.log({ searchResult });
-
   useEffect(() => {
     if (paperRef.current) {
       if (open) {

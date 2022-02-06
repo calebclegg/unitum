@@ -1,11 +1,15 @@
+import Helmet from "react-helmet";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import PostCard, { IProps as IPost } from "../components/PostCard";
-import { useData } from "../hooks";
-import Helmet from "react-helmet";
+import { useData, usePostsActions } from "../hooks";
+
 const Feed = () => {
-  const { data: posts, mutate } = useData<IPost[]>("posts");
+  const { data: posts, mutate } = useData<IPost[]>("posts", {
+    refreshInterval: 10000
+  });
+  const { toggleSave, toggleVote } = usePostsActions(posts, mutate);
 
   return (
     <>
@@ -36,7 +40,12 @@ const Feed = () => {
         }}
       >
         {posts?.map((post) => (
-          <PostCard key={post._id} {...post} revalidate={mutate} />
+          <PostCard
+            {...post}
+            key={post._id}
+            toggleSave={toggleSave}
+            toggleVote={toggleVote}
+          />
         ))}
       </Stack>
     </>

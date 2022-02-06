@@ -13,17 +13,15 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Theme } from "@mui/material/styles";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { API } from "../lib";
-import { useAuth } from "../context/Auth";
 
 export interface IProps {
-  _id: number;
+  _id: string;
   upvotes: number;
   upvoted: boolean;
   downvoted: boolean;
-  media: string;
+  saved: boolean;
+  media: string[];
   numberOfComments: number;
   communityID: {
     _id: string;
@@ -38,7 +36,6 @@ export interface IProps {
   };
   body: string;
   createdAt: string;
-  revalidate?: () => void;
 }
 
 const PostCard = ({
@@ -46,79 +43,27 @@ const PostCard = ({
   author,
   upvoted,
   downvoted,
+  saved,
   upvotes,
   body,
   numberOfComments,
   communityID,
   createdAt,
-  revalidate
-}: Partial<IProps>) => {
-  const { token } = useAuth();
+  toggleSave,
+  toggleVote
+}: Partial<IProps> & {
+  toggleSave: (postID: string) => Promise<void>;
+  toggleVote: (postID: string, action: "upvote" | "downvote") => Promise<void>;
+}) => {
   const tabletUp = useMediaQuery(({ breakpoints }: Theme) =>
     breakpoints.up("sm")
   );
-  const [saved, setSaved] = useState(false);
-  const [vote, setVote] = useState({ upVote: false, downVote: false });
-
-  useEffect(() => {
-    if (upvoted !== undefined && downvoted !== undefined) {
-      setVote({ upVote: upvoted, downVote: downvoted });
-    }
-  }, [upvoted, downvoted]);
-
-  const toggleSaved = async () => {
-    setSaved(!saved);
-
-    try {
-      if (saved) {
-        await API.delete(`users/me/savedPosts/${_id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-
-        revalidate?.();
-      } else {
-        await API.post(
-          "users/me/savedPosts",
-          { postID: _id },
-          {
-            headers: { Authorization: `Bearer ${token}` }
-          }
-        );
-
-        revalidate?.();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const addVote = async (event: React.MouseEvent<HTMLButtonElement>) => {
-    const { vote }: { vote?: "upVote" | "downVote" } =
+    const { action }: { action?: "upvote" | "downvote" } =
       event.currentTarget.dataset;
 
-    if (vote) {
-      if (vote === "upVote") {
-        await API.patch(`posts/${_id}/upvote`, undefined, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-
-        setVote((prevState) => ({
-          upVote: !prevState.upVote,
-          downVote: false
-        }));
-      } else {
-        await API.patch(`posts/${_id}/downvote`, undefined, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-
-        setVote((prevState) => ({
-          upVote: false,
-          downVote: !prevState.downVote
-        }));
-      }
-
-      revalidate?.();
-    }
+    if (_id && action) toggleVote(_id, action);
   };
 
   return (
@@ -135,7 +80,7 @@ const PostCard = ({
           <IconButton
             sx={{ color: ({ customPalette }) => customPalette.navyBlue }}
             aria-label={saved ? "remove post from saved" : "save post"}
-            onClick={toggleSaved}
+            onClick={() => _id && toggleSave(_id)}
           >
             {saved ? <Bookmark /> : <BookmarkOutlined />}
           </IconButton>
@@ -172,9 +117,9 @@ const PostCard = ({
         <Stack alignItems="center">
           <IconButton
             size="small"
-            color={vote.upVote ? "secondary" : "default"}
+            color={upvoted ? "secondary" : "default"}
             aria-label="up vote"
-            data-vote="upVote"
+            data-action="upvote"
             onClick={addVote}
           >
             <Forward fontSize="small" transform="rotate(-90)" />
@@ -182,9 +127,9 @@ const PostCard = ({
           <Typography variant="caption">{upvotes}</Typography>
           <IconButton
             size="small"
-            color={vote.downVote ? "secondary" : "default"}
+            color={downvoted ? "secondary" : "default"}
             aria-label="down vote"
-            data-vote="downVote"
+            data-action="downvote"
             onClick={addVote}
           >
             <Forward fontSize="small" transform="rotate(90)" />
