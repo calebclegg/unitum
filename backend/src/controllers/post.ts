@@ -233,7 +233,7 @@ export const addPostComment = async (req: any, res: Response) => {
   const post = await PostModel.findOne({ _id: postID });
   if (!post) return res.status(404).json({ message: "Post not found" });
   if (post.communityID) {
-    const userCommunities = req.user.communities.map(
+    const userCommunities = req.user.profile.communities.map(
       (commID: Types.ObjectId) => {
         return commID.toString();
       }
@@ -279,14 +279,24 @@ export const postUpVote = async (req: any, res: Response) => {
   const postID = new Types.ObjectId(req.params.postID);
   const post = await PostModel.findOne({ _id: postID }).select("+nextCoyn");
   if (!post) return res.status(404).json({ message: "Post not found" });
+  console.log(req.user);
+
   if (post.communityID) {
-    const userCommunities = req.user.communities.map(
-      (commID: Types.ObjectId) => {
-        return commID.toString();
+    const isMember = req.user.profile.communities.some(
+      (objectid: Types.ObjectId) => {
+        return objectid.equals(post.communityID);
       }
     );
-    if (!userCommunities.includes(post.communityID.toString))
+
+    if (!isMember)
       return res.status(401).json({ message: "Cannot Like this post" });
+    // const userCommunities = req.user.communities.map(
+    //   (commID: Types.ObjectId) => {
+    //     return commID.toString();
+    //   }
+    // );
+    // if (!userCommunities.includes(post.communityID.toString))
+    //   return res.status(401).json({ message: "Cannot Like this post" });
   }
   const upvoted = post.upvoteBy?.some((objectid) => {
     return objectid.equals(req.user._id);
@@ -351,8 +361,9 @@ export const postDownVote = async (req: any, res: Response) => {
   const postID = new Types.ObjectId(req.params.postID);
   const post = await PostModel.findOne({ _id: postID });
   if (!post) return res.status(404).json({ message: "Post not found" });
+  console.log(req.user);
   if (post.communityID) {
-    const userCommunities = req.user.communities.map(
+    const userCommunities = req.user.profile.communities.map(
       (commID: Types.ObjectId) => {
         return commID.toString();
       }
