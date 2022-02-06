@@ -8,11 +8,11 @@ const schoolSchema = new Schema({
 });
 
 const educationSchema = new Schema<IEducation>({
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-    required: true
-  },
+  // user: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: "User",
+  //   required: true
+  // },
   school: {
     type: schoolSchema,
     required: true
@@ -37,8 +37,7 @@ const profileSchema = new Schema<IProfile>({
   picture: String,
   dob: Date,
   education: {
-    type: [Types.ObjectId],
-    ref: "Education"
+    type: educationSchema
   },
   communities: {
     type: [Types.ObjectId],

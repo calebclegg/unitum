@@ -26,8 +26,7 @@ export const userInfo = async (req: Request, res: Response) => {
         path: "profile.schoolWork",
         select: "-__v -userID -updatedAt"
       },
-      { path: "profile.communities", select: "-__v -updatedAt -members" },
-      { path: "profile.education", select: "-__v -updatedAt -user" }
+      { path: "profile.communities", select: "-__v -updatedAt -members" }
     ]);
   return res.status(200).json(user);
 };
@@ -48,84 +47,94 @@ export const updateUserInfo = async (req: Request, res: Response) => {
   }
 
   Object.entries(valData.value.profile).forEach(([key, value]) => {
-    (user.profile as Record<string, any>)[key] = value;
+    let field = key as string;
+    if (typeof value === "object") {
+      Object.entries(value as Record<string, any>).forEach(([key, value]) => {
+        ((user.profile as Record<string, any>)[field] as Record<string, any>)[
+          key
+        ] = value;
+      });
+    } else {
+      (user.profile as Record<string, any>)[key] = value;
+    }
   });
 
+  console.log(user);
   await user.save();
 
   return res.sendStatus(200);
 };
 
-export const getEducation = async (req: any, res: Response) => {
-  const edID = req.params.edID;
-  const education = await Education.findOne({ _id: edID }).populate({
-    path: "user",
-    select:
-      "-__v -updatedAt -createdAt -role -fullName -profile.dob -profile.communities -profile.education -profile.schoolWork -profile.unicoyn"
-  });
-  if (!education)
-    return res.status(404).json({ message: "Education not found" });
-  return res.status(200).json(education);
-};
+// export const getEducation = async (req: any, res: Response) => {
+//   const edID = req.params.edID;
+//   const education = await Education.findOne({ _id: edID }).populate({
+//     path: "user",
+//     select:
+//       "-__v -updatedAt -createdAt -role -fullName -profile.dob -profile.communities -profile.education -profile.schoolWork -profile.unicoyn"
+//   });
+//   if (!education)
+//     return res.status(404).json({ message: "Education not found" });
+//   return res.status(200).json(education);
+// };
 
-export const addNewEducation = async (req: any, res: Response) => {
-  const valData = await validateEducationData(req.body);
+// export const addNewEducation = async (req: any, res: Response) => {
+//   const valData = await validateEducationData(req.body);
 
-  let errors;
-  if (valData.error) {
-    errors = valData.error.details.map((error: any) => ({
-      label: error.context?.label,
-      message: error.message
-    }));
-    return res
-      .status(400)
-      .json({ message: "Some fields are invalid/required", errors: errors });
-  }
-  const newEducation = await new Education({
-    ...valData.value,
-    user: req.user._id
-  }).save();
-  const user = await User.findOne({ _id: req.user._id });
-  user?.profile?.education?.push(newEducation._id);
-  await user?.save();
-  return res.status(201).json(newEducation);
-};
+//   let errors;
+//   if (valData.error) {
+//     errors = valData.error.details.map((error: any) => ({
+//       label: error.context?.label,
+//       message: error.message
+//     }));
+//     return res
+//       .status(400)
+//       .json({ message: "Some fields are invalid/required", errors: errors });
+//   }
+//   const newEducation = await new Education({
+//     ...valData.value,
+//     user: req.user._id
+//   }).save();
+//   const user = await User.findOne({ _id: req.user._id });
+//   user?.profile?.education?.push(newEducation._id);
+//   await user?.save();
+//   return res.status(201).json(newEducation);
+// };
 
-export const editEducation = async (req: any, res: Response) => {
-  const valData = await validateEducationEditData(req.body);
-  const edID = new Types.ObjectId(req.params.edID);
-  let errors;
-  if (valData.error) {
-    errors = valData.error.details.map((error: any) => ({
-      label: error.context?.label,
-      message: error.message
-    }));
-    return res
-      .status(400)
-      .json({ message: "Some fields are invalid/required", errors: errors });
-  }
-  const updatedEducation = await Education.findOneAndUpdate(
-    { _id: edID, user: req.user._id },
-    valData.value,
-    { new: true }
-  );
-  if (!updatedEducation)
-    return res.status(404).json({
-      message: "Couldn't find education details tha belonged to you"
-    });
-  return res.sendStatus(200);
-};
+// export const editEducation = async (req: any, res: Response) => {
+//   const valData = await validateEducationEditData(req.body);
+//   const edID = new Types.ObjectId(req.params.edID);
+//   let errors;
+//   if (valData.error) {
+//     errors = valData.error.details.map((error: any) => ({
+//       label: error.context?.label,
+//       message: error.message
+//     }));
+//     return res
+//       .status(400)
+//       .json({ message: "Some fields are invalid/required", errors: errors });
+//   }
+//   const updatedEducation = await Education.findOneAndUpdate(
+//     { _id: edID, user: req.user._id },
+//     valData.value,
+//     { new: true }
+//   );
+//   if (!updatedEducation)
+//     return res.status(404).json({
+//       message: "Couldn't find education details tha belonged to you"
+//     });
+//   return res.sendStatus(200);
+// };
 
-export const deleteEducation = async (req: any, res: Response) => {
-  const edID = new Types.ObjectId(req.params.edID);
-  const edu = await Education.findOne({ _id: edID, user: req.user._id });
-  if (!edu)
-    return res.status(404).json({
-      message: "Couldn't find education details tha belonged to you"
-    });
-  await edu.delete();
-  return res.sendStatus(200);
-};
+// export const deleteEducation = async (req: any, res: Response) => {
+//   const edID = new Types.ObjectId(req.params.edID);
+//   const edu = await Education.findOne({ _id: edID, user: req.user._id });
+//   if (!edu)
+//     return res.status(404).json({
+//       message: "Couldn't find education details tha belonged to you"
+//     });
+//   await edu.delete();
+//   return res.sendStatus(200);
+// };
 
 export const getUserSchoolWork = async (req: any, res: Response) => {
   const user = req.user;
@@ -213,16 +222,15 @@ export const getUnreadNotifications = async (req: any, res: Response) => {
     .populate([
       {
         path: "user",
-        select:
-          "-fullName -role -__v -profile.communities -profile.education -profile.schoolWork"
+        select: "profile.fullName profile.picture"
       },
       {
         path: "community",
-        select: "-__v -updatedAt -members"
+        select: "name"
       },
       {
         path: "post",
-        select: "-__v -upvoteBy"
+        select: "body"
       }
     ])
     .sort({ createdAt: -1 });

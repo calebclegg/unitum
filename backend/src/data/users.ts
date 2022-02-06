@@ -9,7 +9,15 @@ const users = [
     profile: {
       picture: "https://liel2c.deta.dev/images/2CqdBMbBaKkxJFv5kzDkHQ.jpeg",
       fullName: "John Barnes",
-      education: new Array(),
+      education: {
+        school: {
+          name: "KNUST"
+        },
+        degree: "Associate",
+        fieldOfStudy: "Computer Science and Engineering",
+        startDate: "2020-09-02",
+        grade: 83
+      },
       communities: new Array(),
       schoolWork: new Array()
     }
@@ -21,7 +29,6 @@ const users = [
     profile: {
       fullName: "John Doe",
       picture: "https://liel2c.deta.dev/images/C9n6B24XbvjKWtnbRHaQw6.jpg",
-      education: new Array(),
       communities: new Array(),
       schoolWork: new Array()
     }
@@ -33,7 +40,6 @@ const users = [
     profile: {
       fullName: "Jane Doe",
       picture: "https://liel2c.deta.dev/images/BZN8RLvDqrQrqGgQL4GUzF.png",
-      education: new Array(),
       communities: new Array(),
       schoolWork: new Array()
     }
@@ -45,7 +51,15 @@ const users = [
     profile: {
       fullName: "Rex Osei",
       picture: "https://liel2c.deta.dev/images/BZN8RLvDqrQrqGgQL4GUzF.png",
-      education: new Array(),
+      education: {
+        school: {
+          name: "University of Mines and Technology"
+        },
+        degree: "Bachelor's Degree",
+        fieldOfStudy: "Computer Science and Engineering",
+        startDate: "2019-09-05",
+        grade: 99
+      },
       communities: new Array(),
       schoolWork: new Array()
     }
@@ -58,7 +72,15 @@ const users = [
       fullName: "Derek Oware",
       dob: "2001-05-06",
       picture: "https://liel2c.deta.dev/images/BTa8GQJQJV6VXdmFyqpDCc.png",
-      education: new Array(),
+      education: {
+        school: {
+          name: "University of Mines"
+        },
+        degree: "Bsc. Computer Science",
+        fieldOfStudy: "Computer Science",
+        startDate: "2019-09-02",
+        grade: 83
+      },
       communities: new Array(),
       schoolWork: new Array(),
       unicoyn: 21
