@@ -124,7 +124,6 @@ export const getPosts = async (req: any, res: Response) => {
     delete post.downVoteBy;
     return post;
   });
-  console.log(posts);
   return res.status(200).json(posts);
 };
 
@@ -142,8 +141,7 @@ export const getPostDetails = async (req: any, res: Response) => {
       populate: {
         path: "author",
         select: "profile.fullName profile.picture"
-      },
-      sort: { createdAt: -1 }
+      }
     },
     { path: "communityID", select: "-__v -members" }
   ]);
@@ -225,8 +223,7 @@ export const getPostComments = async (req: any, res: Response) => {
     .populate({
       path: "author",
       select: "profile.fullName profile.picture"
-    })
-    .sort({ createdAt: -1 });
+    });
   return res.status(200).json(comments);
 };
 
@@ -315,15 +312,21 @@ export const postUpVote = async (req: any, res: Response) => {
   post.upvotes! = post.upvoteBy!.length - post.downVoteBy!.length || 0;
   post.downvotes! = post.downVoteBy?.length || 0;
   await post.save();
-  const notificationInfo: notification = {
-    message: `${req.user.profile.fullName} liked your post`,
-    user: req.user._id,
-    type: "like",
-    userID: post.author._id,
-    post: post._id
-  };
   res.sendStatus(200);
-  await sendNotification(req.io, notificationInfo, post.author._id.toString());
+  if (!(req.user._id.toString() === post.author.toString()) && !upvoted) {
+    const notificationInfo: notification = {
+      message: `${req.user.profile.fullName} liked your post`,
+      user: req.user._id,
+      type: "like",
+      userID: post.author._id,
+      post: post._id
+    };
+    await sendNotification(
+      req.io,
+      notificationInfo,
+      post.author._id.toString()
+    );
+  }
   if (post.upvoteBy?.length === post.nextCoyn) {
     const user = await User.findOne({ _id: post.author });
     if (user?.profile) user.profile.unicoyn += 1;
@@ -395,4 +398,25 @@ export const deleteComment = async (req: any, res: Response) => {
       .json({ message: "You are unauthorized to delete this comment" });
   await comment.delete();
   return res.sendStatus(200);
+};
+
+export const getPostWithCommID = async (req: any, res: Response) => {
+  const { skip, limit } = req.query;
+  const dbposts = await PostModel.find({ communityID: { $exists: true } })
+    .limit(limit)
+    .skip(skip)
+    .sort({ createdAt: -1 })
+    .select("-comments +upvoteBy")
+    .populate([
+      { path: "author", select: "profile.fullName profile.picture" },
+      { path: "communityID", select: "_id name picture createdAt" }
+    ]);
+  const posts = dbposts.map((post) => {
+    const postObj = { ...post.toObject() };
+    delete postObj.upvoteBy;
+    delete postObj.downVoteBy;
+    delete postObj.comments;
+    return postObj;
+  });
+  return res.json(posts);
 };
