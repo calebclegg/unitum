@@ -60,10 +60,8 @@ function App() {
           >
             <Route path="chat" element={<Chat />} />
             <Route path="profile" element={<Profile />} />
-            <Route path="feed">
-              <Route index element={<Feed />} />
-              <Route path=":post_id" element={<Post />} />
-            </Route>
+            <Route path="feed" element={<Feed />} />
+            <Route path="posts/:post_id" element={<Post />} />
             <Route path="search" element={<Search />} />
             <Route path="notifications" element={<Notification />} />
           </Route>

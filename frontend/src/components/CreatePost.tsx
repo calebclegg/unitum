@@ -145,12 +145,13 @@ const CreatePost = () => {
         requestData[key] = value;
       }
 
-      await API.post("posts", requestData, {
+      const { data } = await API.post("posts", requestData, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
 
+      navigate(`/posts/${data._id}`);
       handleClose();
     } catch (error) {
       console.log(error);
