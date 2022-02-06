@@ -13,7 +13,7 @@ const UserPosts = () => {
   const { data: posts, mutate } = useData<IPost[]>("users/me/posts");
   const [activeTab, setActiveTab] = useState("my-posts");
   const [userPosts, setUserPosts] = useState<IPost[] | null>(null);
-  const { toggleVote } = usePostsActions(posts, mutate);
+  const { toggleSave, toggleVote } = usePostsActions(posts, mutate);
 
   useEffect(() => {
     const param = searchParams.get("tab");
@@ -60,7 +60,12 @@ const UserPosts = () => {
       </Paper>
       <Stack id="my-posts" spacing={2}>
         {userPosts?.map((post) => (
-          <PostCard key={post._id} {...post} toggleVote={toggleVote} />
+          <PostCard
+            {...post}
+            key={post._id}
+            toggleSave={toggleSave}
+            toggleVote={toggleVote}
+          />
         ))}
       </Stack>
     </>

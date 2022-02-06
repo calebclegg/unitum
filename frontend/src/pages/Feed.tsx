@@ -4,27 +4,12 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import PostCard, { IProps as IPost } from "../components/PostCard";
 import { useData, usePostsActions } from "../hooks";
-import { API } from "../lib";
-import { useAuth } from "../context/Auth";
 
 const Feed = () => {
-  const { token } = useAuth();
   const { data: posts, mutate } = useData<IPost[]>("posts", {
     refreshInterval: 10000
   });
-  const { toggleVote } = usePostsActions(posts, mutate);
-
-  const toggleSave = async (postID: string) => {
-    posts?.map((post) => {
-      if (post._id === postID) {
-        console.log(post);
-      }
-    });
-
-    await API.delete(`users/me/savedPosts/${postID}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-  };
+  const { toggleSave, toggleVote } = usePostsActions(posts, mutate);
 
   return (
     <>
@@ -55,7 +40,12 @@ const Feed = () => {
         }}
       >
         {posts?.map((post) => (
-          <PostCard key={post._id} {...post} toggleVote={toggleVote} />
+          <PostCard
+            {...post}
+            key={post._id}
+            toggleSave={toggleSave}
+            toggleVote={toggleVote}
+          />
         ))}
       </Stack>
     </>

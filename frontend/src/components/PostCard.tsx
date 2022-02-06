@@ -13,17 +13,15 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Theme } from "@mui/material/styles";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { API } from "../lib";
-import { useAuth } from "../context/Auth";
 
 export interface IProps {
   _id: string;
   upvotes: number;
   upvoted: boolean;
   downvoted: boolean;
-  media: string;
+  saved: boolean;
+  media: string[];
   numberOfComments: number;
   communityID: {
     _id: string;
@@ -45,42 +43,21 @@ const PostCard = ({
   author,
   upvoted,
   downvoted,
+  saved,
   upvotes,
   body,
   numberOfComments,
   communityID,
   createdAt,
+  toggleSave,
   toggleVote
 }: Partial<IProps> & {
+  toggleSave: (postID: string) => Promise<void>;
   toggleVote: (postID: string, action: "upvote" | "downvote") => Promise<void>;
 }) => {
-  const { token } = useAuth();
   const tabletUp = useMediaQuery(({ breakpoints }: Theme) =>
     breakpoints.up("sm")
   );
-  const [saved, setSaved] = useState(false);
-
-  const toggleSaved = async () => {
-    setSaved(!saved);
-
-    try {
-      if (saved) {
-        await API.delete(`users/me/savedPosts/${_id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-      } else {
-        await API.post(
-          "users/me/savedPosts",
-          { postID: _id },
-          {
-            headers: { Authorization: `Bearer ${token}` }
-          }
-        );
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const addVote = async (event: React.MouseEvent<HTMLButtonElement>) => {
     const { action }: { action?: "upvote" | "downvote" } =
@@ -103,7 +80,7 @@ const PostCard = ({
           <IconButton
             sx={{ color: ({ customPalette }) => customPalette.navyBlue }}
             aria-label={saved ? "remove post from saved" : "save post"}
-            onClick={toggleSaved}
+            onClick={() => _id && toggleSave(_id)}
           >
             {saved ? <Bookmark /> : <BookmarkOutlined />}
           </IconButton>

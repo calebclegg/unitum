@@ -47,5 +47,35 @@ export const usePostsActions = (
     }
   };
 
-  return { toggleVote };
+  const toggleSave = async (postID: string) => {
+    const updated = posts?.map((post) => {
+      if (post._id === postID) {
+        const postCopy = { ...post };
+        postCopy.saved = !post.saved;
+
+        return postCopy;
+      }
+
+      return post;
+    });
+
+    mutate(updated, false);
+
+    const post = posts?.find((post) => post._id === postID);
+    post?.saved
+      ? await API.delete(`users/me/savedPosts/${postID}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+      : await API.post(
+          "users/me/savedPosts",
+          { postID },
+          {
+            headers: { Authorization: `Bearer ${token}` }
+          }
+        );
+
+    mutate();
+  };
+
+  return { toggleSave, toggleVote };
 };
