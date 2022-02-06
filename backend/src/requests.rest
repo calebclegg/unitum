@@ -143,11 +143,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 
 POST http://localhost:5000/api/community/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NDAxMDMyOCwiZXhwIjoxNjQ0MDEwOTI4fQ.jQqC4NCqRJ4IQSVvzFw--Al6hl3EZR1Sc2kBaTvLknA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEY2hvbGVAZ21haWwuY29tIiwiaXNzIjoidW5pdHVtOnBsYXRmb3JtIiwiaWF0IjoxNjQ0MTgxMTM3LCJleHAiOjE2NDQxODE3Mzd9.kXFkJRGBUfDacFhoMY_pvg5HNdp4t9XYHe7Oh4cVTTw
 
 {
-    "name": "new Channel",
-    "description": "All about web dev"
+    "name": "SWR gang",
+    "description": "All about SWR"
 }
 
 ###
