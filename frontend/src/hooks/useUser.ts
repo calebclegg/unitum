@@ -34,8 +34,12 @@ interface IUser {
       school: {
         _id: string;
         name: string;
+        url: string;
       };
-    }[];
+      endDate: string;
+      degree: string;
+      grade: string;
+    };
   };
 }
 

@@ -7,6 +7,12 @@ import { useData, usePostsActions, useUser } from "../hooks";
 import PostCard, { IProps as IPost } from "./PostCard";
 import { Link, useSearchParams } from "react-router-dom";
 
+const links = {
+  "my-posts": "users/me/posts",
+  "saved-posts": "users/me/savedPosts",
+  "school-works": "users/me/schoolWork"
+}
+
 const UserPosts = () => {
   const { user } = useUser();
   const [searchParams] = useSearchParams();
@@ -31,6 +37,16 @@ const UserPosts = () => {
     }
   }, [user, posts]);
 
+  useEffect(() => {
+    const { data: posts, mutate } = useData<IPost[]>("users/me/posts");
+    
+  }, [])
+
+  const setNewActiveTab = (e: any) => {
+      setActiveTab(e.target.value)
+      console.log(activeTab)
+  }
+
   return (
     <>
       <Paper
@@ -43,17 +59,20 @@ const UserPosts = () => {
             label="My Posts"
             component={Link}
             to="/profile?tab=my-posts"
+            onClick={setNewActiveTab}
           />
           <Tab
             value="saved-posts"
             label="Saved Posts"
             component={Link}
+            onClick={setNewActiveTab}
             to="/profile?tab=saved-posts"
           />
           <Tab
             value="school-works"
             label="School Works"
             component={Link}
+            onClick={setNewActiveTab}
             to="/profile?tab=school-works"
           />
         </Tabs>
