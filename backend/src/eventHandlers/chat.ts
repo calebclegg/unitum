@@ -58,7 +58,7 @@ export const chatHandler = async (io: Server, socket: any) => {
           {
             path: "messages",
             select: "-__v -createdAt",
-            options: { limit: 1, sort: { updatedAt: 1 } }
+            options: { limit: 1, sort: { updatedAt: -1 } }
           },
           {
             path: "participant",
