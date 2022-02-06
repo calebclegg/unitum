@@ -28,7 +28,11 @@ const CommunitiesBrief = () => {
       position="relative"
       top={0}
       flexGrow={1}
-      visibility={pathname !== "/feed" ? "hidden" : "visible"}
+      visibility={
+        pathname !== "/feed" && !pathname.includes("/communities")
+          ? "hidden"
+          : "visible"
+      }
       ml={tabletLaptop ? "0 !important" : undefined}
     >
       <Paper
@@ -40,8 +44,7 @@ const CommunitiesBrief = () => {
           mt: 11,
           position: "sticky",
           top: ({ spacing }) => spacing(11),
-          width: "max-content",
-          maxWidth: laptopUp ? undefined : 300
+          width: "max-content"
         }}
       >
         <Typography variant="h6" component="h2">
