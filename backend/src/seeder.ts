@@ -4,9 +4,10 @@ import { posts } from "./data/posts";
 import User, { Education } from "./models/User";
 import { education } from "./data/users";
 import CommunityModel from "./models/Community";
-import { PostModel } from "./models/Post";
+import { CommentModel, PostModel } from "./models/Post";
 import connectDB from "./config/db";
 import { config } from "dotenv-flow";
+import { SchoolWork } from "./models/schoolWork";
 
 config();
 const db = connectDB();
@@ -16,6 +17,9 @@ export const importData = async () => {
     await User.deleteMany();
     await CommunityModel.deleteMany();
     await PostModel.deleteMany();
+    await CommentModel.deleteMany();
+    await Education.deleteMany();
+    await SchoolWork.deleteMany();
 
     // const educations = await Education.insertMany(education);
 
@@ -60,6 +64,9 @@ export const destroyData = async () => {
     await User.deleteMany();
     await CommunityModel.deleteMany();
     await PostModel.deleteMany();
+    await CommentModel.deleteMany();
+    await Education.deleteMany();
+    await SchoolWork.deleteMany();
 
     (await db).connection.close();
     process.exit();

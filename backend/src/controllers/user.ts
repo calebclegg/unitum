@@ -127,6 +127,14 @@ export const deleteEducation = async (req: any, res: Response) => {
   return res.sendStatus(200);
 };
 
+export const getUserSchoolWork = async (req: any, res: Response) => {
+  const user = req.user;
+  const works = await SchoolWork.find({ userID: user._id }).sort({
+    createdAt: -1
+  });
+  return res.json(works);
+};
+
 export const newSchoolWork = async (req: any, res: Response) => {
   const user = req.user;
   const valData = await validateSchoolWorkData({
@@ -216,7 +224,8 @@ export const getUnreadNotifications = async (req: any, res: Response) => {
         path: "post",
         select: "-__v -upvoteBy"
       }
-    ]);
+    ])
+    .sort({ createdAt: -1 });
   return res.status(200).json(notifications);
 };
 
@@ -247,7 +256,8 @@ export const getUserPosts = async (req: any, res: Response) => {
     .select("-comments -upvoteBy -downVoteBy -author")
     .populate([{ path: "communityID", select: "-__v -members" }])
     .skip(skip)
-    .limit(limit);
+    .limit(limit)
+    .sort({ createdAt: -1 });
   return res.json(posts);
 };
 

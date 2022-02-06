@@ -261,7 +261,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 
 POST http://localhost:5000/api/posts
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NDA4Njc4NywiZXhwIjoxNjQ0MDg3Mzg3fQ.sPm2CiZU-OiMTF3p4T-g4tkkjBMmb_1zi90DNeygXUE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NDEwNDI0OCwiZXhwIjoxNjQ0MTA0ODQ4fQ.e8Q0cLQiekso5uPiiCpc-w1glqYFHM1ikuQmA4tm7K8
 
 {
     "body": "Cloud Computing 2"
@@ -281,13 +281,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 
 GET http://localhost:5000/api/posts
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzgxMTQyMywiZXhwIjoxNjQzODEyMDIzfQ.X7jXPGQb0tC8rQu4mn0IBcCvdhRhLTHLsQR6YMwZiT0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NDEwNDI0OCwiZXhwIjoxNjQ0MTA0ODQ4fQ.e8Q0cLQiekso5uPiiCpc-w1glqYFHM1ikuQmA4tm7K8
 
 ###
 
-GET http://localhost:5000/api/posts/61f96f3d3ac6fda9e2d53704
+GET http://localhost:5000/api/posts/61fec19dec8561a74843be25
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzgxMTQyMywiZXhwIjoxNjQzODEyMDIzfQ.X7jXPGQb0tC8rQu4mn0IBcCvdhRhLTHLsQR6YMwZiT0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NDEwMzI2NywiZXhwIjoxNjQ0MTAzODY3fQ.qwjY5JQfDP0-2ra7AzG6NtYMK_MEIf-TarC1moKtlbM
 
 ###
 
@@ -296,9 +296,9 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjQxODQ3NCwiZXhwIjoxNjQyNDE5MDc0fQ.hn78LL0K6-sFz5S-g6uaEOg2G4KpvmHluz0hfjhAC04
 
 ###
-POST http://localhost:5000/api/posts/61e5431eb9891b61558fcde5/comments
+POST http://localhost:5000/api/posts/61fec19dec8561a74843be25/comments
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjQyNDcyMCwiZXhwIjoxNjQyNDI1MzIwfQ.2x80SfUoMHQcKR7IwKAfqnwFADoPZwsPmb_iMQORu-Y
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NDEwMzI2NywiZXhwIjoxNjQ0MTAzODY3fQ.qwjY5JQfDP0-2ra7AzG6NtYMK_MEIf-TarC1moKtlbM
 
 {
     "text": "I like this post"
@@ -306,9 +306,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 
 ###
 
-GET http://localhost:5000/api/posts/61e5431eb9891b61558fcde5/comments
+GET http://localhost:5000/api/posts/61fec19dec8561a74843be25/comments
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjQyNzEyMiwiZXhwIjoxNjQyNDI3NzIyfQ.UB6zDkP1qh99fxin61f5Bwr7DOAxTbwhC4WXP52j-R0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NDEwMzI2NywiZXhwIjoxNjQ0MTAzODY3fQ.qwjY5JQfDP0-2ra7AzG6NtYMK_MEIf-TarC1moKtlbM
 
 ###
 
@@ -318,9 +318,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 
 ###
 
-PATCH http://localhost:5000/api/posts/61f96f3d3ac6fda9e2d53704/upvote
+PATCH http://localhost:5000/api/posts/61fec47c784b8a96d00cd4e0/upvote
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzgxMTQyMywiZXhwIjoxNjQzODEyMDIzfQ.X7jXPGQb0tC8rQu4mn0IBcCvdhRhLTHLsQR6YMwZiT0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NDA4ODczMCwiZXhwIjoxNjQ0MDg5MzMwfQ.3uVC2susyXSzuedeQaO5pFE-f8eeYASonTUV5XSfAZ0
 
 ###
 

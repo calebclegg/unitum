@@ -24,6 +24,8 @@ router.delete("/me/education/:edID", getUser, use(controller.deleteEducation));
 
 router.post("/me/schoolWork", getUser, use(controller.newSchoolWork));
 
+router.get("/me/schoolWork", getUser, use(controller.getUserSchoolWork));
+
 router.patch(
   "/me/schoolWork/:workID",
   getUser,
