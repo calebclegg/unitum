@@ -63,10 +63,12 @@ const PostDetails = ({ id }: IProps) => {
   const [vote, setVote] = useState({ upVote: false, downVote: false });
   const [postingComment, setPostingComment] = useState(false);
   const { data: post, mutate: revalidatePosts } = useData<Record<string, any>>(
-    `posts/${id}`
+    `posts/${id}`,
+    { refreshInterval: 5000 }
   );
   const { data: comments, mutate: revalidateComments } = useData<IComment[]>(
-    `posts/${id}/comments`
+    `posts/${id}/comments`,
+    { refreshInterval: 1000 }
   );
 
   const sortedComments = laptopUp ? [...(comments || [])].reverse() : comments;

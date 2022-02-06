@@ -19,7 +19,7 @@ import { API } from "../lib";
 import { useAuth } from "../context/Auth";
 
 export interface IProps {
-  _id: number;
+  _id: string;
   upvotes: number;
   upvoted: boolean;
   downvoted: boolean;
@@ -38,7 +38,6 @@ export interface IProps {
   };
   body: string;
   createdAt: string;
-  revalidate?: () => void;
 }
 
 const PostCard = ({
@@ -51,20 +50,15 @@ const PostCard = ({
   numberOfComments,
   communityID,
   createdAt,
-  revalidate
-}: Partial<IProps>) => {
+  toggleVote
+}: Partial<IProps> & {
+  toggleVote: (postID: string, action: "upvote" | "downvote") => Promise<void>;
+}) => {
   const { token } = useAuth();
   const tabletUp = useMediaQuery(({ breakpoints }: Theme) =>
     breakpoints.up("sm")
   );
   const [saved, setSaved] = useState(false);
-  const [vote, setVote] = useState({ upVote: false, downVote: false });
-
-  useEffect(() => {
-    if (upvoted !== undefined && downvoted !== undefined) {
-      setVote({ upVote: upvoted, downVote: downvoted });
-    }
-  }, [upvoted, downvoted]);
 
   const toggleSaved = async () => {
     setSaved(!saved);
@@ -74,8 +68,6 @@ const PostCard = ({
         await API.delete(`users/me/savedPosts/${_id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
-
-        revalidate?.();
       } else {
         await API.post(
           "users/me/savedPosts",
@@ -84,8 +76,6 @@ const PostCard = ({
             headers: { Authorization: `Bearer ${token}` }
           }
         );
-
-        revalidate?.();
       }
     } catch (error) {
       console.log(error);
@@ -93,32 +83,10 @@ const PostCard = ({
   };
 
   const addVote = async (event: React.MouseEvent<HTMLButtonElement>) => {
-    const { vote }: { vote?: "upVote" | "downVote" } =
+    const { action }: { action?: "upvote" | "downvote" } =
       event.currentTarget.dataset;
 
-    if (vote) {
-      if (vote === "upVote") {
-        await API.patch(`posts/${_id}/upvote`, undefined, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-
-        setVote((prevState) => ({
-          upVote: !prevState.upVote,
-          downVote: false
-        }));
-      } else {
-        await API.patch(`posts/${_id}/downvote`, undefined, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-
-        setVote((prevState) => ({
-          upVote: false,
-          downVote: !prevState.downVote
-        }));
-      }
-
-      revalidate?.();
-    }
+    if (_id && action) toggleVote(_id, action);
   };
 
   return (
@@ -172,9 +140,9 @@ const PostCard = ({
         <Stack alignItems="center">
           <IconButton
             size="small"
-            color={vote.upVote ? "secondary" : "default"}
+            color={upvoted ? "secondary" : "default"}
             aria-label="up vote"
-            data-vote="upVote"
+            data-action="upvote"
             onClick={addVote}
           >
             <Forward fontSize="small" transform="rotate(-90)" />
@@ -182,9 +150,9 @@ const PostCard = ({
           <Typography variant="caption">{upvotes}</Typography>
           <IconButton
             size="small"
-            color={vote.downVote ? "secondary" : "default"}
+            color={downvoted ? "secondary" : "default"}
             aria-label="down vote"
-            data-vote="downVote"
+            data-action="downvote"
             onClick={addVote}
           >
             <Forward fontSize="small" transform="rotate(90)" />

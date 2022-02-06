@@ -41,7 +41,6 @@ const AuthProvider = ({ children }: IProviderProps) => {
   >(
     () => {
       const refreshToken = getRefreshToken();
-      console.log({ refreshToken });
       return ["auth/token", refreshToken];
     },
     fetcher,

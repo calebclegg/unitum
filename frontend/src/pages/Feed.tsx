@@ -1,11 +1,30 @@
+import Helmet from "react-helmet";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import PostCard, { IProps as IPost } from "../components/PostCard";
-import { useData } from "../hooks";
-import Helmet from "react-helmet";
+import { useData, usePostsActions } from "../hooks";
+import { API } from "../lib";
+import { useAuth } from "../context/Auth";
+
 const Feed = () => {
-  const { data: posts, mutate } = useData<IPost[]>("posts");
+  const { token } = useAuth();
+  const { data: posts, mutate } = useData<IPost[]>("posts", {
+    refreshInterval: 10000
+  });
+  const { toggleVote } = usePostsActions(posts, mutate);
+
+  const toggleSave = async (postID: string) => {
+    posts?.map((post) => {
+      if (post._id === postID) {
+        console.log(post);
+      }
+    });
+
+    await API.delete(`users/me/savedPosts/${postID}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  };
 
   return (
     <>
@@ -36,7 +55,7 @@ const Feed = () => {
         }}
       >
         {posts?.map((post) => (
-          <PostCard key={post._id} {...post} revalidate={mutate} />
+          <PostCard key={post._id} {...post} toggleVote={toggleVote} />
         ))}
       </Stack>
     </>

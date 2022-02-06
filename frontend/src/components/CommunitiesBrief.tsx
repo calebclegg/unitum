@@ -1,8 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
+import LoadingButton from "@mui/lab/LoadingButton";
 import Box from "@mui/system/Box";
 import Avatar from "@mui/material/Avatar";
 import Paper from "@mui/material/Paper";
-import MuiLink from "@mui/material/Link";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
@@ -83,9 +83,7 @@ const CommunitiesBrief = () => {
             </ListItem>
           ))}
         </List>
-        <MuiLink component={Link} to="/communities">
-          See all communities
-        </MuiLink>
+        <LoadingButton>See more</LoadingButton>
       </Paper>
     </Box>
   );
