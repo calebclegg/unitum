@@ -9,9 +9,11 @@ import Landing from "./pages/Landing";
 import Layout from "./components/Layout";
 import AOS from "aos";
 import "aos/dist/aos.css";
+
 const Chat = lazy(() => import("./pages/Chat"));
 const Feed = lazy(() => import("./pages/Feed"));
 const Post = lazy(() => import("./pages/Post"));
+const Communities = lazy(() => import("./pages/Communities"));
 const Search = lazy(() => import("./pages/Search"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Notification = lazy(() => import("./pages/Notification"));
@@ -22,6 +24,7 @@ function App() {
   useEffect(() => {
     AOS.init();
   });
+
   return (
     <>
       <CssBaseline />
@@ -62,6 +65,9 @@ function App() {
             <Route path="profile" element={<Profile />} />
             <Route path="feed" element={<Feed />} />
             <Route path="posts/:post_id" element={<Post />} />
+            <Route path="communities">
+              <Route index element={<Communities />} />
+            </Route>
             <Route path="search" element={<Search />} />
             <Route path="notifications" element={<Notification />} />
           </Route>

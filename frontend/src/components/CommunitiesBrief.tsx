@@ -10,7 +10,8 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Theme } from "@mui/material/styles";
-import { useUser } from "../hooks";
+import { IProps as IPost } from "./PostCard";
+import { useData, useUser } from "../hooks";
 
 const CommunitiesBrief = () => {
   const { user } = useUser();

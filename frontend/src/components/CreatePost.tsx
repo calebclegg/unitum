@@ -151,7 +151,7 @@ const CreatePost = () => {
         }
       });
 
-      navigate(`/posts/${data._id}`);
+      navigate(`/posts/${data._id}`, { replace: true });
       handleClose();
     } catch (error) {
       console.log(error);
