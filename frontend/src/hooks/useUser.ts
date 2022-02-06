@@ -1,3 +1,4 @@
+import { IProps as IPost } from "../components/PostCard";
 import { useNavigate } from "react-router-dom";
 import { clearRefreshToken } from "../utils";
 import { fetcher } from "../utils";
@@ -39,6 +40,14 @@ interface IUser {
   };
 }
 
+export interface INotification {
+  _id: string;
+  createdAt: string;
+  post: IPost;
+  type: "like" | "comment" | "post";
+  user: IUser;
+}
+
 export const useUser = () => {
   const navigate = useNavigate();
   const { updateToken } = useAuth();
@@ -55,9 +64,12 @@ export const useUser = () => {
     navigate("/login");
   };
 
-  const { data: notifications } = useData<any>("users/me/notifications", {
-    revalidateOnFocus: false
-  });
+  const { data: notifications } = useData<INotification[]>(
+    "users/me/notifications",
+    {
+      revalidateOnFocus: false
+    }
+  );
 
   return { user, notifications, logout };
 };
