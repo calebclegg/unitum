@@ -399,3 +399,24 @@ export const deleteComment = async (req: any, res: Response) => {
   await comment.delete();
   return res.sendStatus(200);
 };
+
+export const getPostWithCommID = async (req: any, res: Response) => {
+  const { skip, limit } = req.query;
+  const dbposts = await PostModel.find({ communityID: { $exists: true } })
+    .limit(limit)
+    .skip(skip)
+    .sort({ createdAt: -1 })
+    .select("-comments +upvoteBy")
+    .populate([
+      { path: "author", select: "profile.fullName profile.picture" },
+      { path: "communityID", select: "_id name picture createdAt" }
+    ]);
+  const posts = dbposts.map((post) => {
+    const postObj = { ...post.toObject() };
+    delete postObj.upvoteBy;
+    delete postObj.downVoteBy;
+    delete postObj.comments;
+    return postObj;
+  });
+  return res.json(posts);
+};
