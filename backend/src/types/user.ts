@@ -19,7 +19,7 @@ interface IProfile {
   fullName?: string;
   picture?: string;
   dob?: Date;
-  education?: Types.ObjectId[];
+  education?: IEducation;
   communities?: Types.ObjectId[];
   schoolWork?: Types.ObjectId[];
   unicoyn: number;

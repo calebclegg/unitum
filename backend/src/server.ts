@@ -88,7 +88,7 @@ app.use("/api/contact", contactRoutes);
 app.use("/api/uploads", uploadsRoute);
 
 app.use((err: Error, req: any, res: Response, next: NextFunction) => {
-  // console.log(err);
+  console.log(err);
   res.status(500).json({ message: "Something went wrong" });
 });
 //Mount api routes here
