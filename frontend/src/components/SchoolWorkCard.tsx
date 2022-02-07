@@ -41,10 +41,9 @@ const SchoolWorkCard = ({
   media,
   grade,
   date,
-  createdAt,
-}: Partial<IProps>
-) => {
-    const tabletUp = useMediaQuery(({ breakpoints }: Theme) =>
+  createdAt
+}: Partial<IProps>) => {
+  const tabletUp = useMediaQuery(({ breakpoints }: Theme) =>
     breakpoints.up("sm")
   );
 
@@ -110,11 +109,7 @@ const SchoolWorkCard = ({
             </MuiLink>
           </CardContent>
           <CardActions>
-            <Button
-              variant="text"
-            >
-              {grade}
-            </Button>
+            <Button variant="text">{grade}</Button>
           </CardActions>
         </div>
       </Stack>

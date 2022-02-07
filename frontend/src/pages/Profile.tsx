@@ -143,7 +143,11 @@ const Profile = () => {
               <Typography variant="subtitle1">
                 {user?.profile.education.school.name}
               </Typography>
-              <IconButton size="small" color="primary" href={user?.profile.education.school.url || "#"}>
+              <IconButton
+                size="small"
+                color="primary"
+                href={user?.profile.education.school.url || "#"}
+              >
                 <Link fontSize="small" />
               </IconButton>
             </Stack>
@@ -155,7 +159,9 @@ const Profile = () => {
               Field of Study
             </Typography>
             <Stack direction="row" alignItems="center" spacing={2}>
-              <Typography variant="subtitle1">{user?.profile.education.fieldOfStudy}</Typography>
+              <Typography variant="subtitle1">
+                {user?.profile.education.fieldOfStudy}
+              </Typography>
             </Stack>
           </div>
         </Stack>
@@ -175,7 +181,9 @@ const Profile = () => {
               Grade
             </Typography>
             <Stack direction="row" alignItems="center" spacing={2}>
-              <Typography variant="subtitle1">{user?.profile.education.grade || "---"}</Typography>
+              <Typography variant="subtitle1">
+                {user?.profile.education.grade || "---"}
+              </Typography>
             </Stack>
           </Stack>
         </Stack>
@@ -186,7 +194,11 @@ const Profile = () => {
             </Typography>
             <Stack direction="row" alignItems="center" spacing={2}>
               <Typography variant="subtitle1">
-              {user?.profile.education.startDate ? new Date(`${user?.profile.education.startDate}`).toLocaleDateString() : "---"}
+                {user?.profile.education.startDate
+                  ? new Date(
+                      `${user?.profile.education.startDate}`
+                    ).toLocaleDateString()
+                  : "---"}
               </Typography>
             </Stack>
           </div>
@@ -196,7 +208,11 @@ const Profile = () => {
             </Typography>
             <Stack direction="row" alignItems="center" spacing={2}>
               <Typography variant="subtitle1">
-                {user?.profile.education.endDate ? new Date(`${user?.profile.education.endDate}`).toLocaleDateString() : "---"}
+                {user?.profile.education.endDate
+                  ? new Date(
+                      `${user?.profile.education.endDate}`
+                    ).toLocaleDateString()
+                  : "---"}
               </Typography>
             </Stack>
           </Stack>
