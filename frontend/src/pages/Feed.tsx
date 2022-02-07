@@ -22,7 +22,7 @@ const Feed = () => {
         sx={{
           px: 3,
           py: 1.5,
-          maxWidth: ({ breakpoints }) => breakpoints.values.md
+          width: "100%"
         }}
       >
         <Typography variant="h5" fontWeight={500} component="h1">
@@ -31,7 +31,7 @@ const Feed = () => {
       </Paper>
       <Stack
         spacing={2}
-        maxWidth={({ breakpoints }) => breakpoints.values.md}
+        width="100%"
         sx={{
           "& .MuiPaper-rounded:first-of-type": {
             borderTopLeftRadius: 0,
