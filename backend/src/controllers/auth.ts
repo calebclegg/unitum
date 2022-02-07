@@ -77,6 +77,7 @@ export const externalAuth = async (req: any, res: Response) => {
     "+authProvider"
   );
   let accessToken, refreshToken;
+  console.log(userData);
   if (!dbUser) {
     const newUser = new User({
       ...userData,
@@ -84,6 +85,7 @@ export const externalAuth = async (req: any, res: Response) => {
       "profile.fullName": userData?.fullName
     });
 
+    console.log(newUser);
     const savedUser = await newUser.save();
     accessToken = await createToken(savedUser);
     refreshToken = await createRefreshToken(savedUser);
