@@ -64,7 +64,7 @@ const Profile = () => {
           </IconButton>
         </Grid>
       </Grid>
-      <Box id="education" mt={4} mb={3}>
+      <Box id="education" mt={4} mb={3} width="min(800px, 100%)">
         <Stack direction="row" alignItems="center" spacing={2}>
           <Typography variant="h4" fontWeight={500} component="h2">
             Education
