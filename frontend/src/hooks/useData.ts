@@ -4,11 +4,14 @@ import useSWR, { SWRConfiguration } from "swr";
 import { useAuth } from "../context/Auth";
 import { fetcher } from "../utils";
 
-export const useData = <Data>(key: string, config?: SWRConfiguration) => {
+export const useData = <Data>(
+  key: string | null,
+  config?: SWRConfiguration
+) => {
   const { token } = useAuth();
   const [staleData, setStaleData] = useState<Data | null>(null);
   const { data, ...rest } = useSWR<Data, AxiosError>(
-    token ? [key, token] : null,
+    token && key ? [key, token] : null,
     fetcher,
     config
   );
