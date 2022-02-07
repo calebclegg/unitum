@@ -4,14 +4,15 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Paper from "@mui/material/Paper";
-import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Theme } from "@mui/material/styles";
-import PostCard, { IProps as IPost } from "../components/PostCard";
 import { useData, useUser, usePostsActions } from "../hooks";
+import PostCard, { IProps as IPost } from "../components/PostCard";
 import FeedLayout from "../components/FeedLayout";
+import { lazy, Suspense } from "react";
+
+const CreateCommunity = lazy(() => import("../components/CreateCommunity"));
 
 const Communities = () => {
   const tabletUp = useMediaQuery(({ breakpoints }: Theme) =>
@@ -67,6 +68,9 @@ const Communities = () => {
           </List>
         </>
       )}
+      <Suspense fallback={<div />}>
+        <CreateCommunity />
+      </Suspense>
     </>
   );
 };

@@ -1,6 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
+import Add from "@mui/icons-material/Add";
 import Box from "@mui/system/Box";
 import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -67,7 +69,11 @@ const CommunitiesBrief = () => {
             </ListItem>
           ))}
         </List>
-        {pathname !== "/communities" && (
+        {pathname === "/communities" ? (
+          <Button fullWidth startIcon={<Add />} href="#create-community">
+            Create Community
+          </Button>
+        ) : (
           <MuiLink component={Link} to="/communities">
             See all communities
           </MuiLink>
