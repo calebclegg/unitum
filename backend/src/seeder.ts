@@ -42,7 +42,7 @@ export const importData = async () => {
 
     let k = 0;
     const postL = posts.map((post) => {
-      const pos = { ...post, author: createdUsers[i]._id };
+      const pos = { ...post, author: createdUsers[k]._id };
       k++;
       return pos;
     });
@@ -52,7 +52,7 @@ export const importData = async () => {
     const chatL = chats.map((chat) => {
       const chatObj = {
         ...chat,
-        participant: [createdUsers[i]._id, createdUsers[i + 1]._id]
+        participant: [createdUsers[j]._id, createdUsers[j + 1]._id]
       };
       j++;
       return chatObj;

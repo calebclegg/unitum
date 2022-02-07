@@ -2,27 +2,6 @@ import bcrypt from "bcryptjs";
 
 const users = [
   {
-    fullName: "John Barnes",
-    email: "ohenesetwumasi@gmail.com",
-    password: bcrypt.hashSync("jaybarnes3319", 10),
-    role: "active",
-    profile: {
-      picture: "https://liel2c.deta.dev/images/2CqdBMbBaKkxJFv5kzDkHQ.jpeg",
-      fullName: "John Barnes",
-      education: {
-        school: {
-          name: "KNUST"
-        },
-        degree: "Associate",
-        fieldOfStudy: "Computer Science and Engineering",
-        startDate: "2020-09-02",
-        grade: 83
-      },
-      communities: new Array(),
-      schoolWork: new Array()
-    }
-  },
-  {
     fullName: "John Doe",
     email: "john@example.com",
     password: bcrypt.hashSync("123456", 10),
