@@ -32,11 +32,10 @@ const Layout = () => {
           <Sidebar open={isDrawerOpened} handleClose={closeDrawer} />
         </Suspense>
         <Container
-          maxWidth="md"
           component="main"
           id="main-content"
           disableGutters={desktopUp}
-          sx={{ pt: 11, width: "unset", flexGrow: 1 }}
+          sx={{ pt: 11, width: "min(800px, 100%)", maxWidth: 800 }}
         >
           <Outlet />
         </Container>
