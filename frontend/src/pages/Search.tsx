@@ -15,6 +15,7 @@ import { useAuth } from "../context/Auth";
 import Empty from "../components/Search/Empty";
 import Failure from "../components/Search/Failure";
 import Tag from "../components/Tag";
+import RenderResult from "../components/Search/RenderResult";
 
 const Search = () => {
   const { token } = useAuth();
@@ -90,19 +91,8 @@ const Search = () => {
       />
       {query && !error ? (
         <List role="listbox">
-          {searchResults?.map((i: any) => (
-            <ListItem key={i} role="option" id={`item-${i}`} button>
-              <ListItemText
-                primary={
-                  <Typography
-                    dangerouslySetInnerHTML={{ __html: result }}
-                    color={isValidating ? "grey.500" : "text.primary"}
-                  />
-                }
-                secondary={<Tag />}
-                disableTypography
-              />
-            </ListItem>
+          {searchResults?.map((result: any) => (
+            <RenderResult key={result._id} result={result} query={query} />
           ))}
         </List>
       ) : null}

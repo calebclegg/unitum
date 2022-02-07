@@ -2,12 +2,12 @@ import { Link, useLocation } from "react-router-dom";
 import Box from "@mui/system/Box";
 import Avatar from "@mui/material/Avatar";
 import Paper from "@mui/material/Paper";
-import MuiLink from "@mui/material/Link";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Typography from "@mui/material/Typography";
+import MuiLink from "@mui/material/Link";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Theme } from "@mui/material/styles";
 import { useUser } from "../hooks";
@@ -19,9 +19,6 @@ const CommunitiesBrief = () => {
   const tabletLaptop = useMediaQuery(({ breakpoints }: Theme) =>
     breakpoints.between("sm", "lg")
   );
-  const laptopUp = useMediaQuery(({ breakpoints }: Theme) =>
-    breakpoints.up("md")
-  );
 
   return (
     <Box
@@ -29,7 +26,11 @@ const CommunitiesBrief = () => {
       top={0}
       flexGrow={1}
       display={tabletLaptop ? "none" : undefined}
-      visibility={pathname !== "/feed" ? "hidden" : "visible"}
+      visibility={
+        pathname !== "/feed" && !pathname.includes("/communities")
+          ? "hidden"
+          : "visible"
+      }
       ml={tabletLaptop ? "0 !important" : undefined}
     >
       <Paper
@@ -41,15 +42,14 @@ const CommunitiesBrief = () => {
           mt: 11,
           position: "sticky",
           top: ({ spacing }) => spacing(11),
-          width: "max-content",
-          maxWidth: laptopUp ? undefined : 300
+          width: "max-content"
         }}
       >
         <Typography variant="h6" component="h2">
           Communities
         </Typography>
         <List>
-          {user?.profile.communities.map(({ _id, name }) => (
+          {user?.profile.communities.map(({ _id, name, picture }) => (
             <ListItem
               key={_id}
               button
@@ -58,35 +58,21 @@ const CommunitiesBrief = () => {
               sx={{ my: 2 }}
             >
               <ListItemAvatar>
-                <Avatar>{name.charAt(0).toUpperCase()}</Avatar>
+                <Avatar src={picture} alt={name} variant="rounded" />
               </ListItemAvatar>
               <ListItemText
                 primaryTypographyProps={{ sx: { whiteSpace: "nowrap" } }}
               >
                 {name}
               </ListItemText>
-              <Typography
-                variant="caption"
-                fontSize="0.5rem"
-                sx={{
-                  ml: 4,
-                  color: "grey.100",
-                  bgcolor: "primary.main",
-                  borderRadius: "50%",
-                  width: 20,
-                  height: 20,
-                  display: "grid",
-                  placeItems: "center"
-                }}
-              >
-                {Math.floor(Math.random() * 100)}
-              </Typography>
             </ListItem>
           ))}
         </List>
-        <MuiLink component={Link} to="/communities">
-          See all communities
-        </MuiLink>
+        {pathname !== "/communities" && (
+          <MuiLink component={Link} to="/communities">
+            See all communities
+          </MuiLink>
+        )}
       </Paper>
     </Box>
   );

@@ -1,10 +1,11 @@
+import { IProps as IPost } from "../components/PostCard";
 import { useNavigate } from "react-router-dom";
 import { clearRefreshToken } from "../utils";
 import { fetcher } from "../utils";
 import { useData } from ".";
 import { useAuth } from "../context/Auth";
 
-interface ICommunity {
+export interface ICommunity {
   _id: string;
   name: string;
   picture: string;
@@ -16,7 +17,7 @@ interface ICommunity {
   }[];
 }
 
-interface IUser {
+export interface IUser {
   _id: string;
   email: string;
   profile: {
@@ -34,9 +35,21 @@ interface IUser {
       school: {
         _id: string;
         name: string;
+        url: string;
       };
-    }[];
+      endDate: string;
+      degree: string;
+      grade: string;
+    };
   };
+}
+
+export interface INotification {
+  _id: string;
+  createdAt: string;
+  post: IPost;
+  type: "like" | "comment" | "post";
+  user: IUser;
 }
 
 export const useUser = () => {
@@ -55,9 +68,12 @@ export const useUser = () => {
     navigate("/login");
   };
 
-  const { data: notifications } = useData<any>("users/me/notifications", {
-    revalidateOnFocus: false
-  });
+  const { data: notifications } = useData<INotification[]>(
+    "users/me/notifications",
+    {
+      revalidateOnFocus: false
+    }
+  );
 
   return { user, notifications, logout };
 };

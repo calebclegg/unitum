@@ -36,7 +36,7 @@ const storage = multerS3({
 });
 
 function checkFileType(file: Express.Multer.File, cb: any) {
-  const fileTypes = /jpeg|jpg|png/;
+  const fileTypes = /jpeg|jpg|png|pdf|docx|doc|webp/;
   const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
   const mimetype = fileTypes.test(file.mimetype);
 

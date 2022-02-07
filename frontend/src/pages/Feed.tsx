@@ -1,11 +1,15 @@
+import Helmet from "react-helmet";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import PostCard, { IProps as IPost } from "../components/PostCard";
-import { useData } from "../hooks";
-import Helmet from "react-helmet";
+import { useData, usePostsActions } from "../hooks";
+
 const Feed = () => {
-  const { data: posts, mutate } = useData<IPost[]>("posts");
+  const { data: posts, mutate } = useData<IPost[]>("posts", {
+    refreshInterval: 10000
+  });
+  const { toggleSave, toggleVote } = usePostsActions(posts, mutate);
 
   return (
     <>
@@ -18,7 +22,7 @@ const Feed = () => {
         sx={{
           px: 3,
           py: 1.5,
-          maxWidth: ({ breakpoints }) => breakpoints.values.md
+          width: "100%"
         }}
       >
         <Typography variant="h5" fontWeight={500} component="h1">
@@ -27,7 +31,7 @@ const Feed = () => {
       </Paper>
       <Stack
         spacing={2}
-        maxWidth={({ breakpoints }) => breakpoints.values.md}
+        width="100%"
         sx={{
           "& .MuiPaper-rounded:first-of-type": {
             borderTopLeftRadius: 0,
@@ -36,7 +40,12 @@ const Feed = () => {
         }}
       >
         {posts?.map((post) => (
-          <PostCard key={post._id} {...post} revalidate={mutate} />
+          <PostCard
+            {...post}
+            key={post._id}
+            toggleSave={toggleSave}
+            toggleVote={toggleVote}
+          />
         ))}
       </Stack>
     </>

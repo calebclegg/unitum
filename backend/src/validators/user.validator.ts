@@ -36,14 +36,14 @@ const profileSchema = Joi.object({
   picture: Joi.string(),
   dob: Joi.date(),
   education: educationSchema,
-  communities: Joi.array(),
-  unicoyn: Joi.number()
+  communities: Joi.array()
 });
 
 const profileUpdateSchema = Joi.object({
   fullName: Joi.string().min(2).max(20),
   picture: Joi.string(),
-  dob: Joi.date()
+  dob: Joi.date(),
+  education: educationEditSchema
 }).options({ abortEarly: false });
 
 function validateRegUser(data: IUser) {

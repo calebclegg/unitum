@@ -1,11 +1,19 @@
 import Chip from "@mui/material/Chip";
 
-const Tag = () => {
+const colors = {
+  post: "primary",
+  user: "error",
+  community: "success"
+};
+
+type TColors = "primary" | "error" | "success";
+
+const Tag = ({ type }: { type: "post" | "user" | "community" }) => {
   return (
     <Chip
-      label="post"
+      label={type}
       variant="outlined"
-      color="primary"
+      color={colors[type] as TColors}
       sx={{ height: 20, borderRadius: 0.5 }}
     />
   );

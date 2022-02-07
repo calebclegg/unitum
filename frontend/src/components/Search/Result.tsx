@@ -16,6 +16,7 @@ import { useAuth } from "../../context/Auth";
 import { fetcher } from "../../utils";
 import Empty from "./Empty";
 import Failure from "./Failure";
+import RenderResult from "./RenderResult";
 
 export const content =
   "...ipsum dolor sit amet consectetur adipisicing elit...";
@@ -52,11 +53,6 @@ const Result = ({ anchorEl, query }: IProps) => {
   const open = Boolean(anchorEl);
   const [filters, setFilters] = useState<string[]>([]);
 
-  const result = useMemo(
-    () => content.replaceAll(query, `<mark>${query}</mark>`),
-    [query]
-  );
-
   const {
     data: searchResult,
     error,
@@ -81,8 +77,6 @@ const Result = ({ anchorEl, query }: IProps) => {
       shouldRetryOnError: false
     }
   );
-
-  console.log({ searchResult });
 
   useEffect(() => {
     if (paperRef.current) {
@@ -160,19 +154,8 @@ const Result = ({ anchorEl, query }: IProps) => {
         />
         {query && !error ? (
           <List role="listbox">
-            {[1, 2, 3, 4].map((i) => (
-              <ListItem key={i} role="option" id={`item-${i}`} button>
-                <ListItemText
-                  primary={
-                    <Typography
-                      dangerouslySetInnerHTML={{ __html: result }}
-                      color={isValidating ? "grey.500" : "text.primary"}
-                    />
-                  }
-                  secondary={<Tag />}
-                  disableTypography
-                />
-              </ListItem>
+            {searchResult?.map((result: any) => (
+              <RenderResult key={result._id} result={result} query={query} />
             ))}
           </List>
         ) : null}

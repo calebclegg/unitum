@@ -17,17 +17,12 @@ import { Link } from "react-router-dom";
 
 export interface IProps {
   _id: string;
-  upvotes: number;
-  upvoted: boolean;
-  downvoted: boolean;
-  saved: boolean;
-  media: string[];
-  numberOfComments: number;
-  communityID: {
-    _id: string;
-    name: string;
-  };
-  author: {
+  title: string;
+  description?: string;
+  media?: string[];
+  date?: Date;
+  grade?: string;
+  userID: {
     profile: {
       _id: string;
       picture: string;
@@ -38,75 +33,43 @@ export interface IProps {
   createdAt: string;
 }
 
-const PostCard = ({
+const SchoolWorkCard = ({
   _id,
-  author,
-  upvoted,
-  downvoted,
-  saved,
-  upvotes,
-  body,
-  numberOfComments,
-  communityID,
+  userID,
+  title,
+  description,
+  media,
+  grade,
+  date,
   createdAt,
-  toggleSave,
-  toggleVote
-}: Partial<IProps> & {
-  toggleSave: (postID: string) => Promise<void>;
-  toggleVote: (postID: string, action: "upvote" | "downvote") => Promise<void>;
-}) => {
-  const tabletUp = useMediaQuery(({ breakpoints }: Theme) =>
+}: Partial<IProps>
+) => {
+    const tabletUp = useMediaQuery(({ breakpoints }: Theme) =>
     breakpoints.up("sm")
   );
-
-  const addVote = async (event: React.MouseEvent<HTMLButtonElement>) => {
-    const { action }: { action?: "upvote" | "downvote" } =
-      event.currentTarget.dataset;
-
-    if (_id && action) toggleVote(_id, action);
-  };
 
   return (
     <Card variant="outlined" sx={{ p: tabletUp ? 1 : 0 }}>
       <CardHeader
         avatar={
           <Avatar
-            src={author?.profile.picture}
-            alt={author?.profile.fullName}
+            src={userID?.profile.picture}
+            alt={userID?.profile.fullName}
             sx={{ bgcolor: "rgb(255, 0, 0)" }}
           />
         }
-        action={
-          <IconButton
-            sx={{ color: ({ customPalette }) => customPalette.navyBlue }}
-            aria-label={saved ? "remove post from saved" : "save post"}
-            onClick={() => _id && toggleSave(_id)}
-          >
-            {saved ? <Bookmark /> : <BookmarkOutlined />}
-          </IconButton>
-        }
-        title={author?.profile.fullName}
+        // action={
+        //   <IconButton
+        //     sx={{ color: ({ customPalette }) => customPalette.navyBlue }}
+        //     aria-label={saved ? "remove post from saved" : "save post"}
+        //     onClick={() => _id && toggleSave(_id)}
+        //   >
+        //     {saved ? <Bookmark /> : <BookmarkOutlined />}
+        //   </IconButton>
+        // }
+        title={userID?.profile.fullName}
         subheader={
           <>
-            {communityID?.name && (
-              <>
-                <span
-                  style={
-                    tabletUp
-                      ? undefined
-                      : {
-                          width: 80,
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis"
-                        }
-                  }
-                >
-                  {communityID.name}
-                </span>
-                <span>&bull;</span>
-              </>
-            )}
             <span>{createdAt && new Date(createdAt).toDateString()}</span>
           </>
         }
@@ -114,7 +77,7 @@ const PostCard = ({
         subheaderTypographyProps={{ sx: { display: "flex", gap: 1 } }}
       />
       <Stack direction="row" ml={2}>
-        <Stack alignItems="center">
+        {/* <Stack alignItems="center">
           <IconButton
             size="small"
             color={upvoted ? "secondary" : "default"}
@@ -134,7 +97,7 @@ const PostCard = ({
           >
             <Forward fontSize="small" transform="rotate(90)" />
           </IconButton>
-        </Stack>
+        </Stack> */}
         <div>
           <CardContent sx={{ py: 0.5 }}>
             <MuiLink
@@ -143,20 +106,14 @@ const PostCard = ({
               color="textSecondary"
               underline="none"
             >
-              {body}
+              {description}
             </MuiLink>
           </CardContent>
           <CardActions>
             <Button
               variant="text"
-              component={Link}
-              to={`/posts/${_id}#comments`}
             >
-              {numberOfComments ? (
-                <>Comments ({numberOfComments})</>
-              ) : (
-                <>No comments yet</>
-              )}
+              {grade}
             </Button>
           </CardActions>
         </div>
@@ -165,4 +122,4 @@ const PostCard = ({
   );
 };
 
-export default PostCard;
+export default SchoolWorkCard;

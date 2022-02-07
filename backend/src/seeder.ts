@@ -2,11 +2,14 @@ import users from "./data/users";
 import { communities } from "./data/community";
 import { posts } from "./data/posts";
 import User, { Education } from "./models/User";
+import { Chat, Message } from "./models/Chat";
+import { chats, messages } from "./data/chat";
 import { education } from "./data/users";
 import CommunityModel from "./models/Community";
-import { PostModel } from "./models/Post";
+import { CommentModel, PostModel } from "./models/Post";
 import connectDB from "./config/db";
 import { config } from "dotenv-flow";
+import { SchoolWork } from "./models/schoolWork";
 
 config();
 const db = connectDB();
@@ -16,12 +19,12 @@ export const importData = async () => {
     await User.deleteMany();
     await CommunityModel.deleteMany();
     await PostModel.deleteMany();
+    await CommentModel.deleteMany();
+    await Education.deleteMany();
+    await SchoolWork.deleteMany();
+    await Chat.deleteMany();
+    await Message.deleteMany();
 
-    // const educations = await Education.insertMany(education);
-
-    // users.forEach((user) => {
-    //   return (user.profile.education = [educations[0]._id]);
-    // });
     const createdUsers = await User.insertMany(users);
 
     let i = 0;
@@ -37,15 +40,37 @@ export const importData = async () => {
     user.profile?.communities?.push(savedCommunities[1]._id);
     await user.save();
 
+    let k = 0;
     const postL = posts.map((post) => {
-      let i = 0;
       const pos = { ...post, author: createdUsers[i]._id };
-      i++;
+      k++;
       return pos;
     });
 
     const savedPosts = await PostModel.insertMany(postL);
+    let j = 0;
+    const chatL = chats.map((chat) => {
+      const chatObj = {
+        ...chat,
+        participant: [createdUsers[i]._id, createdUsers[i + 1]._id]
+      };
+      j++;
+      return chatObj;
+    });
 
+    const savedChats = await Chat.insertMany(chatL);
+
+    let l = 0;
+    const messageL = messages.map((message) => {
+      const messageObj = {
+        ...message,
+        from: savedChats[0].participant[0],
+        to: savedChats[0].participant[1],
+        chatID: savedChats[0]._id
+      };
+    });
+
+    const savedMessages = await Message.insertMany(messageL);
     (await db).connection.close();
     process.exit();
   } catch (error) {
@@ -60,6 +85,9 @@ export const destroyData = async () => {
     await User.deleteMany();
     await CommunityModel.deleteMany();
     await PostModel.deleteMany();
+    await CommentModel.deleteMany();
+    await Education.deleteMany();
+    await SchoolWork.deleteMany();
 
     (await db).connection.close();
     process.exit();
