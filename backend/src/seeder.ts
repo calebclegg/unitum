@@ -42,19 +42,22 @@ export const importData = async () => {
 
     let k = 0;
     const postL = posts.map((post) => {
-      const pos = { ...post, author: createdUsers[i]._id };
+      const pos = { ...post, author: createdUsers[k]._id };
       k++;
       return pos;
     });
+    console.log("chatL");
 
     const savedPosts = await PostModel.insertMany(postL);
     let j = 0;
     const chatL = chats.map((chat) => {
+      console.log("chatL");
       const chatObj = {
         ...chat,
-        participant: [createdUsers[i]._id, createdUsers[i + 1]._id]
+        participant: [createdUsers[j]._id, createdUsers[j + 1]._id]
       };
       j++;
+      console.log("chatL");
       return chatObj;
     });
 
@@ -68,6 +71,7 @@ export const importData = async () => {
         to: savedChats[0].participant[1],
         chatID: savedChats[0]._id
       };
+      return messageObj;
     });
 
     const savedMessages = await Message.insertMany(messageL);

@@ -36,10 +36,9 @@ Content-Type: application/json
 X-Auth-Provider: GOOGLE
 
 {
-    "given_name": "Barnes",
-    "family_name": "Oduro",
-    "otherNames": "Twumasi",
-    "email": "oduro23@gmail.com",
+   "fullName": "Name Name",
+   "picture": "http://localhost",
+    "email": "oduro22@gmail.com",
     "authProvider": "GOOGLE"
 }
 
@@ -65,7 +64,7 @@ Content-Type: application/json
 
 GET http://localhost:5000/api/users/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEY2hvbGVAZ21haWwuY29tIiwiaXNzIjoidW5pdHVtOnBsYXRmb3JtIiwiaWF0IjoxNjQ0MTYxMjgwLCJleHAiOjE2NDQxNjE4ODB9.kEPgvDILhObc6tjLAVYWty6XwTBTcoObQI3AkHyN6Ds
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJvZHVybzIyQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NDIzOTgzNCwiZXhwIjoxNjQ0MjQwNDM0fQ.sC7HUpgpU9NkskG8xibV0fHDYtcobximfuazLbb2REQ
 
 ###
 
@@ -143,12 +142,23 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 
 POST http://localhost:5000/api/community/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEY2hvbGVAZ21haWwuY29tIiwiaXNzIjoidW5pdHVtOnBsYXRmb3JtIiwiaWF0IjoxNjQ0MTgxMTM3LCJleHAiOjE2NDQxODE3Mzd9.kXFkJRGBUfDacFhoMY_pvg5HNdp4t9XYHe7Oh4cVTTw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEY2hvbGVAZ21haWwuY29tIiwiaXNzIjoidW5pdHVtOnBsYXRmb3JtIiwiaWF0IjoxNjQ0MjM4NTEzLCJleHAiOjE2NDQyMzkxMTN9.JjMm4NiDdPp8f6fG0tDmssCi1333w3OVzkw8O2mzHdE
 
 {
     "name": "SWR gang",
     "description": "All about SWR"
 }
+
+###
+
+POST http://localhost:5000/api/community/620036d7f5ddd13572603ee2/join HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NDIyOTQzMiwiZXhwIjoxNjQ0MjMwMDMyfQ.qVXeUBEiuOKPgjsbuHQBaXablJvC5-aXqyB1wacJdBI
+
+###
+GET http://localhost:5000/api/community/620036d7f5ddd13572603ee2/requests HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEY2hvbGVAZ21haWwuY29tIiwiaXNzIjoidW5pdHVtOnBsYXRmb3JtIiwiaWF0IjoxNjQ0MjI5Njk5LCJleHAiOjE2NDQyMzAyOTl9.4DIYQpvTZ6gjvwYmGrTXYAZU5TQ2u7t1CD0HKpGpeRc
 
 ###
 PATCH http://localhost:5000/api/community/61f6c5e9322b64a993b1e956
@@ -172,7 +182,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 
 ###
 GET http://localhost:5000/api/community/ HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEY2hvbGVAZ21haWwuY29tIiwiaXNzIjoidW5pdHVtOnBsYXRmb3JtIiwiaWF0IjoxNjQ0MTcyODE1LCJleHAiOjE2NDQxNzM0MTV9.MZbH5K0h32wBTpxp1q8ODYTQilV1cZnI6_Mz4wb-sto
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NDIyOTQzMiwiZXhwIjoxNjQ0MjMwMDMyfQ.qVXeUBEiuOKPgjsbuHQBaXablJvC5-aXqyB1wacJdBI
 
 ###
 GET http://localhost:5000/api/community/posts HTTP/1.1
@@ -271,7 +281,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEY2hvbGVAZ
 
 POST http://localhost:5000/api/posts
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEY2hvbGVAZ21haWwuY29tIiwiaXNzIjoidW5pdHVtOnBsYXRmb3JtIiwiaWF0IjoxNjQ0MTcyODE1LCJleHAiOjE2NDQxNzM0MTV9.MZbH5K0h32wBTpxp1q8ODYTQilV1cZnI6_Mz4wb-sto
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEY2hvbGVAZ21haWwuY29tIiwiaXNzIjoidW5pdHVtOnBsYXRmb3JtIiwiaWF0IjoxNjQ0MjM4NTEzLCJleHAiOjE2NDQyMzkxMTN9.JjMm4NiDdPp8f6fG0tDmssCi1333w3OVzkw8O2mzHdE
 
 {
     "body": "Cloud Computing 2",
