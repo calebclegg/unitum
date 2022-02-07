@@ -1,11 +1,9 @@
 const normalizeGoogleData = async (data: any) => {
-  
   return {
     email: data.email,
-    firstname: data.given_name,
-    lastname: data.family_name,
-    picture: data.picture || null,
-    authProvider: data.authProvider,
+    fullName: data.name,
+    picture: data.imageUrl || null,
+    authProvider: data.googleId && "GOOGLE",
     role: data.role
   };
 };

@@ -8,14 +8,43 @@ import facebook from "../images/facebook-logo.svg";
 import twitter_square from "../images/twitter-logo_square.svg";
 import twitter from "../images/twitter-logo.svg";
 import google from "../images/google-logo.png";
-import { kebabToRegular } from "../utils";
+import {
+  getRedirectUrlFromState,
+  kebabToRegular,
+  saveRefreshToken,
+  TState
+} from "../utils";
 import { useDisplaySize } from "../hooks";
+import { GoogleLogin } from "react-google-login";
+import { API } from "../lib";
+import axios from "axios";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface IProps {
   formType: string;
+  setMessage: (message: string) => void;
 }
 
-const AuthProviders = ({ formType }: IProps) => {
+const AuthProviders = ({ formType, setMessage }: IProps) => {
+  const navigate = useNavigate();
+  const { state } = useLocation();
+  //responses
+  const responseGoogle = async (response: Record<string, any>) => {
+    if (response.accessToken) {
+      const { profileObj } = response;
+      try {
+        const { data } = await API.post("/auth/oauth/google", profileObj);
+        saveRefreshToken(data?.refreshToken);
+
+        navigate(getRedirectUrlFromState(state as TState), { replace: true });
+      } catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
+          setMessage(error.response.data.message);
+        }
+      }
+    }
+  };
+
   const tabletUp = useDisplaySize("sm");
   const laptopUp = useDisplaySize("md");
 
@@ -63,13 +92,23 @@ const AuthProviders = ({ formType }: IProps) => {
           >
             {kebabToRegular(formType)} with facebook
           </Button>
-          <Button
-            variant="outlined"
-            color="error"
-            startIcon={<img src={google} alt="google" width="30" height="30" />}
-          >
-            {kebabToRegular(formType)} with google
-          </Button>
+          <GoogleLogin
+            clientId="250767377397-68p1knjngdur342c3qcs993994otnhar.apps.googleusercontent.com"
+            render={(renderProps: Record<string, any>) => (
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={renderProps.onClick}
+                startIcon={
+                  <img src={google} alt="google" width="30" height="30" />
+                }
+              >
+                {kebabToRegular(formType)} with google
+              </Button>
+            )}
+            onSuccess={responseGoogle}
+            onFailure={responseGoogle}
+          />
           <Button
             sx={{ bgcolor: "#1DA1F2" }}
             startIcon={

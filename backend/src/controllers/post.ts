@@ -82,7 +82,7 @@ export const getPosts = async (req: any, res: Response) => {
       .select("-comments +upvoteBy")
       .populate([
         { path: "author", select: "profile.fullName profile.picture" },
-        { path: "communityID", select: "-__v -members" }
+        { path: "communityID", select: "-__v" }
       ])
       .skip(skip)
       .limit(limit)
@@ -93,7 +93,7 @@ export const getPosts = async (req: any, res: Response) => {
       .select("-comments +upvoteBy")
       .populate([
         { path: "author", select: "profile.fullName profile.picture" },
-        { path: "communityID", select: "-__v -members" }
+        { path: "communityID", select: "-__v" }
       ])
       .skip(skip)
       .limit(limit)
