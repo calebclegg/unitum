@@ -51,7 +51,7 @@ const AuthProviders = ({ formType, setMessage }: IProps) => {
     if (response.accessToken) {
       const { profileObj } = response;
       try {
-        const { data } = await API.post("/auth/oauth/google", profileObj);
+        const { data } = await API.post("/auth/oauth/facebook", profileObj);
         saveRefreshToken(data?.refreshToken);
 
         navigate(getRedirectUrlFromState(state as TState), { replace: true });
