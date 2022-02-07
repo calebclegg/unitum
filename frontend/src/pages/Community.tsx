@@ -13,8 +13,6 @@ const Community = () => {
     `posts?communityID=${comm_id}`
   );
 
-  console.log({ user, community });
-
   // const isMember = user ? community?.members.includes(user._id) : false;
 
   const { toggleSave, toggleVote } = usePostsActions(posts, mutate);

@@ -11,6 +11,7 @@ export interface ICommunity {
   picture: string;
   description: string;
   numberOfMembers: number;
+  createdAt: string;
   members: {
     info: any;
     role: string;

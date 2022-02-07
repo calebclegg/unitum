@@ -146,9 +146,7 @@ const Profile = () => {
               <IconButton
                 size="small"
                 color="primary"
-
                 href={user?.profile.education?.school?.url || "#"}
-
               >
                 <Link fontSize="small" />
               </IconButton>
@@ -162,9 +160,7 @@ const Profile = () => {
             </Typography>
             <Stack direction="row" alignItems="center" spacing={2}>
               <Typography variant="subtitle1">
-
                 {user?.profile.education?.fieldOfStudy || "---"}
-
               </Typography>
             </Stack>
           </div>
@@ -186,9 +182,7 @@ const Profile = () => {
             </Typography>
             <Stack direction="row" alignItems="center" spacing={2}>
               <Typography variant="subtitle1">
-
                 {user?.profile.education?.grade || "---"}
-
               </Typography>
             </Stack>
           </Stack>
@@ -200,11 +194,9 @@ const Profile = () => {
             </Typography>
             <Stack direction="row" alignItems="center" spacing={2}>
               <Typography variant="subtitle1">
-
                 {user?.profile.education?.startDate
                   ? new Date(
                       `${user?.profile.education?.startDate}`
-
                     ).toLocaleDateString()
                   : "---"}
               </Typography>
@@ -216,11 +208,9 @@ const Profile = () => {
             </Typography>
             <Stack direction="row" alignItems="center" spacing={2}>
               <Typography variant="subtitle1">
-
                 {user?.profile.education?.endDate
                   ? new Date(
                       `${user?.profile.education?.endDate}`
-
                     ).toLocaleDateString()
                   : "---"}
               </Typography>

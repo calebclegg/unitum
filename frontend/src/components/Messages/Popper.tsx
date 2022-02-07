@@ -1,21 +1,20 @@
 import Popover from "@mui/material/Popover";
 import { useState } from "react";
-import { useOpenWithHash } from "../../hooks";
 import MessagesList from "./MessagesList";
 
 interface IProps {
   anchorEl: HTMLButtonElement | null;
+  handleClose: () => void;
 }
 
-const Notifications = ({ anchorEl }: IProps) => {
-  const { open, handleClose } = useOpenWithHash("#messages");
+const Notifications = ({ anchorEl, handleClose }: IProps) => {
   const [secondaryTextEl, setSecondaryTextEl] =
     useState<HTMLParagraphElement | null>(null);
 
   return (
     <Popover
       id="messages"
-      open={Boolean(open && anchorEl)}
+      open={Boolean(anchorEl)}
       anchorEl={anchorEl}
       TransitionProps={{
         onTransitionEnd: () => {

@@ -88,6 +88,8 @@ const TopBar = ({ openDrawer }: IProps) => {
   const setAnchor = (
     event: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>
   ) => {
+    if (tabletUp) event.preventDefault();
+
     event.currentTarget.id === "open-notifications"
       ? setNotificationButton(
           (event as React.MouseEvent<HTMLButtonElement>).currentTarget
@@ -96,6 +98,9 @@ const TopBar = ({ openDrawer }: IProps) => {
           (event as React.MouseEvent<HTMLButtonElement>).currentTarget
         );
   };
+
+  const closeMessages = () => setMessagesButton(null);
+  const closeNotifications = () => setNotificationButton(null);
 
   return (
     <>
@@ -151,7 +156,7 @@ const TopBar = ({ openDrawer }: IProps) => {
                       component={Link}
                       aria-label="notifications"
                       onClick={setAnchor}
-                      to={tabletUp ? "#notifications" : "/notifications"}
+                      to={"/notifications"}
                       sx={{ color: "text.secondary" }}
                     >
                       <Badge
@@ -169,7 +174,7 @@ const TopBar = ({ openDrawer }: IProps) => {
                         aria-label="messages"
                         component={Link}
                         onClick={setAnchor}
-                        to={tabletUp ? "#messages" : "/messages"}
+                        to={"/messages"}
                         sx={{ color: "text.secondary" }}
                       >
                         <Badge
@@ -237,10 +242,13 @@ const TopBar = ({ openDrawer }: IProps) => {
             </Toolbar>
           </Container>
           <Suspense fallback={<div />}>
-            <Notifications anchorEl={notificationButton} />
+            <Notifications
+              anchorEl={notificationButton}
+              handleClose={closeNotifications}
+            />
           </Suspense>
           <Suspense fallback={<div />}>
-            <Messages anchorEl={messagesButton} />
+            <Messages anchorEl={messagesButton} handleClose={closeMessages} />
           </Suspense>
           <Suspense fallback={<div />}>
             <MenuOptions anchorEl={menuButton} handleClose={closeMenu} />
