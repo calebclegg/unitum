@@ -25,6 +25,7 @@ const CommunitiesBrief = () => {
       position="relative"
       top={0}
       flexGrow={1}
+      display={tabletLaptop ? "none" : undefined}
       visibility={
         pathname !== "/feed" && !pathname.includes("/communities")
           ? "hidden"
