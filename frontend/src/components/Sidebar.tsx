@@ -104,6 +104,7 @@ const Sidebar = ({ open, handleClose }: IProps) => {
               key={path}
               component={NavLink}
               to={path}
+              onClick={handleClose}
               sx={({ palette }) => ({
                 bgcolor:
                   path === pathname
