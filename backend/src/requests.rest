@@ -47,8 +47,8 @@ POST http://localhost:5000/api/auth/login
 Content-Type: application/json
 
 {
-   "email": "Dchole@gmail.com",
-   "password": "testuser"
+   "email": "rexosei111@gmail.com",
+   "password": "rexosei111"
 }
 
 ###
@@ -98,7 +98,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJvaGVuZXNld
 ###
 POST http://localhost:5000/api/users/me/schoolWork
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NDAxMDMyOCwiZXhwIjoxNjQ0MDEwOTI4fQ.jQqC4NCqRJ4IQSVvzFw--Al6hl3EZR1Sc2kBaTvLknA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NDE5NDI1OCwiZXhwIjoxNjQ0MTk0ODU4fQ.XjNii3eS5hNpdCYuh6oX8ITkg341m11N_PyjN9yEXZ0
 
 {
     "title": "New School Work 23",

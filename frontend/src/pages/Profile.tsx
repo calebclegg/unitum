@@ -1,4 +1,7 @@
 import Helmet from "react-helmet";
+import Close from "@mui/icons-material/Close";
+import Check from "@mui/icons-material/Check";
+import Message from "@mui/icons-material/Message";
 import Edit from "@mui/icons-material/Edit";
 import Link from "@mui/icons-material/Link";
 import Chip from "@mui/material/Chip";
@@ -7,23 +10,43 @@ import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/system/Box";
+import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { useRef } from "react";
+import InputAdornment from "@mui/material/InputAdornment";
+import { lazy, Suspense, useRef, useState } from "react";
 import { useUser } from "../hooks";
 import UserPosts from "../components/UserPosts";
-import { Message } from "@mui/icons-material";
+
+const EditEducation = lazy(() => import("../components/EditEducation"));
 
 const Profile = () => {
   const avatarRef = useRef<HTMLDivElement>(null);
   const { user } = useUser();
+  const [updating, setUpdating] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+
+  const toggleMode = () => setEditMode(!editMode);
+
+  const update = async () => {
+    try {
+      setUpdating(true);
+      console.log("trying");
+      toggleMode();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      console.log("done");
+      setUpdating(false);
+    }
+  };
 
   return (
     <>
       <Helmet>
         <title>{`${user?.profile.fullName} | Profile`}</title>
       </Helmet>
-      <Grid container spacing={2} alignItems="center">
+      <Grid container spacing={2} alignItems="center" marginTop={"1rem"}>
         <Grid item flexGrow="0 !important" width="fit-content" xs>
           <Avatar
             ref={avatarRef}
@@ -46,9 +69,43 @@ const Profile = () => {
           justifyContent="space-between"
         >
           <Stack spacing={1}>
-            <Typography variant="h4" fontWeight="500" component="h1">
-              {user?.profile.fullName}
-            </Typography>
+            {editMode ? (
+              <TextField
+                name="fullName"
+                label="Full Name"
+                value={user?.profile.fullName}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        size="small"
+                        aria-label="cancel"
+                        onClick={toggleMode}
+                      >
+                        <Close fontSize="small" />
+                      </IconButton>
+                      <IconButton
+                        size="small"
+                        color="success"
+                        aria-label="save"
+                        onClick={update}
+                      >
+                        <Check fontSize="small" />
+                      </IconButton>
+                    </InputAdornment>
+                  )
+                }}
+                sx={{
+                  "& input": {
+                    py: 1
+                  }
+                }}
+              />
+            ) : (
+              <Typography variant="h4" fontWeight="500" component="h1">
+                {user?.profile.fullName}
+              </Typography>
+            )}
             <Stack direction="row" alignItems="center" spacing={2}>
               <Button size="small" startIcon={<Message />}>
                 Start Chat
@@ -59,7 +116,7 @@ const Profile = () => {
               />
             </Stack>
           </Stack>
-          <IconButton>
+          <IconButton aria-label="edit user name" onClick={toggleMode}>
             <Edit />
           </IconButton>
         </Grid>
@@ -69,7 +126,11 @@ const Profile = () => {
           <Typography variant="h4" fontWeight={500} component="h2">
             Education
           </Typography>
-          <IconButton size="small">
+          <IconButton
+            size="small"
+            href="#edit-education"
+            aria-label="edit education"
+          >
             <Edit fontSize="small" />
           </IconButton>
         </Stack>
@@ -80,9 +141,15 @@ const Profile = () => {
             </Typography>
             <Stack direction="row" alignItems="center" spacing={2}>
               <Typography variant="subtitle1">
-                University of Mines and Technology
+                {user?.profile.education?.school?.name || "---"}
               </Typography>
-              <IconButton size="small" color="primary" href="#">
+              <IconButton
+                size="small"
+                color="primary"
+
+                href={user?.profile.education?.school?.url || "#"}
+
+              >
                 <Link fontSize="small" />
               </IconButton>
             </Stack>
@@ -94,7 +161,11 @@ const Profile = () => {
               Field of Study
             </Typography>
             <Stack direction="row" alignItems="center" spacing={2}>
-              <Typography variant="subtitle1">Computer Science</Typography>
+              <Typography variant="subtitle1">
+
+                {user?.profile.education?.fieldOfStudy || "---"}
+
+              </Typography>
             </Stack>
           </div>
         </Stack>
@@ -105,7 +176,7 @@ const Profile = () => {
             </Typography>
             <Stack direction="row" alignItems="center" spacing={2}>
               <Typography variant="subtitle1">
-                Bachelor&apos;s Degree
+                {user?.profile.education?.degree || "---"}
               </Typography>
             </Stack>
           </div>
@@ -114,7 +185,11 @@ const Profile = () => {
               Grade
             </Typography>
             <Stack direction="row" alignItems="center" spacing={2}>
-              <Typography variant="subtitle1">{70}</Typography>
+              <Typography variant="subtitle1">
+
+                {user?.profile.education?.grade || "---"}
+
+              </Typography>
             </Stack>
           </Stack>
         </Stack>
@@ -125,7 +200,13 @@ const Profile = () => {
             </Typography>
             <Stack direction="row" alignItems="center" spacing={2}>
               <Typography variant="subtitle1">
-                {new Date().toLocaleDateString()}
+
+                {user?.profile.education?.startDate
+                  ? new Date(
+                      `${user?.profile.education?.startDate}`
+
+                    ).toLocaleDateString()
+                  : "---"}
               </Typography>
             </Stack>
           </div>
@@ -135,13 +216,22 @@ const Profile = () => {
             </Typography>
             <Stack direction="row" alignItems="center" spacing={2}>
               <Typography variant="subtitle1">
-                {new Date().toLocaleDateString()}
+
+                {user?.profile.education?.endDate
+                  ? new Date(
+                      `${user?.profile.education?.endDate}`
+
+                    ).toLocaleDateString()
+                  : "---"}
               </Typography>
             </Stack>
           </Stack>
         </Stack>
       </Box>
       <UserPosts />
+      <Suspense fallback={<div />}>
+        <EditEducation updating={updating} update={update} />
+      </Suspense>
     </>
   );
 };

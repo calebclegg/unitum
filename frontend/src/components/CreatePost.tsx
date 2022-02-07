@@ -42,9 +42,6 @@ const CreatePost = () => {
   const tabletUp = useMediaQuery(({ breakpoints }: Theme) =>
     breakpoints.up("sm")
   );
-  const laptopUp = useMediaQuery(({ breakpoints }: Theme) =>
-    breakpoints.up("md")
-  );
   const { token } = useAuth();
   const { hash } = useLocation();
   const [mediaPreview, setMediaPreview] = useState<(string | ArrayBuffer)[]>(
@@ -53,12 +50,7 @@ const CreatePost = () => {
   const [files, setFiles] = useState<File[]>([]);
   const navigate = useNavigate();
   const [creatingPost, setCreatingPost] = useState(false);
-  const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    if (hash === "#create-post") setOpen(true);
-    else setOpen(false);
-  }, [hash]);
+  const open = hash === "#create-post";
 
   const handleClose = () => {
     setFiles([]);

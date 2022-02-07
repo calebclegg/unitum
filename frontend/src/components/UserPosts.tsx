@@ -6,14 +6,31 @@ import { useEffect, useState } from "react";
 import { useData, usePostsActions, useUser } from "../hooks";
 import PostCard, { IProps as IPost } from "./PostCard";
 import { Link, useSearchParams } from "react-router-dom";
+import SchoolWorkCard from "./SchoolWorkCard";
+
+const links: Record<string, string> = {
+  "my-posts": "users/me/posts",
+  "saved-posts": "users/me/savedPosts",
+  "school-works": "users/me/schoolWork"
+};
 
 const UserPosts = () => {
   const { user } = useUser();
   const [searchParams] = useSearchParams();
-  const { data: posts, mutate } = useData<IPost[]>("users/me/posts");
+  const tab = searchParams.get("tab");
+  const { data: posts, mutate: updatePosts } = useData<IPost[]>(
+    tab === "my-posts" ? links[tab] : null
+  );
+  const { data: saved, mutate: updateSaved } = useData<IPost[]>(
+    tab === "saved-posts" ? links[tab] : null
+  );
+  const { data: works, mutate: updateWorks } = useData<IPost[]>(
+    tab === "school-works" ? links[tab] : null
+  );
   const [activeTab, setActiveTab] = useState("my-posts");
   const [userPosts, setUserPosts] = useState<IPost[] | null>(null);
-  const { toggleSave, toggleVote } = usePostsActions(posts, mutate);
+  const { toggleSave, toggleVote } = usePostsActions(posts, updateSaved);
+  // const { toggleSave, toggleVote } = usePostsActions(posts, updatePosts);
 
   useEffect(() => {
     const param = searchParams.get("tab");
@@ -21,15 +38,17 @@ const UserPosts = () => {
   }, [searchParams]);
 
   useEffect(() => {
-    if (user && posts) {
-      const postsWithAuthor = posts.map((post) => ({
-        ...post,
-        author: { profile: user.profile }
-      }));
-
-      setUserPosts(postsWithAuthor);
+    if (activeTab === "saved-posts") {
+      const savedPosts = saved?.map((post) => {
+        return { ...post, saved: true };
+      });
+      savedPosts ? setUserPosts(savedPosts) : null;
+    } else if (activeTab == "school-works") {
+      setUserPosts(works);
+    } else {
+      setUserPosts(posts);
     }
-  }, [user, posts]);
+  }, [user, activeTab]);
 
   return (
     <>
@@ -59,14 +78,18 @@ const UserPosts = () => {
         </Tabs>
       </Paper>
       <Stack id="my-posts" spacing={2}>
-        {userPosts?.map((post) => (
-          <PostCard
-            {...post}
-            key={post._id}
-            toggleSave={toggleSave}
-            toggleVote={toggleVote}
-          />
-        ))}
+        {activeTab === "school-works"
+          ? userPosts?.map((post) => (
+              <SchoolWorkCard {...post} key={post._id} />
+            ))
+          : userPosts?.map((post) => (
+              <PostCard
+                {...post}
+                key={post._id}
+                toggleSave={toggleSave}
+                toggleVote={toggleVote}
+              />
+            ))}
       </Stack>
     </>
   );

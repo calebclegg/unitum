@@ -17,7 +17,7 @@ router.post("/login", validateUserLogData, use(controller.login));
 
 router.post("/authProvider", use(controller.checkAuthProvider));
 
-router.post("/oauth", use(controller.externalAuth));
+router.post("/oauth/:provider", use(controller.externalAuth));
 
 router.get("/token", use(controller.getNewAccessToken));
 
