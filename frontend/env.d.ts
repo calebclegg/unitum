@@ -6,3 +6,5 @@ declare namespace NodeJS {
     REACT_APP_CLOUDINARY_API_SECRET: string;
   }
 }
+
+declare module "react-facebook-login/dist/facebook-login-render-props";

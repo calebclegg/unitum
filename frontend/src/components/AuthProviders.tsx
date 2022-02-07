@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
@@ -14,6 +15,7 @@ import {
   saveRefreshToken,
   TState
 } from "../utils";
+import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import { useDisplaySize } from "../hooks";
 import { GoogleLogin } from "react-google-login";
 import { API } from "../lib";
@@ -30,6 +32,22 @@ const AuthProviders = ({ formType, setMessage }: IProps) => {
   const { state } = useLocation();
   //responses
   const responseGoogle = async (response: Record<string, any>) => {
+    if (response.accessToken) {
+      const { profileObj } = response;
+      try {
+        const { data } = await API.post("/auth/oauth/google", profileObj);
+        saveRefreshToken(data?.refreshToken);
+
+        navigate(getRedirectUrlFromState(state as TState), { replace: true });
+      } catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
+          setMessage(error.response.data.message);
+        }
+      }
+    }
+  };
+
+  const responseFacebook = async (response: Record<string, any>) => {
     if (response.accessToken) {
       const { profileObj } = response;
       try {
@@ -80,18 +98,28 @@ const AuthProviders = ({ formType, setMessage }: IProps) => {
       )}
       {tabletUp ? (
         <Stack spacing={2}>
-          <Button
-            startIcon={
-              <img
-                src={facebook_square}
-                alt="facebook"
-                width="30"
-                height="30"
-              />
-            }
-          >
-            {kebabToRegular(formType)} with facebook
-          </Button>
+          <FacebookLogin
+            appId="479876153580321"
+            autoLoad
+            callback={responseFacebook}
+            scope="email,public_profile"
+            render={(renderProps: Record<string, any>) => (
+              <Button
+                onClick={renderProps.onClick}
+                startIcon={
+                  <img
+                    src={facebook_square}
+                    alt="facebook"
+                    width="30"
+                    height="30"
+                  />
+                }
+              >
+                {kebabToRegular(formType)} with facebook
+              </Button>
+            )}
+          />
+
           <GoogleLogin
             clientId="250767377397-68p1knjngdur342c3qcs993994otnhar.apps.googleusercontent.com"
             render={(renderProps: Record<string, any>) => (
