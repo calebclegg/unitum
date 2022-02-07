@@ -45,7 +45,7 @@ const AuthProvider = ({ children }: IProviderProps) => {
     },
     fetcher,
     {
-      refreshInterval: 1000 * 60 * 60 * 10, // 10 minutes
+      refreshInterval: 1000 * 60 * 60 * 9, // 9 minutes
       onSuccess: (data) => {
         if (isOnAuthPage) {
           navigate("/feed", { replace: true });
