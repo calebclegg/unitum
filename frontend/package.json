@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@axe-core/react": "^4.3.2",
+    "@date-io/date-fns": "^2.13.1",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@fontsource/inter": "^4.5.2",
@@ -22,6 +23,7 @@
     "@types/react-helmet": "^6.1.5",
     "aos": "^2.3.4",
     "axios": "^0.25.0",
+    "date-fns": "^2.0.0-beta.5",
     "formik": "^2.2.9",
     "formik-mui": "^4.0.0-alpha.3",
     "formik-mui-lab": "^1.0.0-alpha.3",
