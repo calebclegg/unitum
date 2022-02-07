@@ -11,6 +11,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { Theme } from "@mui/material/styles";
 import PostCard, { IProps as IPost } from "../components/PostCard";
 import { useData, useUser, usePostsActions } from "../hooks";
+import FeedLayout from "../components/FeedLayout";
 
 const Communities = () => {
   const tabletUp = useMediaQuery(({ breakpoints }: Theme) =>
@@ -25,29 +26,7 @@ const Communities = () => {
     <>
       {tabletUp ? (
         <>
-          <Paper
-            square
-            variant="outlined"
-            sx={{
-              px: 3,
-              py: 1.5,
-              width: "100%"
-            }}
-          >
-            <Typography variant="h5" fontWeight={500} component="h1">
-              Communities Activities
-            </Typography>
-          </Paper>
-          <Stack
-            spacing={2}
-            width="100%"
-            sx={{
-              "& .MuiPaper-rounded:first-of-type": {
-                borderTopLeftRadius: 0,
-                borderTopRightRadius: 0
-              }
-            }}
-          >
+          <FeedLayout title="Communities Activities">
             {posts?.map((post) => (
               <PostCard
                 {...post}
@@ -56,7 +35,7 @@ const Communities = () => {
                 toggleVote={toggleVote}
               />
             ))}
-          </Stack>
+          </FeedLayout>
         </>
       ) : (
         <>

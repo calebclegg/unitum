@@ -50,7 +50,7 @@ export interface INotification {
 
 export const useUser = () => {
   const navigate = useNavigate();
-  const { updateToken } = useAuth();
+  const { token, updateToken } = useAuth();
 
   const { data: user, mutate: updateUser } = useData<IUser | null>("users/me", {
     revalidateOnFocus: false
@@ -58,7 +58,7 @@ export const useUser = () => {
 
   const logout = async () => {
     clearRefreshToken();
-    await fetcher("auth/logout");
+    await fetcher("auth/logout", token);
     updateToken();
     updateUser(null);
     navigate("/login");

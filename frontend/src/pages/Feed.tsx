@@ -1,7 +1,5 @@
 import Helmet from "react-helmet";
-import Paper from "@mui/material/Paper";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
+import FeedLayout from "../components/FeedLayout";
 import PostCard, { IProps as IPost } from "../components/PostCard";
 import { useData, usePostsActions } from "../hooks";
 
@@ -16,29 +14,7 @@ const Feed = () => {
       <Helmet>
         <title>Feed</title>
       </Helmet>
-      <Paper
-        square
-        variant="outlined"
-        sx={{
-          px: 3,
-          py: 1.5,
-          width: "100%"
-        }}
-      >
-        <Typography variant="h5" fontWeight={500} component="h1">
-          Feed
-        </Typography>
-      </Paper>
-      <Stack
-        spacing={2}
-        width="100%"
-        sx={{
-          "& .MuiPaper-rounded:first-of-type": {
-            borderTopLeftRadius: 0,
-            borderTopRightRadius: 0
-          }
-        }}
-      >
+      <FeedLayout title="Feed">
         {posts?.map((post) => (
           <PostCard
             {...post}
@@ -47,7 +23,7 @@ const Feed = () => {
             toggleVote={toggleVote}
           />
         ))}
-      </Stack>
+      </FeedLayout>
     </>
   );
 };
