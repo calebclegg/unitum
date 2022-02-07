@@ -16,6 +16,7 @@ import {
   validateUserUpdate
 } from "../validators/user.validator";
 import { PostModel } from "../models/Post";
+import { SavedPost } from "../models/SavedPost";
 
 export const userInfo = async (req: Request, res: Response) => {
   const customRequest = req as IReq;
@@ -138,9 +139,11 @@ export const updateUserInfo = async (req: Request, res: Response) => {
 
 export const getUserSchoolWork = async (req: any, res: Response) => {
   const user = req.user;
-  const works = await SchoolWork.find({ userID: user._id }).sort({
-    createdAt: -1
-  });
+  const works = await SchoolWork.find({ userID: user._id })
+    .sort({
+      createdAt: -1
+    })
+    .populate({ path: "userID", select: "profile.fullName profile.picture" });
   return res.json(works);
 };
 
@@ -259,13 +262,42 @@ export const getUserPosts = async (req: any, res: Response) => {
   const limit = +req.query.limit || 10;
   const skip = +req.query.skip || 0;
 
-  const posts = await PostModel.find({ author: req.user._id })
+  const dbposts = await PostModel.find({ author: req.user._id })
     .sort("createdAt")
-    .select("-comments -upvoteBy -downVoteBy -author")
-    .populate([{ path: "communityID", select: "-__v -members" }])
+    .select("-comments")
+    .populate([
+      { path: "communityID", select: "-__v -members" },
+      { path: "author", select: "profile.fullName profile.picture" }
+    ])
     .skip(skip)
     .limit(limit)
     .sort({ createdAt: -1 });
+  const savedPosts = await SavedPost.findOne({ userID: req.user._id });
+  const posts = dbposts.map((post: any) => {
+    const upvoted = post.upvoteBy?.some((objectid: any) => {
+      return objectid.equals(req.user._id);
+    });
+
+    const downvoted = post.downVoteBy?.some((objectid: any) => {
+      return objectid.equals(req.user._id);
+    });
+
+    let saved = false;
+    if (savedPosts) {
+      saved = savedPosts.posts.some((objectid: Types.ObjectId) => {
+        return objectid.equals(post._id);
+      });
+    }
+    post = {
+      ...post.toObject(),
+      saved: saved,
+      upvoted: upvoted,
+      downvoted: downvoted
+    };
+    delete post.upvoteBy;
+    delete post.downVoteBy;
+    return post;
+  });
   return res.json(posts);
 };
 
