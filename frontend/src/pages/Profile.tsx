@@ -23,7 +23,7 @@ const Profile = () => {
       <Helmet>
         <title>{`${user?.profile.fullName} | Profile`}</title>
       </Helmet>
-      <Grid container spacing={2} alignItems="center">
+      <Grid container spacing={2} alignItems="center" marginTop={"1rem"}>
         <Grid item flexGrow="0 !important" width="fit-content" xs>
           <Avatar
             ref={avatarRef}
@@ -80,9 +80,13 @@ const Profile = () => {
             </Typography>
             <Stack direction="row" alignItems="center" spacing={2}>
               <Typography variant="subtitle1">
-                {user?.profile.education.school.name}
+                {user?.profile.education?.school?.name || "---"}
               </Typography>
-              <IconButton size="small" color="primary" href={user?.profile.education.school.url || "#"}>
+              <IconButton
+                size="small"
+                color="primary"
+                href={user?.profile.education?.school?.url || "#"}
+              >
                 <Link fontSize="small" />
               </IconButton>
             </Stack>
@@ -94,7 +98,9 @@ const Profile = () => {
               Field of Study
             </Typography>
             <Stack direction="row" alignItems="center" spacing={2}>
-              <Typography variant="subtitle1">{user?.profile.education.fieldOfStudy}</Typography>
+              <Typography variant="subtitle1">
+                {user?.profile.education?.fieldOfStudy || "---"}
+              </Typography>
             </Stack>
           </div>
         </Stack>
@@ -105,7 +111,7 @@ const Profile = () => {
             </Typography>
             <Stack direction="row" alignItems="center" spacing={2}>
               <Typography variant="subtitle1">
-                {user?.profile.education.degree || "---"}
+                {user?.profile.education?.degree || "---"}
               </Typography>
             </Stack>
           </div>
@@ -114,7 +120,9 @@ const Profile = () => {
               Grade
             </Typography>
             <Stack direction="row" alignItems="center" spacing={2}>
-              <Typography variant="subtitle1">{user?.profile.education.grade || "---"}</Typography>
+              <Typography variant="subtitle1">
+                {user?.profile.education?.grade || "---"}
+              </Typography>
             </Stack>
           </Stack>
         </Stack>
@@ -125,7 +133,11 @@ const Profile = () => {
             </Typography>
             <Stack direction="row" alignItems="center" spacing={2}>
               <Typography variant="subtitle1">
-              {user?.profile.education.startDate ? new Date(`${user?.profile.education.startDate}`).toLocaleDateString() : "---"}
+                {user?.profile.education?.startDate
+                  ? new Date(
+                      `${user?.profile.education?.startDate}`
+                    ).toLocaleDateString()
+                  : "---"}
               </Typography>
             </Stack>
           </div>
@@ -135,7 +147,11 @@ const Profile = () => {
             </Typography>
             <Stack direction="row" alignItems="center" spacing={2}>
               <Typography variant="subtitle1">
-                {user?.profile.education.endDate ? new Date(`${user?.profile.education.endDate}`).toLocaleDateString() : "---"}
+                {user?.profile.education?.endDate
+                  ? new Date(
+                      `${user?.profile.education?.endDate}`
+                    ).toLocaleDateString()
+                  : "---"}
               </Typography>
             </Stack>
           </Stack>
