@@ -27,6 +27,10 @@ router.delete("/:commID/remove", getUser, use(controller.removeMember));
 
 router.delete("/:commID/leave", getUser, use(controller.leaveCommunity));
 
+router.post("/:commID/join", getUser, use(controller.joinCommunity));
+
+router.get("/:commID/requests", getUser, use(controller.getJoinRequests));
+
 // delete a community
 router.delete("/:commID", getUser, use(controller.deleteCommunity));
 

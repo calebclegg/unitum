@@ -9,6 +9,7 @@ import User from "../models/User";
 import { notification } from "../types/notification";
 import { sendNotification } from "../utils/notification";
 import { ICommunity } from "../types/community";
+import { JoinCommunity } from "../models/CommRequest";
 
 export const createCommunity = async (req: any, res: Response) => {
   const user = req.user;
@@ -259,5 +260,46 @@ export const leaveCommunity = async (req: any, res: Response) => {
   }
   community.save();
   user!.save();
+  return res.sendStatus(200);
+};
+
+export const getJoinRequests = async (req: any, res: Response) => {
+  const user = req.user;
+  const commID = req.params.commID;
+  const community = await CommunityModel.findOne({ _id: commID });
+  if (!community)
+    return res.status(404).json({ message: "Community not found" });
+
+  if (community.admin.toString() !== user._id.toString()) {
+    return res.status(401).json({ message: "You are unauthorized" });
+  }
+
+  const requests = await JoinCommunity.find({ community: commID }).populate([
+    { path: "community", select: "name picture description" },
+    { path: "user", select: "profile.fullName profile.picture" }
+  ]);
+  return res.json(requests);
+};
+
+export const joinCommunity = async (req: any, res: Response) => {
+  const user = req.user;
+  const commID = req.params.commID;
+
+  const community = await CommunityModel.findOne({ _id: commID });
+  if (!community)
+    return res.status(404).json({ message: "Community not found" });
+  const isMember = community.members?.some((member) => {
+    return member?.info?.equals(user?._id);
+  });
+
+  if (isMember)
+    return res
+      .status(200)
+      .json({ message: "You are member of this community" });
+
+  const join = await new JoinCommunity({
+    community: community._id,
+    user: user._id
+  }).save();
   return res.sendStatus(200);
 };
