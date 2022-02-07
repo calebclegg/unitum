@@ -79,6 +79,9 @@ const FormLayout = ({
     authError && setMessage({ type: "error", message: authError });
   }, [authError]);
 
+  const handleErrorMessage = (message: string) =>
+    setMessage({ type: "error", message });
+
   return (
     <Box
       py={2}
@@ -170,7 +173,10 @@ const FormLayout = ({
                 Or {kebabToCapitalized(formType)} with
               </Divider>
             )}
-            <AuthProviders formType={formType} />
+            <AuthProviders
+              formType={formType}
+              setMessage={handleErrorMessage}
+            />
           </Stack>
         </Paper>
       </Container>
