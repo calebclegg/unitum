@@ -4,7 +4,7 @@ import { fetcher } from "../utils";
 import { useData } from ".";
 import { useAuth } from "../context/Auth";
 
-interface ICommunity {
+export interface ICommunity {
   _id: string;
   name: string;
   picture: string;
@@ -16,7 +16,7 @@ interface ICommunity {
   }[];
 }
 
-interface IUser {
+export interface IUser {
   _id: string;
   email: string;
   profile: {

@@ -6,6 +6,7 @@ import { debounce } from "@mui/material/utils";
 import { ThemeProvider } from "@mui/material/styles";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { lightTheme } from "../../lib";
+import { fetcher } from "../../utils";
 
 const Result = lazy(() => import("./Result"));
 
