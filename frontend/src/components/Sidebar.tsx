@@ -35,12 +35,12 @@ const navLinks = [
     icon: <QuestionAnswer />
   },
   {
-    path: "/profile#posts",
+    path: "/profile?tab=my-posts",
     label: "My Posts",
     icon: <Person />
   },
   {
-    path: "/profile#saved",
+    path: "/profile?tab=saved-posts",
     label: "Saved Posts",
     icon: <Bookmarks />
   },
