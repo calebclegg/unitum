@@ -1,6 +1,11 @@
 import { useParams } from "react-router-dom";
+import Edit from "@mui/icons-material/Edit";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
+import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import PostCard, { IProps as IPost } from "../components/PostCard";
 import { ICommunity, useData, usePostsActions, useUser } from "../hooks";
@@ -19,23 +24,43 @@ const Community = () => {
 
   return (
     <>
-      <Stack py={5} px={3} alignItems="flex-start" spacing={2}>
-        <Typography variant="h4" component="h1">
-          {community?.name}
-        </Typography>
-        <Button>Join Community</Button>
-      </Stack>
-      <Stack
-        spacing={2}
-        width="100%"
-        mb={6}
-        sx={{
-          "& .MuiPaper-rounded:first-of-type": {
-            borderTopLeftRadius: 0,
-            borderTopRightRadius: 0
-          }
-        }}
+      <Paper
+        square
+        variant="outlined"
+        sx={{ mb: 4, p: 4, position: "relative" }}
       >
+        <IconButton
+          size="small"
+          sx={{
+            position: "absolute",
+            top: ({ spacing }) => spacing(2),
+            right: ({ spacing }) => spacing(2)
+          }}
+        >
+          <Edit fontSize="small" />
+        </IconButton>
+        <Grid container spacing={2}>
+          <Grid item>
+            <Avatar
+              variant="rounded"
+              sx={{
+                width: 94,
+                height: 94,
+                backgroundColor: "#cacaca68"
+              }}
+              src={community?.picture}
+              alt=""
+            />
+          </Grid>
+          <Grid item spacing={2}>
+            <Typography variant="h4" component="h1">
+              {community?.name}
+            </Typography>
+            <Button sx={{ mt: 2 }}>Join Community</Button>
+          </Grid>
+        </Grid>
+      </Paper>
+      <Stack spacing={2} width="100%" mb={6}>
         {posts?.map((post) => (
           <PostCard
             {...post}

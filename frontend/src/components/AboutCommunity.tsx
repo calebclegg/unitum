@@ -23,7 +23,9 @@ const AboutCommunity = () => {
         lineHeight={1}
         sx={{ mt: 2, mb: 0 }}
       >
-        {community?.numberOfMembers || 0}
+        {community && community.numberOfMembers > 980
+          ? ((community?.numberOfMembers || 0) / 1000).toFixed(1)
+          : community?.numberOfMembers || 0}
       </Typography>
       <Typography variant="caption" color="textSecondary">
         Members
@@ -32,7 +34,7 @@ const AboutCommunity = () => {
       {community?.createdAt && (
         <Stack direction="row" spacing={2}>
           <EventIcon />
-          <Typography variant="body1">
+          <Typography>
             Created {new Date(community.createdAt).toDateString()}
           </Typography>
         </Stack>

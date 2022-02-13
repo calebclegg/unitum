@@ -7,9 +7,11 @@ import MenuItemAvatar from "@mui/material/ListItemAvatar";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import { useUser } from "../hooks";
+import { useParams } from "react-router-dom";
 
 const SelectCommunity = () => {
   const { user } = useUser();
+  const { comm_id } = useParams();
 
   return (
     <FormControl
@@ -29,9 +31,10 @@ const SelectCommunity = () => {
         MenuProps={{ PaperProps: { sx: { p: 0 } } }}
         inputProps={{
           id: "communities-options",
-          name: "communityID"
+          name: "communityID",
+          readOnly: Boolean(comm_id)
         }}
-        defaultValue="wall"
+        defaultValue={comm_id || "wall"}
         label="Select Community"
         sx={({ breakpoints }) => ({
           "& .MuiSelect-select": {

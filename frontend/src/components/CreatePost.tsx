@@ -16,7 +16,7 @@ import Box from "@mui/system/Box";
 import SelectCommunity from "./SelectCommunity";
 import { TransitionProps } from "@mui/material/transitions";
 import { styled, Theme } from "@mui/material/styles";
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { forwardRef, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getUrl } from "../utils";
 import { API } from "../lib";
