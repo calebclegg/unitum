@@ -13,7 +13,6 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Box from "@mui/system/Box";
-import SelectCommunity from "./SelectCommunity";
 import { TransitionProps } from "@mui/material/transitions";
 import { styled, Theme } from "@mui/material/styles";
 import { forwardRef, useRef, useState } from "react";
@@ -44,17 +43,15 @@ const CreatePost = () => {
   );
   const { token } = useAuth();
   const { hash } = useLocation();
-  const [mediaPreview, setMediaPreview] = useState<(string | ArrayBuffer)[]>(
-    []
+  const [mediaPreview, setMediaPreview] = useState<string | ArrayBuffer | null>(
+    null
   );
-  const [files, setFiles] = useState<File[]>([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const [creatingPost, setCreatingPost] = useState(false);
-  const open = hash === "#create-post";
+  const open = hash === "#create-community";
 
   const handleClose = () => {
-    setFiles([]);
-    setMediaPreview([]);
+    setMediaPreview(null);
     navigate(getUrl().replace(hash, ""));
   };
 
@@ -62,58 +59,38 @@ const CreatePost = () => {
     uploadRef.current?.click();
   };
 
-  const removeMedia = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const { dataset } = event.currentTarget;
-
-    setMediaPreview((prev) =>
-      prev.filter((media) => media !== dataset.preview)
-    );
+  const removeMedia = () => {
+    setMediaPreview(null);
   };
 
   const uploadFile = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
+    const { files } = event.target;
 
-    if (files?.length) {
-      Array.from(files).forEach((file) => {
-        setFiles((prev) => [...prev, file]);
-        const reader = new FileReader();
+    if (files) {
+      const [file] = files;
+      const reader = new FileReader();
 
-        reader.addEventListener("load", (event) => {
-          setMediaPreview((prev) => {
-            const previews = prev ? [...prev] : [];
-
-            if (
-              !event.target?.result ||
-              previews.includes(event.target.result)
-            ) {
-              return [...previews];
-            }
-
-            return [...previews, event.target.result];
-          });
-        });
-
-        reader.readAsDataURL(file);
+      reader.addEventListener("load", (event) => {
+        if (event.target?.result) setMediaPreview(event.target.result);
       });
+
+      reader.readAsDataURL(file);
     }
   };
 
-  const createPost = async (event: React.FormEvent<HTMLFormElement>) => {
+  const createCommunity = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     try {
       const formData = new FormData(event.currentTarget);
-
-      if (formData.get("communityID") === "wall") {
-        formData.delete("communityID");
-      }
+      const file = formData.get("picture");
 
       const uploadData = new FormData();
-      for (const file of files) {
+      if (file) {
         uploadData.append("media", file);
       }
 
-      setCreatingPost(true);
+      setLoading(true);
       const { data: imgURLs } = await API.post<string[]>(
         "uploads",
         uploadData,
@@ -128,27 +105,26 @@ const CreatePost = () => {
       const requestData: Record<string, unknown> = {};
 
       for (const [key, value] of formData.entries()) {
-        if (key === "communityID" && value === "wall") continue;
-        if (key === "media") {
-          requestData[key] = imgURLs;
+        if (key === "picture") {
+          requestData[key] = imgURLs[0];
           continue;
         }
 
         requestData[key] = value;
       }
 
-      const { data } = await API.post("posts", requestData, {
+      const { data } = await API.post("community", requestData, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
 
-      navigate(`/posts/${data._id}`, { replace: true });
+      navigate(`/communities/${data._id}`, { replace: true });
       handleClose();
     } catch (error) {
       console.log(error);
     } finally {
-      setCreatingPost(false);
+      setLoading(false);
     }
   };
 
@@ -169,31 +145,40 @@ const CreatePost = () => {
         method="post"
         action="#"
         encType="multipart/form-data"
-        onSubmit={createPost}
+        onSubmit={createCommunity}
       >
         <Stack>
-          <DialogTitle>Create new post</DialogTitle>
+          <DialogTitle>Create new Community</DialogTitle>
           <DialogContent>
             <TextField
-              multiline
+              required
               fullWidth
               autoFocus
+              autoComplete="off"
+              autoCapitalize="on"
               minRows={2}
-              id="post"
-              name="body"
-              variant="standard"
-              inputProps={{
-                required: true,
-                "aria-label": "post content",
-                placeholder: "Type Something here"
-              }}
-              sx={{ mb: 1.4 }}
+              id="name-input"
+              name="name"
+              variant="outlined"
+              margin="normal"
+              label="Community Name"
             />
-            <Collapse in={Boolean(mediaPreview?.length)}>
+            <TextField
+              fullWidth
+              multiline
+              autoCapitalize="on"
+              minRows={2}
+              id="description-input"
+              name="description"
+              variant="outlined"
+              margin="normal"
+              label="Description"
+            />
+            <Collapse in={Boolean(mediaPreview)}>
               <Stack direction="row" spacing={tabletUp ? 1 : 2} my={1.5}>
-                {mediaPreview?.map((preview) => (
+                {mediaPreview && (
                   <Box
-                    key={preview.toString()}
+                    key={mediaPreview.toString()}
                     position="relative"
                     sx={({ breakpoints }) => ({
                       "& .MuiIconButton-root": {
@@ -213,7 +198,7 @@ const CreatePost = () => {
                   >
                     <IconButton
                       size="small"
-                      data-preview={preview.toString()}
+                      data-preview={mediaPreview.toString()}
                       aria-label="remove image"
                       sx={{
                         p: 0.4,
@@ -228,13 +213,13 @@ const CreatePost = () => {
                       <Close fontSize="small" />
                     </IconButton>
                     <MediaPreview
-                      src={preview.toString()}
+                      src={mediaPreview.toString()}
                       alt=""
                       width="60"
                       height="60"
                     />
                   </Box>
-                ))}
+                )}
               </Stack>
             </Collapse>
             <Stack
@@ -246,7 +231,7 @@ const CreatePost = () => {
                 <input
                   multiple
                   type="file"
-                  name="media"
+                  name="picture"
                   id="post-media"
                   accept="image/*"
                   ref={uploadRef}
@@ -260,10 +245,9 @@ const CreatePost = () => {
                   onClick={selectMedia}
                   startIcon={<AddPhotoAlternateIcon />}
                 >
-                  <span>Add image</span>
+                  <span>Upload Image</span>
                 </Button>
               </div>
-              <SelectCommunity />
             </Stack>
           </DialogContent>
         </Stack>
@@ -271,12 +255,8 @@ const CreatePost = () => {
           <Button variant="text" onClick={handleClose}>
             Close
           </Button>
-          <LoadingButton
-            type="submit"
-            variant="contained"
-            loading={creatingPost}
-          >
-            Create Post
+          <LoadingButton type="submit" variant="contained" loading={loading}>
+            Create Community
           </LoadingButton>
         </DialogActions>
       </form>

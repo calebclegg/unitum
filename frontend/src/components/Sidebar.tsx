@@ -1,8 +1,12 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useParams } from "react-router-dom";
 import Add from "@mui/icons-material/Add";
 import Bookmarks from "@mui/icons-material/Bookmarks";
 import Close from "@mui/icons-material/Close";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import Feed from "@mui/icons-material/Feed";
@@ -17,6 +21,7 @@ import Stack from "@mui/material/Stack";
 import Box from "@mui/system/Box";
 import { alpha } from "@mui/material/styles";
 import { useDisplaySize } from "../hooks";
+import { useRef, useState } from "react";
 
 const navLinks = [
   {
@@ -30,12 +35,12 @@ const navLinks = [
     icon: <QuestionAnswer />
   },
   {
-    path: "/profile#posts",
+    path: "/profile?tab=my-posts",
     label: "My Posts",
     icon: <Person />
   },
   {
-    path: "/profile#saved",
+    path: "/profile?tab=saved-posts",
     label: "Saved Posts",
     icon: <Bookmarks />
   },
@@ -53,7 +58,12 @@ interface IProps {
 
 const Sidebar = ({ open, handleClose }: IProps) => {
   const { pathname } = useLocation();
+  const params = useParams();
+  const anchorRef = useRef<HTMLDivElement>(null);
   const desktopUp = useDisplaySize("lg");
+  const [isCreateMenuOpened, setIsCreateMenuOpened] = useState(false);
+
+  const handleToggle = () => setIsCreateMenuOpened(!isCreateMenuOpened);
 
   return (
     <Drawer
@@ -89,15 +99,79 @@ const Sidebar = ({ open, handleClose }: IProps) => {
         </Stack>
       )}
       <Box p={6}>
-        <Button
-          fullWidth
-          color="primary"
-          startIcon={<Add />}
-          href="#create-post"
-          sx={{ mb: 4 }}
+        {pathname.includes("/communities") && Object.keys(params).length ? (
+          <Button
+            fullWidth
+            color="primary"
+            startIcon={<Add />}
+            href="#create-post"
+            sx={{ mb: 4 }}
+          >
+            Create Post
+          </Button>
+        ) : (
+          <ButtonGroup
+            fullWidth
+            disableElevation
+            variant="contained"
+            ref={anchorRef}
+            aria-label="Create post"
+            sx={{ mb: 4 }}
+          >
+            <Button
+              color="primary"
+              startIcon={<Add />}
+              href="#create-post"
+              sx={{
+                borderTopRightRadius: 0,
+                borderBottomRightRadius: 0,
+                borderRight: "1px solid",
+                borderColor: "divider"
+              }}
+            >
+              Create Post
+            </Button>
+            <Button
+              size="small"
+              aria-controls={
+                isCreateMenuOpened ? "split-button-menu" : undefined
+              }
+              aria-expanded={isCreateMenuOpened ? "true" : undefined}
+              aria-label="select create option"
+              aria-haspopup="menu"
+              onClick={handleToggle}
+              sx={{
+                width: "initial",
+                borderTopLeftRadius: 0,
+                borderBottomLeftRadius: 0
+              }}
+            >
+              <ArrowDropDownIcon />
+            </Button>
+          </ButtonGroup>
+        )}
+        <Menu
+          id="split-button-menu"
+          open={isCreateMenuOpened}
+          anchorEl={anchorRef.current}
+          onClose={handleToggle}
+          PaperProps={{ sx: { p: 0 } }}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right"
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right"
+          }}
         >
-          Create Post
-        </Button>
+          <MenuItem component="a" href="#create-post">
+            Create a post
+          </MenuItem>
+          <MenuItem component="a" href="#upload-school-work">
+            Add a school work
+          </MenuItem>
+        </Menu>
         <List sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           {navLinks.map(({ path, icon, label }) => (
             <ListItem
