@@ -26,7 +26,14 @@ export const createCommunity = async (req: any, res: Response) => {
   }
   const newCommunity = new CommunityModel({
     admin: user._id,
-    ...valData.value
+    ...valData.value,
+    members: [
+      {
+        info: user._id,
+        role: "admin"
+      }
+    ],
+    numberOfMembers: 1
   });
   const savedCommunity = await newCommunity.save();
   user.profile.communities.push(savedCommunity._id);
@@ -101,7 +108,7 @@ export const deleteCommunity = async (req: any, res: Response) => {
   const community = await CommunityModel.findById(commID);
 
   if (!community) return res.sendStatus(404);
-  if (community && community._id.toString() !== req.user._id.toString())
+  if (community.admin.toString() !== req.user._id.toString())
     return res.sendStatus(403);
   await community?.delete();
   return res.sendStatus(200);
@@ -225,7 +232,7 @@ export const removeMember = async (req: any, res: Response) => {
     user.profile.communities = newCommunityList;
   }
   community.save();
-  user!.save();
+  user?.save();
   return res.sendStatus(200);
 };
 
@@ -238,6 +245,8 @@ export const leaveCommunity = async (req: any, res: Response) => {
   if (!community)
     return res.status(404).json({ message: "Community not found" });
 
+  if (community.admin.toString() === userID.toString())
+    return res.status(403).json({ message: "You cannot leave this community" });
   const isMember = community.members?.some((member) => {
     return member?.info?.equals(user?._id.toString());
   });
@@ -259,7 +268,7 @@ export const leaveCommunity = async (req: any, res: Response) => {
     user.profile.communities = newCommunityList;
   }
   community.save();
-  user!.save();
+  user?.save();
   return res.sendStatus(200);
 };
 
