@@ -47,7 +47,7 @@ POST http://localhost:5000/api/auth/login
 Content-Type: application/json
 
 {
-   "email": "kyeisamuel931@gmail.com",
+   "email": "rexosei111@gmail.com",
    "password": "rexosei111"
 }
 
@@ -163,10 +163,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 ###
 PATCH http://localhost:5000/api/community/62012198a708a6f13627af32
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NTA0NTAxNiwiZXhwIjoxNjQ1MDQ1NjE2fQ.PsBByiqsiyOsLJuH53qlAwgEbSmiBetgWpXu0mHhFzc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NTA0NTY5MiwiZXhwIjoxNjQ1MDQ2MjkyfQ.5jBgWWQA5buWeoww6fEB_lkDPetq7nMffytEWcNwEJU
 
 {
-    "name": "Typescript v3",
+    "name": "Typescript v4",
     "description": "Latest channel on the tube"
 }
 
@@ -174,6 +174,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 DELETE http://localhost:5000/api/community/620c278379621e47f847cbff
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NDk2NDg1NSwiZXhwIjoxNjQ0OTY1NDU1fQ.txekPDwilFi_TYo-xJxVnRGTUG7ALC-3M7vjvO4mFek
+
+###
+
+GET http://localhost:5000/api/community/62012198a708a6f13627af32/members/?skip=0&limit=2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NTA0ODA3MiwiZXhwIjoxNjQ1MDQ4NjcyfQ.SX-_tng4vFEq2XUUATkapXjy-bmqoltzVivZm4u6-fU
 
 
 ###
@@ -189,17 +195,17 @@ GET http://localhost:5000/api/community/posts HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEY2hvbGVAZ21haWwuY29tIiwiaXNzIjoidW5pdHVtOnBsYXRmb3JtIiwiaWF0IjoxNjQ0MTc0ODAxLCJleHAiOjE2NDQxNzU0MDF9.73vNmwU62_hEvFpYUhwAmWS9Wl0qPRwnuZEnohrD0mA
 
 ###
-GET http://localhost:5000/api/community/620c2c3902d314c41979f2ef HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NDk2NDg1NSwiZXhwIjoxNjQ0OTY1NDU1fQ.txekPDwilFi_TYo-xJxVnRGTUG7ALC-3M7vjvO4mFek
+GET http://localhost:5000/api/community/62012198a708a6f13627af32 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NTA0NTY5MiwiZXhwIjoxNjQ1MDQ2MjkyfQ.5jBgWWQA5buWeoww6fEB_lkDPetq7nMffytEWcNwEJU
 
 ###
 
-POST http://localhost:5000/api/community/61f6c5e9322b64a993b1e956/add
+POST http://localhost:5000/api/community/62012198a708a6f13627af32/add
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MzU2NDQ4MiwiZXhwIjoxNjQzNTY1MDgyfQ.JDAzvIzrZSqd5wOmre2whOIIosaaPbosfxFInDcL8-4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NTA0NzM5OSwiZXhwIjoxNjQ1MDQ3OTk5fQ.beZCUiLoSUskb-QsO0jc6Htn9DzzAvvAURn3iUC7sNk
 
 {
-    "userID": "61f671741c9134d46565f333"
+    "userID": "62012198a708a6f13627af25"
 }
 ###
 
