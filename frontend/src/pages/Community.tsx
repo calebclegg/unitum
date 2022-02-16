@@ -18,6 +18,7 @@ import { API } from "../lib";
 import { lazy, Suspense, useRef, useState } from "react";
 import { useAuth } from "../context/Auth";
 
+const EditCommunity = lazy(() => import("../components/EditCommunity"));
 const ConfirmDialog = lazy(() => import("../components/ConfirmDialog"));
 
 const Community = () => {
@@ -30,12 +31,14 @@ const Community = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
-  const { data: community } = useData<ICommunity>(`community/${comm_id}`);
-  const { data: posts, mutate } = useData<IPost[]>(
+  const { data: community, mutate: updateCommunity } = useData<ICommunity>(
+    `community/${comm_id}`
+  );
+  const { data: posts, mutate: updatePosts } = useData<IPost[]>(
     `posts?communityID=${comm_id}`
   );
 
-  const { toggleSave, toggleVote } = usePostsActions(posts, mutate);
+  const { toggleSave, toggleVote } = usePostsActions(posts, updatePosts);
 
   // const isMember = user ? community?.members.includes(user._id) : false;
 
@@ -110,7 +113,7 @@ const Community = () => {
       );
 
       console.log({ data });
-      await mutate();
+      await updatePosts();
       removePreview(event);
     } catch (error) {
       console.log(error);
@@ -130,6 +133,7 @@ const Community = () => {
         sx={{ mb: 4, p: 4, position: "relative" }}
       >
         <IconButton
+          href="#edit-community"
           size="small"
           sx={{
             position: "absolute",
@@ -289,6 +293,9 @@ const Community = () => {
           />
         ))}
       </Stack>
+      <Suspense fallback={<div />}>
+        <EditCommunity community={community} revalidate={updateCommunity} />
+      </Suspense>
       <Suspense fallback={<div />}>
         <ConfirmDialog open={isDialogOpen} handleClose={closeConfirmDialog} />
       </Suspense>
