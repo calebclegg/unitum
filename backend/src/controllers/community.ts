@@ -46,13 +46,13 @@ export const editCommunity = async (req: any, res: Response) => {
   const commID = new Types.ObjectId(req.params.commID);
   const dbCommunity = await CommunityModel.findById({
     _id: commID
-  }).populate({ path: "admin", select: "profile.fullName" });
+  });
 
   if (!dbCommunity)
     return res.status(404).json({ message: "Community not found" });
 
   if (dbCommunity.admin.toString() !== user._id.toString())
-    return res.sendStatus(403);
+    return res.sendStatus(401);
   const valData = await validateCommEditData(req.body);
   let errors;
   if (valData.error) {
