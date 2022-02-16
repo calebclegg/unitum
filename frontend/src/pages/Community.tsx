@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom";
+import Helmet from "react-helmet";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Edit from "@mui/icons-material/Edit";
 import Check from "@mui/icons-material/Check";
@@ -127,6 +128,12 @@ const Community = () => {
 
   return (
     <>
+      <Helmet>
+        <title>{community?.name || "Loading..."} | Community</title>
+        {community?.description ? (
+          <meta name="description" content={community.description} />
+        ) : null}
+      </Helmet>
       <Paper
         square
         variant="outlined"
