@@ -54,13 +54,11 @@ const EditCommunity = ({ community, revalidate }: IProps) => {
       const formData = new FormData(event.currentTarget);
       const requestData = Object.fromEntries(formData.entries());
 
-      const { data } = await API.patch(`community/${comm_id}`, requestData, {
+      await API.patch(`community/${comm_id}`, requestData, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
-
-      console.log({ data });
 
       revalidate();
       handleClose();
