@@ -1,6 +1,6 @@
 export const chats = [
   {
-    participant: new Array()
+    participant: []
   }
 ];
 

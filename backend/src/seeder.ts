@@ -10,6 +10,7 @@ import { CommentModel, PostModel } from "./models/Post";
 import connectDB from "./config/db";
 import { config } from "dotenv-flow";
 import { SchoolWork } from "./models/schoolWork";
+import { IMessage } from "./types/message";
 
 config();
 const db = connectDB();
@@ -29,16 +30,30 @@ export const importData = async () => {
 
     let i = 0;
     const communitiesL = communities.map((community) => {
-      const comm = { ...community, admin: createdUsers[i]._id };
+      const comm = {
+        ...community,
+        admin: createdUsers[i]._id,
+        members: [
+          {
+            info: createdUsers[i]._id,
+            role: "admin"
+          }
+        ],
+        numberOfMembers: 1
+      };
       i++;
       return comm;
     });
 
     const savedCommunities = await CommunityModel.insertMany(communitiesL);
 
-    const user = createdUsers[0];
-    user.profile?.communities?.push(savedCommunities[1]._id);
-    await user.save();
+    let l = 0;
+    for (const community of savedCommunities) {
+      const user = createdUsers[l];
+      user.profile?.communities?.push(community._id);
+      await user?.save();
+      l++;
+    }
 
     let k = 0;
     const postL = posts.map((post) => {
@@ -46,24 +61,20 @@ export const importData = async () => {
       k++;
       return pos;
     });
-    console.log("chatL");
 
     const savedPosts = await PostModel.insertMany(postL);
     let j = 0;
     const chatL = chats.map((chat) => {
-      console.log("chatL");
       const chatObj = {
         ...chat,
         participant: [createdUsers[j]._id, createdUsers[j + 1]._id]
       };
       j++;
-      console.log("chatL");
       return chatObj;
     });
 
     const savedChats = await Chat.insertMany(chatL);
 
-    let l = 0;
     const messageL = messages.map((message) => {
       const messageObj = {
         ...message,
@@ -75,6 +86,12 @@ export const importData = async () => {
     });
 
     const savedMessages = await Message.insertMany(messageL);
+
+    const chat = savedChats[0];
+    for (const message of savedMessages) {
+      chat.messages?.push(message._id);
+    }
+    await chat.save();
     (await db).connection.close();
     process.exit();
   } catch (error) {
