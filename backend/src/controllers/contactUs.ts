@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { Contact } from "../models/ContactUs";
 import { validateContactCreateData } from "../validators/contact.validator";
 
