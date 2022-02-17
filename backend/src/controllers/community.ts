@@ -146,6 +146,27 @@ export const searchCommunity = async (req: any, res: Response) => {
   return res.status(200).json(communities);
 };
 
+export const getCommunityMembers = async (req: any, res: Response) => {
+  const communityID = req.params.commID;
+  const limit = +req.query.limit || 20;
+  const skip = +req.query.skip || 0;
+
+  const dbCommunity = await CommunityModel.findById(communityID)
+    .select(["-__v", "-updatedAt"])
+    .populate([
+      {
+        path: "members.info",
+        select: "profile.fullName profile.picture"
+      }
+    ]);
+
+  if (!dbCommunity)
+    return res.status(404).json({ message: "Community not found" });
+
+  const memebers = dbCommunity.members?.slice(skip, skip + limit);
+  return res.json(memebers);
+};
+
 export const addMember = async (req: any, res: Response) => {
   const commID = req.params.commID;
   const userID = req.body.userID;
