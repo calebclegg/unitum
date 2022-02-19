@@ -1,7 +1,4 @@
-import ArrowBack from "@mui/icons-material/ArrowBack";
 import Avatar from "@mui/material/Avatar";
-import Dialog from "@mui/material/Dialog";
-import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
@@ -10,69 +7,54 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/system/Box";
 import { Link } from "react-router-dom";
-import { useData, useOpenWithHash } from "../hooks";
+import { useData } from "../../hooks";
 
-export interface IMessage {
+export interface IChat {
   _id: string;
   chatID: string;
-  createdAt: string;
-  from: {
-    email: string;
+  recipient: {
+    _id: string;
     profile: {
       fullName: string;
       picture: string;
-      _id: string;
     };
   };
+  createdAt: string;
   read: boolean;
-  text: string;
+  numberOfUnreadMessages: number;
+  lastMessage: {
+    from: "me" | "recipient";
+    text: string;
+  };
 }
 
-const Notification = () => {
-  const { open, handleClose } = useOpenWithHash("/chat");
-  const { data: messages } = useData<IMessage[]>("/chat/messages/unread");
-
-  const goBack = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    if (window.history.length > 2) {
-      event.preventDefault();
-      window.history.back();
-    }
-  };
+const ChatsList = () => {
+  const { data: chats } = useData<IChat[]>("/chat");
 
   return (
-    <Dialog fullScreen open={open} id="messages" onClose={handleClose}>
-      <Box mb={2}>
-        <IconButton
-          component={Link}
-          to="/feed"
-          aria-label="go back"
-          onClick={goBack}
-        >
-          <ArrowBack />
-        </IconButton>
-      </Box>
+    <Box p={2}>
       <Typography variant="h5" component="h1">
         Chats
       </Typography>
-      <Stack direction="row" width="min(100%, 350px)">
+      <Stack direction="row" width="min(100%, 350px)" mt={3}>
         <List sx={{ width: "100%" }}>
-          {messages?.map((message) => (
+          {chats?.map((chat) => (
             <ListItem
-              key={message._id}
+              key={chat._id}
               component={Link}
-              to={`/chat/${message.chatID}`}
+              to={`/chat/${chat.chatID}`}
               sx={{ p: 0, mb: 2, alignItems: "flex-start" }}
             >
               <Stack direction="row" flexGrow={1} alignItems="center">
                 <ListItemAvatar>
                   <Avatar
-                    src={message.from.profile.picture}
-                    alt={message.from.profile.fullName}
+                    src={chat.recipient.profile.picture}
+                    alt={chat.recipient.profile.fullName}
                   />
                 </ListItemAvatar>
                 <ListItemText
-                  primary={message.from.profile.fullName}
-                  secondary={message.text}
+                  primary={chat.recipient.profile.fullName}
+                  secondary={chat.lastMessage.text}
                   primaryTypographyProps={{ fontWeight: 500 }}
                 />
               </Stack>
@@ -91,15 +73,15 @@ const Notification = () => {
                     placeItems: "center"
                   }}
                 >
-                  4
+                  {chat.numberOfUnreadMessages}
                 </Typography>
               </Stack>
             </ListItem>
           ))}
         </List>
       </Stack>
-    </Dialog>
+    </Box>
   );
 };
 
-export default Notification;
+export default ChatsList;
