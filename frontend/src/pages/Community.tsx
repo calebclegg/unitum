@@ -95,7 +95,7 @@ const Community = () => {
             <EditableAvatar
               src={community?.picture || ""}
               endpoint={`community/${comm_id}`}
-              revalidate={updatePosts}
+              revalidate={updateCommunity}
             />
           </Grid>
           <Grid item spacing={2}>
