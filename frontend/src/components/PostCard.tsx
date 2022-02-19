@@ -67,7 +67,7 @@ const PostCard = ({
   };
 
   return (
-    <Card variant="outlined" sx={{ p: tabletUp ? 1 : 0 }}>
+    <Card square variant="outlined" sx={{ p: tabletUp ? 1 : 0 }}>
       <CardHeader
         avatar={
           <Avatar

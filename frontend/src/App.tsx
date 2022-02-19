@@ -13,6 +13,7 @@ import "aos/dist/aos.css";
 const Chat = lazy(() => import("./pages/Chat"));
 const Feed = lazy(() => import("./pages/Feed"));
 const Post = lazy(() => import("./pages/Post"));
+const Community = lazy(() => import("./pages/Community"));
 const Communities = lazy(() => import("./pages/Communities"));
 const Search = lazy(() => import("./pages/Search"));
 const Profile = lazy(() => import("./pages/Profile"));
@@ -53,23 +54,19 @@ function App() {
       <Suspense fallback="Loading">
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route
-            path="/*"
-            element={
-              <Auth>
-                <Layout />
-              </Auth>
-            }
-          >
-            <Route path="chat" element={<Chat />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="feed" element={<Feed />} />
-            <Route path="posts/:post_id" element={<Post />} />
-            <Route path="communities">
-              <Route index element={<Communities />} />
+          <Route path="/*" element={<Auth />}>
+            <Route path="/*" element={<Layout />}>
+              <Route path="profile" element={<Profile />} />
+              <Route path="feed" element={<Feed />} />
+              <Route path="posts/:post_id" element={<Post />} />
+              <Route path="communities">
+                <Route index element={<Communities />} />
+                <Route path=":comm_id" element={<Community />} />
+              </Route>
+              <Route path="search" element={<Search />} />
+              <Route path="notifications" element={<Notification />} />
             </Route>
-            <Route path="search" element={<Search />} />
-            <Route path="notifications" element={<Notification />} />
+            <Route path="chat/*" element={<Chat />} />
           </Route>
           <Route path="login/*" element={<Login />} />
           <Route path="register/*" element={<Register />} />

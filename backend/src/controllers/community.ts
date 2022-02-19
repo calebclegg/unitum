@@ -26,7 +26,14 @@ export const createCommunity = async (req: any, res: Response) => {
   }
   const newCommunity = new CommunityModel({
     admin: user._id,
-    ...valData.value
+    ...valData.value,
+    members: [
+      {
+        info: user._id,
+        role: "admin"
+      }
+    ],
+    numberOfMembers: 1
   });
   const savedCommunity = await newCommunity.save();
   user.profile.communities.push(savedCommunity._id);
@@ -39,13 +46,13 @@ export const editCommunity = async (req: any, res: Response) => {
   const commID = new Types.ObjectId(req.params.commID);
   const dbCommunity = await CommunityModel.findById({
     _id: commID
-  }).populate({ path: "admin", select: "profile.fullName" });
+  });
 
   if (!dbCommunity)
     return res.status(404).json({ message: "Community not found" });
 
   if (dbCommunity.admin.toString() !== user._id.toString())
-    return res.sendStatus(403);
+    return res.sendStatus(401);
   const valData = await validateCommEditData(req.body);
   let errors;
   if (valData.error) {
@@ -101,7 +108,7 @@ export const deleteCommunity = async (req: any, res: Response) => {
   const community = await CommunityModel.findById(commID);
 
   if (!community) return res.sendStatus(404);
-  if (community && community._id.toString() !== req.user._id.toString())
+  if (community.admin.toString() !== req.user._id.toString())
     return res.sendStatus(403);
   await community?.delete();
   return res.sendStatus(200);
@@ -137,6 +144,27 @@ export const searchCommunity = async (req: any, res: Response) => {
 
   if (!communities) return res.sendStatus(404);
   return res.status(200).json(communities);
+};
+
+export const getCommunityMembers = async (req: any, res: Response) => {
+  const communityID = req.params.commID;
+  const limit = +req.query.limit || 20;
+  const skip = +req.query.skip || 0;
+
+  const dbCommunity = await CommunityModel.findById(communityID)
+    .select(["-__v", "-updatedAt"])
+    .populate([
+      {
+        path: "members.info",
+        select: "profile.fullName profile.picture"
+      }
+    ]);
+
+  if (!dbCommunity)
+    return res.status(404).json({ message: "Community not found" });
+
+  const memebers = dbCommunity.members?.slice(skip, skip + limit);
+  return res.json(memebers);
 };
 
 export const addMember = async (req: any, res: Response) => {
@@ -225,7 +253,7 @@ export const removeMember = async (req: any, res: Response) => {
     user.profile.communities = newCommunityList;
   }
   community.save();
-  user!.save();
+  user?.save();
   return res.sendStatus(200);
 };
 
@@ -238,6 +266,8 @@ export const leaveCommunity = async (req: any, res: Response) => {
   if (!community)
     return res.status(404).json({ message: "Community not found" });
 
+  if (community.admin.toString() === userID.toString())
+    return res.status(403).json({ message: "You cannot leave this community" });
   const isMember = community.members?.some((member) => {
     return member?.info?.equals(user?._id.toString());
   });
@@ -259,7 +289,7 @@ export const leaveCommunity = async (req: any, res: Response) => {
     user.profile.communities = newCommunityList;
   }
   community.save();
-  user!.save();
+  user?.save();
   return res.sendStatus(200);
 };
 

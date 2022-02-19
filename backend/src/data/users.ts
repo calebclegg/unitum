@@ -2,28 +2,6 @@ import bcrypt from "bcryptjs";
 
 const users = [
   {
-    fullName: "John Doe",
-    email: "john@example.com",
-    password: bcrypt.hashSync("123456", 10),
-    profile: {
-      fullName: "John Doe",
-      picture: "https://liel2c.deta.dev/images/C9n6B24XbvjKWtnbRHaQw6.jpg",
-      communities: new Array(),
-      schoolWork: new Array()
-    }
-  },
-  {
-    fullName: "Jane Doe",
-    email: "jane@example.com",
-    password: bcrypt.hashSync("123456", 10),
-    profile: {
-      fullName: "Jane Doe",
-      picture: "https://liel2c.deta.dev/images/BZN8RLvDqrQrqGgQL4GUzF.png",
-      communities: new Array(),
-      schoolWork: new Array()
-    }
-  },
-  {
     fullName: "Rex Osei",
     email: "rexosei111@gmail.com",
     password: bcrypt.hashSync("rexosei111", 10),
@@ -39,8 +17,8 @@ const users = [
         startDate: "2019-09-05",
         grade: 99
       },
-      communities: new Array(),
-      schoolWork: new Array()
+      communities: [],
+      schoolWork: []
     }
   },
   {
@@ -60,9 +38,31 @@ const users = [
         startDate: "2019-09-02",
         grade: 83
       },
-      communities: new Array(),
-      schoolWork: new Array(),
+      communities: [],
+      schoolWork: [],
       unicoyn: 21
+    }
+  },
+  {
+    fullName: "John Doe",
+    email: "john@example.com",
+    password: bcrypt.hashSync("123456", 10),
+    profile: {
+      fullName: "John Doe",
+      picture: "https://liel2c.deta.dev/images/C9n6B24XbvjKWtnbRHaQw6.jpg",
+      communities: [],
+      schoolWork: []
+    }
+  },
+  {
+    fullName: "Jane Doe",
+    email: "jane@example.com",
+    password: bcrypt.hashSync("123456", 10),
+    profile: {
+      fullName: "Jane Doe",
+      picture: "https://liel2c.deta.dev/images/BZN8RLvDqrQrqGgQL4GUzF.png",
+      communities: [],
+      schoolWork: []
     }
   }
 ];

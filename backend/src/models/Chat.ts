@@ -36,6 +36,7 @@ const chatSchema = new Schema<IChat>(
     participant: {
       type: [Types.ObjectId],
       required: true,
+      ref: "User",
       max: 2,
       min: 2
     },

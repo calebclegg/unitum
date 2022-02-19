@@ -1,18 +1,16 @@
 import Popover from "@mui/material/Popover";
 import NotificationsList from "./NotificationsList";
-import { useOpenWithHash } from "../../hooks";
 
 interface IProps {
   anchorEl: HTMLButtonElement | null;
+  handleClose: () => void;
 }
 
-const Notifications = ({ anchorEl }: IProps) => {
-  const { open, handleClose } = useOpenWithHash("#notifications");
-
+const Notifications = ({ anchorEl, handleClose }: IProps) => {
   return (
     <Popover
       id="notifications"
-      open={Boolean(open && anchorEl)}
+      open={Boolean(anchorEl)}
       anchorEl={anchorEl}
       onClose={handleClose}
       anchorOrigin={{
