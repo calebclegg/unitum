@@ -220,7 +220,7 @@ const Profile = () => {
       </Box>
       <UserPosts />
       <Suspense fallback={<div />}>
-        <EditEducation updating={updating} update={update} />
+        <EditEducation />
       </Suspense>
     </>
   );
