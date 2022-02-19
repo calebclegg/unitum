@@ -8,16 +8,11 @@ import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/system/Box";
-import { styled } from "@mui/material/styles";
 import { useEffect, useState } from "react";
 import { useData } from "../../hooks";
 import { useParams } from "react-router-dom";
 import { IChat } from "./ChatsList";
 import MessageBubble from "../../components/MessageBubble";
-
-const Form = styled("form")`
-  width: 100%;
-`;
 
 interface IMessage {
   _id: string;
@@ -55,36 +50,55 @@ const ChatMessages = ({ numberOfUnreadMessages, setChatID }: TProps) => {
   };
 
   return (
-    <Box width="100%">
-      {readMessages?.map(({ _id, from, text, createdAt }) => (
-        <MessageBubble key={_id} from={from} message={text} time={createdAt} />
-      ))}
-      <Divider variant="middle" color="red" sx={{ my: 2 }} />
-      <Typography
-        align="center"
-        sx={{
-          bgcolor: "primary.light",
-          px: 2,
-          py: 1,
-          width: "fit-content",
-          borderRadius: 4,
-          mx: "auto",
-          mb: 4
-        }}
-        variant="body2"
-        component="div"
-      >
-        {numberOfUnreadMessages} unread Messages
-      </Typography>
-      {unreadMessages?.map(({ _id, from, text, createdAt }) => (
-        <MessageBubble key={_id} from={from} message={text} time={createdAt} />
-      ))}
+    <Box width="100%" position="relative">
+      <Box p={2}>
+        {readMessages?.map(({ _id, from, text, createdAt }) => (
+          <MessageBubble
+            key={_id}
+            from={from}
+            message={text}
+            time={createdAt}
+          />
+        ))}
+        <Divider variant="middle" color="red" sx={{ my: 2 }} />
+        <Typography
+          align="center"
+          sx={{
+            bgcolor: "primary.light",
+            px: 2,
+            py: 1,
+            width: "fit-content",
+            borderRadius: 4,
+            mx: "auto",
+            mb: 4
+          }}
+          variant="body2"
+          component="div"
+        >
+          {numberOfUnreadMessages} unread Messages
+        </Typography>
+        {unreadMessages?.map(({ _id, from, text, createdAt }) => (
+          <MessageBubble
+            key={_id}
+            from={from}
+            message={text}
+            time={createdAt}
+          />
+        ))}
+      </Box>
       <Paper
         square
         variant="outlined"
-        sx={{ py: 1.5, px: 1, position: "fixed", bottom: 0, width: "100%" }}
+        sx={{
+          py: 1.5,
+          px: 1,
+          position: "absolute",
+          bottom: 90,
+          width: "100%",
+          "& form": { width: "100%" }
+        }}
       >
-        <Form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <Stack
             direction="row"
             alignItems="center"
@@ -110,7 +124,7 @@ const ChatMessages = ({ numberOfUnreadMessages, setChatID }: TProps) => {
               Send
             </LoadingButton>
           </Stack>
-        </Form>
+        </form>
       </Paper>
     </Box>
   );

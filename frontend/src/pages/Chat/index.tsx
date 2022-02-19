@@ -67,6 +67,11 @@ const Chat = () => {
         fullScreen
         id="chats"
         PaperProps={{ sx: { p: 0, bgcolor: "background.default" } }}
+        sx={{
+          "& main": {
+            overflowY: "hidden"
+          }
+        }}
       >
         <Stack
           p={2}
@@ -102,7 +107,7 @@ const Chat = () => {
         </Stack>
         <main id="main-content">
           {tablet ? (
-            <Stack direction="row" spacing={2}>
+            <Stack direction="row">
               <ChatsList selected={currentChat?.chatID} />
               <Routes>
                 <Route
