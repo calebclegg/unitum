@@ -1,6 +1,8 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { Chat } from "../models/Chat";
 import { Message } from "../models/Chat";
+import { IChat } from "../types/chat";
+import { IMessage } from "../types/message";
 
 export const getUnreadMessages = async (req: any, res: Response) => {
   const user = req.user;
@@ -65,12 +67,66 @@ export const getChatMessages = async (req: any, res: Response) => {
       .status(401)
       .json({ message: "You are not a participant of this chat" });
   const messages = await Message.find({ chatID: chatID })
-    .populate({
-      path: "from",
-      select: "-profile.dob -profile.education -email -fullName"
-    })
     .sort({ updatedAt: 1 })
     .skip(skip)
     .limit(limit);
-  return res.json(messages);
+
+  const messageList = [];
+  for (const message of messages) {
+    let messageObj: any = {};
+    if (message.from.toString() === user._id.toString()) {
+      messageObj = { ...message.toObject(), from: "me" };
+    } else {
+      messageObj = { ...message.toObject(), from: "recipient" };
+    }
+    delete messageObj.to;
+    messageList.push(messageObj);
+  }
+  return res.json(messageList);
+};
+
+export const getChats = async (req: any, res: Response) => {
+  const user = req.user;
+
+  const chats = await Chat.find(
+    {
+      participant: { $in: [user._id] }
+    },
+    { messages: { $slice: -1 } }
+  ).populate([
+    { path: "participant", select: "profile.fullName profile.picture" },
+    { path: "messages", select: "-updatedAt -__v", limit: 1 }
+  ]);
+
+  const chatList: any = [];
+  for (const chat of chats) {
+    const reciepient = chat.participant.filter((userObj) => {
+      return userObj._id.toString() === user._id.toString();
+    })[0];
+    let lastMessage = {};
+    if (chat.messages) {
+      let message: any = chat.messages[0];
+      if (message.from.toString() === user._id.toString()) {
+        message = { ...message.toObject(), from: "me" };
+      } else {
+        message = { ...message.toObject(), from: "recipient" };
+      }
+      delete message.to;
+      lastMessage = message;
+    }
+    const unreadMessagesCount = await Message.find({
+      to: user._id,
+      chatID: chat._id,
+      read: false
+    }).count();
+    const chatObj = {
+      chatID: chat._id?.toString(),
+      reciepient: reciepient,
+      createdAt: chat.createdAt,
+      lastMessage: lastMessage,
+      numberOfUnreadMessages: unreadMessagesCount
+    };
+    chatList.push(chatObj);
+  }
+  return res.json(chatList);
 };
