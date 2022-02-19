@@ -1,6 +1,6 @@
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import DatePicker from "@mui/lab/DatePicker";
+// import AdapterDateFns from "@mui/lab/AdapterDateFns";
+// import LocalizationProvider from "@mui/lab/LocalizationProvider";
+// import DatePicker from "@mui/lab/DatePicker";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -104,7 +104,7 @@ const EditEducation = ({ update, updating }: IProps) => {
               label="Grade"
               margin="normal"
             />
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
+            {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
                 label="Start Date"
                 value={startDate}
@@ -127,7 +127,7 @@ const EditEducation = ({ update, updating }: IProps) => {
                   <TextField {...params} fullWidth margin="normal" />
                 )}
               />
-            </LocalizationProvider>
+            </LocalizationProvider> */}
           </DialogContent>
         </Stack>
         <DialogActions>

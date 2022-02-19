@@ -7,6 +7,7 @@ import { CommentModel, PostModel } from "../models/Post";
 import { SavedPost } from "../models/SavedPost";
 import User from "../models/User";
 import { notification } from "../types/notification";
+import { IPost } from "../types/post";
 import { sendNotification } from "../utils/notification";
 import {
   validateCommentCreateData,
@@ -124,7 +125,21 @@ export const getPosts = async (req: any, res: Response) => {
     delete post.downVoteBy;
     return post;
   });
-  return res.status(200).json(posts);
+  const commPosts = posts.filter((post: IPost) => {
+    if (post.communityID) {
+      const inc = user.profile.communities.some((commID: Types.ObjectId) => {
+        return commID.equals(post.communityID);
+      });
+      if (inc) return post;
+    }
+    return;
+  });
+
+  const wallPosts = posts.filter((post: IPost) => {
+    if (!post.communityID) return post;
+  });
+
+  return res.status(200).json([...wallPosts, ...commPosts]);
 };
 
 // get post details
