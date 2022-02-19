@@ -5,12 +5,12 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import Box from "@mui/system/Box";
+import Paper from "@mui/material/Paper";
+import { alpha } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import { useData } from "../../hooks";
 
 export interface IChat {
-  _id: string;
   chatID: string;
   recipient: {
     _id: string;
@@ -28,22 +28,34 @@ export interface IChat {
   };
 }
 
-const ChatsList = () => {
+const ChatsList = ({ selected }: Partial<{ selected: string }>) => {
   const { data: chats } = useData<IChat[]>("/chat");
 
   return (
-    <Box p={2}>
-      <Typography variant="h5" component="h1">
+    <Paper
+      component="section"
+      id="chats-list"
+      variant="outlined"
+      sx={{ p: 0, height: "100vh", minWidth: 320, overflowY: "hidden" }}
+    >
+      <Typography variant="h5" component="h1" sx={{ px: 2, mt: 2 }}>
         Chats
       </Typography>
-      <Stack direction="row" width="min(100%, 350px)" mt={3}>
+      <Stack direction="row" width="min(100%, 320px)" mt={3}>
         <List sx={{ width: "100%" }}>
           {chats?.map((chat) => (
             <ListItem
-              key={chat._id}
+              key={chat.chatID}
               component={Link}
               to={`/chat/${chat.chatID}`}
-              sx={{ p: 0, mb: 2, alignItems: "flex-start" }}
+              sx={{
+                mb: 2,
+                alignItems: "flex-start",
+                bgcolor: ({ palette }) =>
+                  selected === chat.chatID
+                    ? alpha(palette.primary.light, 0.1)
+                    : undefined
+              }}
             >
               <Stack direction="row" flexGrow={1} alignItems="center">
                 <ListItemAvatar>
@@ -80,7 +92,7 @@ const ChatsList = () => {
           ))}
         </List>
       </Stack>
-    </Box>
+    </Paper>
   );
 };
 
