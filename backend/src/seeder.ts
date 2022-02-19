@@ -4,13 +4,11 @@ import { posts } from "./data/posts";
 import User, { Education } from "./models/User";
 import { Chat, Message } from "./models/Chat";
 import { chats, messages } from "./data/chat";
-import { education } from "./data/users";
 import CommunityModel from "./models/Community";
 import { CommentModel, PostModel } from "./models/Post";
 import connectDB from "./config/db";
 import { config } from "dotenv-flow";
 import { SchoolWork } from "./models/schoolWork";
-import { IMessage } from "./types/message";
 
 config();
 const db = connectDB();
@@ -62,7 +60,7 @@ export const importData = async () => {
       return pos;
     });
 
-    const savedPosts = await PostModel.insertMany(postL);
+    await PostModel.insertMany(postL);
     let j = 0;
     const chatL = chats.map((chat) => {
       const chatObj = {

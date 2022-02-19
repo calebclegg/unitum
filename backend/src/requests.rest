@@ -130,7 +130,7 @@ GET http://localhost:5000/api/auth/token
 Content-Type: application/json
 
 {
-    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjI5MzM3MywiZXhwIjoxNjQyODk4MTczfQ._SvnyzCDK-omh4kL4qepkum9F0yh4PNHKah68sXr354"
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NTE3Njk3OSwiZXhwIjoxNjQ1NzgxNzc5fQ.fpH9DxMxoIqKB30_RBlmtPQ4lrrbOdyeDxbzSIjOMds"
 }
 
 ###
@@ -364,3 +364,9 @@ Content-Type: application/json
     "name": "Kyei Samuel",
     "message": "Hi, Broke Boys😁😂"
 }
+
+###
+
+GET http://localhost:5000/api/chat
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NTE4MTU0NywiZXhwIjoxNjQ1MTgyMTQ3fQ.QeifLHke3OJQBa7TcjDhMiqSgDcMm_l6ks-bi8IVP-U
