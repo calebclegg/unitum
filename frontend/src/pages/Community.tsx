@@ -9,7 +9,7 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import PostCard, { IProps as IPost } from "../components/PostCard";
-import { ICommunity, useData, usePostsActions } from "../hooks";
+import { ICommunity, useData, usePostsActions, useUser } from "../hooks";
 import { API } from "../lib";
 import { lazy, Suspense, useState } from "react";
 import { useAuth } from "../context/Auth";
@@ -21,6 +21,7 @@ const ConfirmDialog = lazy(() => import("../components/ConfirmDialog"));
 const Community = () => {
   const { comm_id } = useParams<{ comm_id: string }>();
   const { token } = useAuth();
+  const { user } = useUser();
   const [sendingJoinRequest, setSendingJoinRequest] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { data: community, mutate: updateCommunity } = useData<ICommunity>(
@@ -32,7 +33,11 @@ const Community = () => {
 
   const { toggleSave, toggleVote } = usePostsActions(posts, updatePosts);
 
-  // const isMember = user ? community?.members.includes(user._id) : false;
+  const refInMembers = community?.members.find(
+    (member) => member.info._id === user?._id
+  );
+
+  const isMember = user ? Boolean(refInMembers) : false;
 
   const sendJoinRequest = async () => {
     try {
@@ -50,7 +55,11 @@ const Community = () => {
     }
   };
 
-  const openConfirmDialog = () => setIsDialogOpen(true);
+  const openConfirmDialog = () => {
+    if (community?.admin._id !== user?._id) {
+      setIsDialogOpen(true);
+    }
+  };
   const closeConfirmDialog = () => setIsDialogOpen(false);
 
   return (
@@ -102,7 +111,7 @@ const Community = () => {
             <Typography variant="h4" component="h1">
               {community?.name}
             </Typography>
-            {Math.random() < 10 ? ( // Replace with isMember logic
+            {isMember ? (
               <Button
                 variant="outlined"
                 onClick={openConfirmDialog}
