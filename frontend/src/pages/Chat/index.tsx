@@ -36,8 +36,8 @@ const Chat = () => {
   const [chatID, setChatID] = useState("");
   const { data: chats } = useData<IChat[]>("chat");
   const currentChat = chats?.find((chat) => chat.chatID === chatID);
-  const tablet = useMediaQuery(({ breakpoints }: Theme) =>
-    breakpoints.only("sm")
+  const tabletLaptop = useMediaQuery(({ breakpoints }: Theme) =>
+    breakpoints.between("sm", "lg")
   );
   const numberOfMessages = chats?.reduce(
     (acc, curr) => acc + curr.numberOfUnreadMessages,
@@ -92,7 +92,7 @@ const Chat = () => {
           >
             <ArrowBack />
           </IconButton>
-          {!tablet && currentChat ? (
+          {!tabletLaptop && currentChat ? (
             <Stack direction="row" spacing={2} alignItems="center">
               <Typography variant="h4" component="h1">
                 {currentChat.recipient.profile.fullName}
@@ -106,7 +106,7 @@ const Chat = () => {
           ) : null}
         </Stack>
         <main id="main-content">
-          {tablet ? (
+          {tabletLaptop ? (
             <Stack direction="row">
               <ChatsList selected={currentChat?.chatID} />
               <Routes>
