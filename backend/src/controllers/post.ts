@@ -128,7 +128,7 @@ export const getPosts = async (req: any, res: Response) => {
   const commPosts = posts.filter((post: IPost) => {
     if (post.communityID) {
       const inc = user.profile.communities.some((commID: Types.ObjectId) => {
-        return commID.equals(post.communityID);
+        return commID.equals(post.communityID._id);
       });
       if (inc) return post;
     }
@@ -253,7 +253,7 @@ export const addPostComment = async (req: any, res: Response) => {
         return commID.toString();
       }
     );
-    if (!userCommunities.includes(post.communityID.toString))
+    if (!userCommunities.includes(post.communityID.toString()))
       return res.status(401).json({ message: "Cannot comment on this post" });
   }
 
