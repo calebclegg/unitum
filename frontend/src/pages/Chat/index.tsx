@@ -11,7 +11,7 @@ import { Theme } from "@mui/material/styles";
 import ChatsList from "./ChatsList";
 import ChatMessages from "./ChatMessages";
 import { useData } from "../../hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export interface IChat {
   _id: string;
@@ -50,6 +50,22 @@ const Chat = () => {
     (acc, curr) => acc + curr.numberOfUnreadMessages,
     0
   );
+
+  const handleResize = () => {
+    if (laptopUp) {
+      const param = new URLSearchParams();
+      param.set("chat_id", chatID);
+
+      navigate(chatID ? `/feed?${param.toString()}#chat` : "/feed#chat", {
+        replace: true
+      });
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const goBack = (event: React.MouseEvent<HTMLAnchorElement>) => {
     const previousURL = new URL(document.referrer);

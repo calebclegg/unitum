@@ -7,6 +7,8 @@ import Paper, { PaperProps } from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { Theme } from "@mui/material/styles";
 import {
   Link,
   useLocation,
@@ -18,6 +20,7 @@ import { IChat } from "../pages/Chat";
 import ChatMessages from "../pages/Chat/ChatMessages";
 import ChatsList from "../pages/Chat/ChatsList";
 import ArrowBack from "@mui/icons-material/ArrowBack";
+import { useEffect } from "react";
 
 function PaperComponent(props: PaperProps) {
   return (
@@ -37,6 +40,10 @@ const ChatDialog = () => {
   const { hash, pathname } = useLocation();
   const { data: chats } = useData<IChat[]>("chat");
 
+  const laptopUp = useMediaQuery(({ breakpoints }: Theme) =>
+    breakpoints.up("lg")
+  );
+
   const currentChat = chats?.find((chat) => chat.chatID === chatID);
 
   const numberOfMessages = chats?.reduce(
@@ -47,6 +54,17 @@ const ChatDialog = () => {
   const handleClose = () => {
     navigate(pathname);
   };
+
+  const handleResize = () => {
+    if (!laptopUp) {
+      navigate(chatID ? `/chat/${chatID}` : "/chat", { replace: true });
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const goBack = (event: React.MouseEvent<HTMLAnchorElement>) => {
     const previousURL = new URL(document.referrer);
