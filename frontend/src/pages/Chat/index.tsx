@@ -96,11 +96,6 @@ const Chat = () => {
             bgcolor: chatID || tabletLaptop ? "background.default" : undefined
           }
         }}
-        sx={{
-          "& main": {
-            overflowY: "hidden"
-          }
-        }}
       >
         <Stack
           p={2}
@@ -143,6 +138,7 @@ const Chat = () => {
                   path=":chat_id"
                   element={
                     <ChatMessages
+                      recipientID={currentChat?.recipient._id || ""}
                       setChatID={setChatID}
                       numberOfUnreadMessages={
                         currentChat?.numberOfUnreadMessages || 0
@@ -159,6 +155,7 @@ const Chat = () => {
                 path=":chat_id"
                 element={
                   <ChatMessages
+                    recipientID={currentChat?.recipient._id || ""}
                     setChatID={setChatID}
                     numberOfUnreadMessages={
                       currentChat?.numberOfUnreadMessages || 0

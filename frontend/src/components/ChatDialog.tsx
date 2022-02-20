@@ -130,7 +130,10 @@ const ChatDialog = () => {
       </DialogTitle>
       <DialogContent sx={{ p: 0 }}>
         {chatID ? (
-          <ChatMessages numberOfUnreadMessages={numberOfMessages || 0} />
+          <ChatMessages
+            recipientID={currentChat?.recipient._id || ""}
+            numberOfUnreadMessages={numberOfMessages || 0}
+          />
         ) : (
           <ChatsList selected={currentChat?.chatID} />
         )}

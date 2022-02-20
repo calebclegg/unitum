@@ -13,6 +13,7 @@ import { useData } from "../../hooks";
 import { useParams, useSearchParams } from "react-router-dom";
 import { IChat } from ".";
 import MessageBubble from "../../components/MessageBubble";
+import { useSocket } from "../../context/Socket";
 
 export interface IMessage {
   _id: string;
@@ -23,15 +24,21 @@ export interface IMessage {
 }
 
 type TProps = Pick<IChat, "numberOfUnreadMessages"> & {
+  recipientID: string;
   setChatID?: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const ChatMessages = ({ numberOfUnreadMessages, setChatID }: TProps) => {
+const ChatMessages = ({
+  numberOfUnreadMessages,
+  recipientID,
+  setChatID
+}: TProps) => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const { socket } = useSocket();
   const { chat_id } = useParams<{ chat_id: string }>();
   const [searchParams] = useSearchParams();
   const [sending, setSending] = useState(false);
-  const { data: messages } = useData<IMessage[]>(
+  const { data: messages, mutate } = useData<IMessage[]>(
     chat_id ? `chat/${chat_id}` : `chat/${searchParams.get("chat_id")}`
   );
 
@@ -40,21 +47,43 @@ const ChatMessages = ({ numberOfUnreadMessages, setChatID }: TProps) => {
     return () => setChatID?.("");
   }, [chat_id]);
 
+  useEffect(() => {
+    socket?.on("new message", (newMessage) => {
+      setSending(false);
+      mutate([...messages, newMessage]);
+    });
+  }, [socket]);
+
   const readMessages = messages?.filter(({ read }) => read);
   const unreadMessages = messages?.filter(({ read }) => !read);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+
     try {
       setSending(true);
+      const res = socket?.emit("message:send", {
+        to: recipientID,
+        chatID: chat_id,
+        text: formData.get("message")
+      });
+
+      (event.target as HTMLFormElement).reset();
     } catch (error) {
       console.log(error);
-    } finally {
       setSending(false);
     }
   };
 
   return (
-    <Box ref={sectionRef} width="100%" minHeight="100vh" position="relative">
+    <Box
+      mb={8}
+      ref={sectionRef}
+      width="100%"
+      minHeight="100vh"
+      position="relative"
+    >
       <Box p={2}>
         {readMessages?.map(({ _id, from, text, createdAt }) => (
           <MessageBubble
@@ -116,6 +145,7 @@ const ChatMessages = ({ numberOfUnreadMessages, setChatID }: TProps) => {
               <OutlinedInput
                 id="message-input"
                 name="message"
+                autoComplete="off"
                 sx={{ bgcolor: "grey.100" }}
                 inputProps={{
                   required: true,
@@ -124,7 +154,7 @@ const ChatMessages = ({ numberOfUnreadMessages, setChatID }: TProps) => {
                 }}
               />
             </FormControl>
-            <LoadingButton variant="contained" loading={sending}>
+            <LoadingButton type="submit" variant="contained" loading={sending}>
               Send
             </LoadingButton>
           </Stack>

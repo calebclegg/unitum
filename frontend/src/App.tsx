@@ -9,6 +9,7 @@ import Landing from "./pages/Landing";
 import Layout from "./components/Layout";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import SocketProvider from "./context/Socket";
 
 const Chat = lazy(() => import("./pages/Chat"));
 const Feed = lazy(() => import("./pages/Feed"));
@@ -54,7 +55,14 @@ function App() {
       <Suspense fallback="Loading">
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/*" element={<Auth />}>
+          <Route
+            path="/*"
+            element={
+              <Auth>
+                <SocketProvider />
+              </Auth>
+            }
+          >
             <Route path="/*" element={<Layout />}>
               <Route path="profile" element={<Profile />} />
               <Route path="feed" element={<Feed />} />
