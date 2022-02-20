@@ -1,53 +1,59 @@
 import Avatar from "@mui/material/Avatar";
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
+import ListItemButton from "@mui/material/ListItemButton";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import { alpha } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { alpha, Theme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import { useData } from "../../hooks";
-
-export interface IChat {
-  chatID: string;
-  recipient: {
-    _id: string;
-    profile: {
-      fullName: string;
-      picture: string;
-    };
-  };
-  createdAt: string;
-  read: boolean;
-  numberOfUnreadMessages: number;
-  lastMessage: {
-    from: "me" | "recipient";
-    text: string;
-  };
-}
+import { IChat } from ".";
 
 const ChatsList = ({ selected }: Partial<{ selected: string }>) => {
   const { data: chats } = useData<IChat[]>("/chat");
+  const laptopUp = useMediaQuery(({ breakpoints }: Theme) =>
+    breakpoints.up("lg")
+  );
+
+  const getChatPathForDesktop = (chatID: string) => {
+    const url = new URL(window.location.href);
+    url.searchParams.set("chat_id", chatID);
+
+    return url.toString().replace(url.origin, "");
+  };
 
   return (
     <Paper
       component="section"
       id="chats-list"
       variant="outlined"
-      sx={{ p: 0, height: "100vh", minWidth: 320, overflowY: "hidden" }}
+      sx={({ breakpoints }) => ({
+        p: 0,
+        height: "100vh",
+        overflowY: "hidden",
+
+        [breakpoints.up("sm")]: {
+          minWidth: 320
+        }
+      })}
     >
       <Typography variant="h5" component="h1" sx={{ px: 2, mt: 2 }}>
         Chats
       </Typography>
-      <Stack direction="row" width="min(100%, 320px)" mt={3}>
+      <Stack direction="row" width="100%" mt={3}>
         <List sx={{ width: "100%" }}>
           {chats?.map((chat) => (
-            <ListItem
+            <ListItemButton
               key={chat.chatID}
               component={Link}
-              to={`/chat/${chat.chatID}`}
+              to={
+                laptopUp
+                  ? getChatPathForDesktop(chat.chatID)
+                  : `/chat/${chat.chatID}`
+              }
               sx={{
                 mb: 2,
                 alignItems: "flex-start",
@@ -88,7 +94,7 @@ const ChatsList = ({ selected }: Partial<{ selected: string }>) => {
                   {chat.numberOfUnreadMessages}
                 </Typography>
               </Stack>
-            </ListItem>
+            </ListItemButton>
           ))}
         </List>
       </Stack>

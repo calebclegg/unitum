@@ -11,7 +11,7 @@
     "install": "YARN_PRODUCTION=false yarn install:client && YARN_PRODUCTION=false yarn install:server",
     "client": "cd frontend && yarn start",
     "server": "cd backend && yarn dev",
-    "start": "yarn server",
+    "start": "concurrently \"yarn server\" \"yarn client\"",
     "build": "YARN_PRODUCTION=false yarn --cwd frontend build && YARN_PRODUCTION=false yarn --cwd backend build"
   },
   "devDependencies": {
