@@ -15,8 +15,6 @@ import { redisConnect } from "./config/redis_connect";
 import { createServer } from "http";
 import { Server, Socket } from "socket.io";
 import { getUser } from "./eventHandlers/token.middleware";
-import { Notification } from "./models/Notification";
-import { notificationHandler } from "./eventHandlers/notification";
 import { chatHandler } from "./eventHandlers/chat";
 import searchRouter from "./routes/search";
 import path from "path";
@@ -47,7 +45,6 @@ const onConnection = async (socket: any) => {
     next();
   });
 
-  notificationHandler(io, socket);
   chatHandler(io, socket);
   socket.on("disconnect", () => {
     console.log("Socket disconnected");

@@ -1,8 +1,6 @@
 import { Types } from "mongoose";
 import { Server } from "socket.io";
 import { Chat, Message } from "../models/Chat";
-import { IMessage } from "../types/message";
-import { notification } from "../types/notification";
 import { validateMessageData } from "../validators/message.validator";
 
 export const chatHandler = async (io: Server, socket: any) => {
@@ -32,14 +30,17 @@ export const chatHandler = async (io: Server, socket: any) => {
           status: "401",
           message: "You are not a participant of this chat"
         });
-      const newMessage = await (
-        await new Message({ ...valData.value }).save()
-      ).populate({
-        path: "from",
-        select: "profile.fullName profile.picture"
-      });
+      const newMessage = await new Message({ ...valData.value }).save();
 
-      socket.to(newMessage.chatID.toString()).emit("new message", newMessage);
+      let messageObj: any = {};
+      if (newMessage.from.toString() === socket.user._id.toString()) {
+        messageObj = { ...newMessage.toObject(), from: "me" };
+      } else {
+        messageObj = { ...newMessage.toObject(), from: "recipient" };
+      }
+      delete messageObj.to;
+
+      io.to(newMessage.chatID.toString()).emit("new message", messageObj);
     } catch (error) {
       callback({
         status: "500"
@@ -69,7 +70,7 @@ export const chatHandler = async (io: Server, socket: any) => {
       chats.forEach((chat) => {
         socket.join(chat._id.toString());
       });
-      socket.to(user._id).emit("all chats", chats);
+      io.to(user._id).emit("all chats", chats);
     } catch (error) {
       return callback({
         status: "500"
@@ -143,7 +144,7 @@ export const chatHandler = async (io: Server, socket: any) => {
         .sort({ updatedAt: 1 })
         .skip(skip)
         .limit(limit);
-      socket.to(user._id.toString()).emit("chat messages", messages);
+      io.to(user._id.toString()).emit("chat messages", messages);
       return callback({
         status: "200"
       });
