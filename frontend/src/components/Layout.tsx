@@ -13,6 +13,7 @@ import CommunitiesBrief from "./CommunitiesBrief";
 import AboutCommunity from "./AboutCommunity";
 
 const Sidebar = lazy(() => import("./Sidebar"));
+const ChatDialog = lazy(() => import("./ChatDialog"));
 const CreatePost = lazy(() => import("./CreatePost"));
 
 const Layout = () => {
@@ -80,6 +81,9 @@ const Layout = () => {
       </Stack>
       {!tabletUp && <BottomNav />}
       <CreatePost />
+      <Suspense fallback={<div />}>
+        <ChatDialog />
+      </Suspense>
     </SocketProvider>
   );
 };

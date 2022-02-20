@@ -54,24 +54,19 @@ function App() {
       <Suspense fallback="Loading">
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route
-            path="/*"
-            element={
-              <Auth>
-                <Layout />
-              </Auth>
-            }
-          >
-            <Route path="chat" element={<Chat />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="feed" element={<Feed />} />
-            <Route path="posts/:post_id" element={<Post />} />
-            <Route path="communities">
-              <Route index element={<Communities />} />
-              <Route path=":comm_id" element={<Community />} />
+          <Route path="/*" element={<Auth />}>
+            <Route path="/*" element={<Layout />}>
+              <Route path="profile" element={<Profile />} />
+              <Route path="feed" element={<Feed />} />
+              <Route path="posts/:post_id" element={<Post />} />
+              <Route path="communities">
+                <Route index element={<Communities />} />
+                <Route path=":comm_id" element={<Community />} />
+              </Route>
+              <Route path="search" element={<Search />} />
+              <Route path="notifications" element={<Notification />} />
             </Route>
-            <Route path="search" element={<Search />} />
-            <Route path="notifications" element={<Notification />} />
+            <Route path="chat/*" element={<Chat />} />
           </Route>
           <Route path="login/*" element={<Login />} />
           <Route path="register/*" element={<Register />} />

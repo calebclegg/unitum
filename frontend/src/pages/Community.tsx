@@ -1,10 +1,10 @@
 import { useParams } from "react-router-dom";
+import Helmet from "react-helmet";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Edit from "@mui/icons-material/Edit";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
@@ -13,23 +13,31 @@ import { ICommunity, useData, usePostsActions, useUser } from "../hooks";
 import { API } from "../lib";
 import { lazy, Suspense, useState } from "react";
 import { useAuth } from "../context/Auth";
+import EditableAvatar from "../components/EditableAvatar";
 
+const EditCommunity = lazy(() => import("../components/EditCommunity"));
 const ConfirmDialog = lazy(() => import("../components/ConfirmDialog"));
 
 const Community = () => {
   const { comm_id } = useParams<{ comm_id: string }>();
-  const { user } = useUser();
   const { token } = useAuth();
+  const { user } = useUser();
   const [sendingJoinRequest, setSendingJoinRequest] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const { data: community } = useData<ICommunity>(`community/${comm_id}`);
-  const { data: posts, mutate } = useData<IPost[]>(
+  const { data: community, mutate: updateCommunity } = useData<ICommunity>(
+    `community/${comm_id}`
+  );
+  const { data: posts, mutate: updatePosts } = useData<IPost[]>(
     `posts?communityID=${comm_id}`
   );
 
-  const { toggleSave, toggleVote } = usePostsActions(posts, mutate);
+  const { toggleSave, toggleVote } = usePostsActions(posts, updatePosts);
 
-  // const isMember = user ? community?.members.includes(user._id) : false;
+  const refInMembers = community?.members.find(
+    (member) => member.info._id === user?._id
+  );
+
+  const isMember = user ? Boolean(refInMembers) : false;
 
   const sendJoinRequest = async () => {
     try {
@@ -47,17 +55,28 @@ const Community = () => {
     }
   };
 
-  const openConfirmDialog = () => setIsDialogOpen(true);
+  const openConfirmDialog = () => {
+    if (community?.admin._id !== user?._id) {
+      setIsDialogOpen(true);
+    }
+  };
   const closeConfirmDialog = () => setIsDialogOpen(false);
 
   return (
     <>
+      <Helmet>
+        <title>{community?.name || "Loading..."} | Community</title>
+        {community?.description ? (
+          <meta name="description" content={community.description} />
+        ) : null}
+      </Helmet>
       <Paper
         square
         variant="outlined"
         sx={{ mb: 4, p: 4, position: "relative" }}
       >
         <IconButton
+          href="#edit-community"
           size="small"
           sx={{
             position: "absolute",
@@ -68,23 +87,31 @@ const Community = () => {
           <Edit fontSize="small" />
         </IconButton>
         <Grid container spacing={2}>
-          <Grid item>
-            <Avatar
-              variant="rounded"
-              sx={{
-                width: 94,
-                height: 94,
-                backgroundColor: "#cacaca68"
-              }}
-              src={community?.picture}
-              alt=""
+          <Grid
+            item
+            width={104}
+            height={104}
+            position="relative"
+            borderRadius={2}
+            bgcolor="#cacaca68"
+            sx={{
+              "&.MuiGrid-item": {
+                pl: 0,
+                pt: 0
+              }
+            }}
+          >
+            <EditableAvatar
+              src={community?.picture || ""}
+              endpoint={`community/${comm_id}`}
+              revalidate={updateCommunity}
             />
           </Grid>
           <Grid item spacing={2}>
             <Typography variant="h4" component="h1">
               {community?.name}
             </Typography>
-            {Math.random() < 10 ? ( // Replace with isMember logic
+            {isMember ? (
               <Button
                 variant="outlined"
                 onClick={openConfirmDialog}
@@ -115,6 +142,9 @@ const Community = () => {
           />
         ))}
       </Stack>
+      <Suspense fallback={<div />}>
+        <EditCommunity community={community} revalidate={updateCommunity} />
+      </Suspense>
       <Suspense fallback={<div />}>
         <ConfirmDialog open={isDialogOpen} handleClose={closeConfirmDialog} />
       </Suspense>

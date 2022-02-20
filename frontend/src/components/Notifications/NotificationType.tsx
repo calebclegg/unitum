@@ -63,9 +63,7 @@ const NotificationType = ({
               px: 1
             }}
           >
-            <strong>{username}</strong> {typeMessage[type]} &ldquo;
-            <strong>{post}</strong>
-            &rdquo;
+            {typeMessage[type]}
           </Typography>
         }
         secondary={
