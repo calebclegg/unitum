@@ -50,7 +50,7 @@ const ChatMessages = ({
   useEffect(() => {
     socket?.on("new message", (newMessage) => {
       setSending(false);
-      mutate([...messages, newMessage]);
+      mutate([...(messages || []), newMessage]);
     });
   }, [socket]);
 
