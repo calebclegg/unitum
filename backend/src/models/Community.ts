@@ -1,6 +1,5 @@
-import { Schema, model, Types } from "mongoose";
+import { Schema, model } from "mongoose";
 import { ICommunity } from "../types/community";
-import { postSchema } from "../models/Post";
 
 const membersSchema = new Schema({
   info: {
@@ -9,7 +8,8 @@ const membersSchema = new Schema({
   },
   role: {
     type: String,
-    enum: ["admin", "moderator", "member"]
+    enum: ["admin", "moderator", "member"],
+    default: "member"
   }
 });
 const communitySchema = new Schema<ICommunity>(

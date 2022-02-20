@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import User from "../models/User";
 import { Request, Response } from "express";
 import {
@@ -9,6 +10,8 @@ import {
 import { validateEmail } from "../validators/user.validator";
 import { normalizeGoogleData } from "../utils/dataNormalizer";
 import { saveRefreshToken, deleteRefreshToken } from "../utils/Token";
+import { AnyKeys, AnyObject } from "mongoose";
+import { IUser } from "../types/user";
 
 export const register = async (req: Request, res: Response) => {
   const newUser = new User({
@@ -44,8 +47,8 @@ export const checkAuthProvider = async (req: Request, res: Response) => {
       errors: valData.error
     });
   }
-  let dbUser;
-  dbUser = await User.findOne({ email: valData.value.email }).select(
+
+  const dbUser = await User.findOne({ email: valData.value.email }).select(
     "+authProvider"
   );
 
@@ -61,26 +64,28 @@ export const checkAuthProvider = async (req: Request, res: Response) => {
 
 type authProvider = "GOOGLE" | "FACEBOOK" | "TWITTER" | string;
 export const externalAuth = async (req: any, res: Response) => {
-  const provider: authProvider = req.body.authProvider;
+  const provider: authProvider = String(req.params.provider).toUpperCase();
   if (!provider) {
     return res.status(400).json({ message: "Authentication Provider not set" });
   }
-  let userData;
+  let userData: (AnyKeys<IUser> & AnyObject) | undefined;
   if (provider === "GOOGLE") {
     userData = await normalizeGoogleData(req.body);
   }
 
-  let dbUser;
-
-  dbUser = await User.findOne({ email: userData?.email }).select(
+  const dbUser = await User.findOne({ email: userData?.email }).select(
     "+authProvider"
   );
   let accessToken, refreshToken;
+  console.log(userData);
   if (!dbUser) {
     const newUser = new User({
-      ...userData
+      ...userData,
+      "profile.picture": userData?.picture,
+      "profile.fullName": userData?.fullName
     });
 
+    console.log(newUser);
     const savedUser = await newUser.save();
     accessToken = await createToken(savedUser);
     refreshToken = await createRefreshToken(savedUser);
@@ -111,19 +116,19 @@ export const getNewAccessToken = async (req: any, res: Response) => {
   } catch (error) {
     return res.status(400).json({ message: "Invalid Token" });
   }
-  let redisToken;
-  redisToken = await retrieveRefreshToken(tokenData.sub?.toString()!);
+
+  const redisToken = await retrieveRefreshToken(tokenData.sub!.toString());
   if (redisToken !== refreshToken) {
     return res.sendStatus(401);
   }
-  let dbUser;
-  dbUser = await User.findOne({ email: tokenData.sub }).select([
+
+  const dbUser = await User.findOne({ email: tokenData.sub }).select([
     "+authProvider",
     "+password"
   ]);
   const accessToken = await createToken(dbUser!);
   const newRefreshToken = await createRefreshToken(dbUser!);
-  await saveRefreshToken(tokenData.sub?.toString()!, refreshToken);
+  await saveRefreshToken(tokenData.sub!.toString(), refreshToken);
   return res.status(200).json({ accessToken, newRefreshToken });
 };
 

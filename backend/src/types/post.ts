@@ -11,7 +11,7 @@ export interface IPost {
   author: Types.ObjectId;
   communityID: Types.ObjectId;
   body: string;
-  media: string;
+  media: string[];
   numberOfComments?: number;
   comments?: Types.ObjectId[];
   upvotes?: number;

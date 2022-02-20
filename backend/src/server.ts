@@ -3,6 +3,7 @@ import { config as dotenv } from "dotenv-flow";
 import authRoutes from "./routes/auth";
 import userRoutes from "./routes/user";
 import communityRoutes from "./routes/community";
+import uploadsRoute from "./routes/uploads";
 import postRoutes from "./routes/post";
 import chatRoutes from "./routes/chat";
 import contactRoutes from "./routes/contact";
@@ -84,9 +85,10 @@ app.use("/api/posts", postRoutes);
 app.use("/api", searchRouter);
 app.use("/api/chat", chatRoutes);
 app.use("/api/contact", contactRoutes);
+app.use("/api/uploads", uploadsRoute);
 
 app.use((err: Error, req: any, res: Response, next: NextFunction) => {
-  // console.log(err);
+  console.log(err);
   res.status(500).json({ message: "Something went wrong" });
 });
 //Mount api routes here

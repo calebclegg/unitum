@@ -14,15 +14,17 @@ router.get("/me/posts", getUser, use(controller.getUserPosts));
 
 router.get("/me/communities", getUser, use(controller.getUserCommunities));
 
-router.get("/me/education/:edID", getUser, use(controller.getEducation));
+// router.get("/me/education/:edID", getUser, use(controller.getEducation));
 
-router.post("/me/education", getUser, use(controller.addNewEducation));
+// router.post("/me/education", getUser, use(controller.addNewEducation));
 
-router.patch("/me/education/:edID", getUser, use(controller.editEducation));
+// router.patch("/me/education/:edID", getUser, use(controller.editEducation));
 
-router.delete("/me/education/:edID", getUser, use(controller.deleteEducation));
+// router.delete("/me/education/:edID", getUser, use(controller.deleteEducation));
 
 router.post("/me/schoolWork", getUser, use(controller.newSchoolWork));
+
+router.get("/me/schoolWork", getUser, use(controller.getUserSchoolWork));
 
 router.patch(
   "/me/schoolWork/:workID",

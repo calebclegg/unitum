@@ -17,7 +17,10 @@ export const search = async (req: Request, res: Response) => {
       "-__v -createdAt -updatedAt -profile.education +profile.picture -profile.dob -email -fullName -role -profile.communities"
     ),
     community: CommunityModel.find({
-      $or: [{ name: { $regex: searchString, $options: "i" } }]
+      $or: [
+        { name: { $regex: searchString, $options: "i" } },
+        { description: { $regex: searchString, $options: "i" } }
+      ]
     })
       .select("-__v -updatedAt -members")
       .populate({ path: "admin", select: "profile.fullName profile.picture" }),
