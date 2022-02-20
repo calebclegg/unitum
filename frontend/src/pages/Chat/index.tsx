@@ -1,4 +1,4 @@
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import Helmet from "react-helmet";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import Avatar from "@mui/material/Avatar";
@@ -33,19 +33,27 @@ export interface IChat {
 }
 
 const Chat = () => {
+  const navigate = useNavigate();
   const [chatID, setChatID] = useState("");
   const { data: chats } = useData<IChat[]>("chat");
   const currentChat = chats?.find((chat) => chat.chatID === chatID);
   const tabletLaptop = useMediaQuery(({ breakpoints }: Theme) =>
     breakpoints.between("sm", "lg")
   );
+  const laptopUp = useMediaQuery(({ breakpoints }: Theme) =>
+    breakpoints.up("lg")
+  );
+
+  if (laptopUp) navigate("/feed#chat", { replace: true });
+
   const numberOfMessages = chats?.reduce(
     (acc, curr) => acc + curr.numberOfUnreadMessages,
     0
   );
 
   const goBack = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    if (window.history.length > 2) {
+    const previousURL = new URL(document.referrer);
+    if (previousURL.origin === window.location.origin) {
       event.preventDefault();
       window.history.back();
     }
@@ -66,7 +74,12 @@ const Chat = () => {
         open
         fullScreen
         id="chats"
-        PaperProps={{ sx: { p: 0, bgcolor: "background.default" } }}
+        PaperProps={{
+          sx: {
+            p: 0,
+            bgcolor: chatID || tabletLaptop ? "background.default" : undefined
+          }
+        }}
         sx={{
           "& main": {
             overflowY: "hidden"
@@ -77,7 +90,7 @@ const Chat = () => {
           p={2}
           mb={2}
           bgcolor="#fff"
-          borderBottom="2px solid"
+          borderBottom="1px solid"
           borderColor="divider"
           spacing={1}
           direction="row"
