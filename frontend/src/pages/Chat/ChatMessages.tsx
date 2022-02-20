@@ -8,13 +8,13 @@ import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/system/Box";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useData } from "../../hooks";
-import { useParams } from "react-router-dom";
-import { IChat } from "./ChatsList";
+import { useParams, useSearchParams } from "react-router-dom";
+import { IChat } from ".";
 import MessageBubble from "../../components/MessageBubble";
 
-interface IMessage {
+export interface IMessage {
   _id: string;
   createdAt: string;
   from: "recipient" | "me";
@@ -23,17 +23,21 @@ interface IMessage {
 }
 
 type TProps = Pick<IChat, "numberOfUnreadMessages"> & {
-  setChatID: React.Dispatch<React.SetStateAction<string>>;
+  setChatID?: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const ChatMessages = ({ numberOfUnreadMessages, setChatID }: TProps) => {
+  const sectionRef = useRef<HTMLDivElement>(null);
   const { chat_id } = useParams<{ chat_id: string }>();
+  const [searchParams] = useSearchParams();
   const [sending, setSending] = useState(false);
-  const { data: messages } = useData<IMessage[]>(`chat/${chat_id}`);
+  const { data: messages } = useData<IMessage[]>(
+    chat_id ? `chat/${chat_id}` : `chat/${searchParams.get("chat_id")}`
+  );
 
   useEffect(() => {
-    if (chat_id) setChatID(chat_id);
-    return () => setChatID("");
+    if (chat_id) setChatID?.(chat_id);
+    return () => setChatID?.("");
   }, [chat_id]);
 
   const readMessages = messages?.filter(({ read }) => read);
@@ -50,7 +54,7 @@ const ChatMessages = ({ numberOfUnreadMessages, setChatID }: TProps) => {
   };
 
   return (
-    <Box width="100%" position="relative">
+    <Box ref={sectionRef} width="100%" minHeight="100vh" position="relative">
       <Box p={2}>
         {readMessages?.map(({ _id, from, text, createdAt }) => (
           <MessageBubble
@@ -92,9 +96,9 @@ const ChatMessages = ({ numberOfUnreadMessages, setChatID }: TProps) => {
         sx={{
           py: 1.5,
           px: 1,
-          position: "absolute",
-          bottom: 90,
-          width: "100%",
+          position: "fixed",
+          bottom: 0,
+          width: sectionRef.current?.getBoundingClientRect().width,
           "& form": { width: "100%" }
         }}
       >
