@@ -27,7 +27,7 @@ const wrap = (middleware: any) => (socket: Socket, next: any) =>
   middleware(socket.request, {}, next);
 const app = express();
 const httpServer = createServer(app);
-const io = new Server(httpServer, {
+export const io = new Server(httpServer, {
   cors: {
     origin: "http://localhost:3000"
   }
