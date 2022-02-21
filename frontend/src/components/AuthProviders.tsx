@@ -48,6 +48,7 @@ const AuthProviders = ({ formType, setMessage }: IProps) => {
   };
 
   const responseFacebook = async (response: Record<string, any>) => {
+    console.log(response);
     if (response.accessToken) {
       const { profileObj } = response;
       try {
