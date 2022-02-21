@@ -31,7 +31,6 @@ export const chatHandler = async (io: Server, socket: any) => {
           message: "You are not a participant of this chat"
         });
       const newMessage = await new Message({ ...valData.value }).save();
-
       let messageObj: any = {};
       if (newMessage.from.toString() === socket.user._id.toString()) {
         messageObj = { ...newMessage.toObject(), from: "me" };
@@ -39,7 +38,6 @@ export const chatHandler = async (io: Server, socket: any) => {
         messageObj = { ...newMessage.toObject(), from: "recipient" };
       }
       delete messageObj.to;
-
       io.to(newMessage.chatID.toString()).emit("new message", messageObj);
     } catch (error) {
       callback({

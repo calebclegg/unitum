@@ -1,18 +1,18 @@
 import { Notification } from "../models/Notification";
 import { notification } from "../types/notification";
-import { Server } from "socket.io";
+import { io } from "../server";
 
-export const sendNotification = async (
-  io: Server,
-  content: notification,
-  to: string
-) => {
-  const newNotification = await new Notification(content).save();
-  io.to(to).emit(
-    "new notification",
-    newNotification.populate({
-      path: "user",
-      select: "profile.fullName -profile.picture -__v -updatedAt"
-    })
-  );
+export const sendNotification = async (content: notification, to: string) => {
+  try {
+    const newNotification = await new Notification(content).save();
+    io.to(to).emit(
+      "new notification",
+      newNotification.populate({
+        path: "user",
+        select: "profile.fullName profile.picture"
+      })
+    );
+  } catch (e) {
+    console.log(e);
+  }
 };
