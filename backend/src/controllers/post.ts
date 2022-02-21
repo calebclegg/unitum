@@ -61,11 +61,7 @@ export const createPost = async (req: any, res: Response) => {
       user: user._id,
       post: newPost._id
     };
-    await sendNotification(
-      req.socket,
-      notificationInfo,
-      community._id.toString()
-    );
+    await sendNotification(notificationInfo, community._id.toString());
   }
 };
 
@@ -128,7 +124,7 @@ export const getPosts = async (req: any, res: Response) => {
   const commPosts = posts.filter((post: IPost) => {
     if (post.communityID) {
       const inc = user.profile.communities.some((commID: Types.ObjectId) => {
-        return commID.equals(post.communityID);
+        return commID.equals(post.communityID._id);
       });
       if (inc) return post;
     }
@@ -253,7 +249,7 @@ export const addPostComment = async (req: any, res: Response) => {
         return commID.toString();
       }
     );
-    if (!userCommunities.includes(post.communityID.toString))
+    if (!userCommunities.includes(post.communityID.toString()))
       return res.status(401).json({ message: "Cannot comment on this post" });
   }
 
@@ -275,19 +271,17 @@ export const addPostComment = async (req: any, res: Response) => {
   post.comments?.push(newComment._id);
   post.numberOfComments! += 1;
   await post.save();
-  const notificationInfo: notification = {
-    message: `${req.user.profile.fullName} commented on your post`,
-    user: req.user._id,
-    type: "comment",
-    userID: post.author._id,
-    post: post._id
-  };
   res.sendStatus(201);
-  await sendNotification(
-    req.socket,
-    notificationInfo,
-    post.author._id.toString()
-  );
+  if (!(req.user._id.toString() === post.author.toString())) {
+    const notificationInfo: notification = {
+      message: `${req.user.profile.fullName} commented on your post`,
+      user: req.user._id,
+      type: "comment",
+      userID: post.author._id,
+      post: post._id
+    };
+    await sendNotification(notificationInfo, post.author.toString());
+  }
 };
 
 export const postUpVote = async (req: any, res: Response) => {
@@ -346,11 +340,7 @@ export const postUpVote = async (req: any, res: Response) => {
       userID: post.author._id,
       post: post._id
     };
-    await sendNotification(
-      req.io,
-      notificationInfo,
-      post.author._id.toString()
-    );
+    await sendNotification(notificationInfo, post.author.toString());
   }
   if (post.upvoteBy?.length === post.nextCoyn) {
     const user = await User.findOne({ _id: post.author });
@@ -364,11 +354,7 @@ export const postUpVote = async (req: any, res: Response) => {
       type: "post",
       post: post.id
     };
-    await sendNotification(
-      req.io,
-      notificationInfo,
-      post.author._id.toString()
-    );
+    await sendNotification(notificationInfo, post.author.toString());
   }
 };
 
