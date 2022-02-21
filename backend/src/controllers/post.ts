@@ -288,7 +288,6 @@ export const postUpVote = async (req: any, res: Response) => {
   const postID = new Types.ObjectId(req.params.postID);
   const post = await PostModel.findOne({ _id: postID }).select("+nextCoyn");
   if (!post) return res.status(404).json({ message: "Post not found" });
-  console.log(req.user);
 
   if (post.communityID) {
     const isMember = req.user.profile.communities.some(
@@ -362,7 +361,6 @@ export const postDownVote = async (req: any, res: Response) => {
   const postID = new Types.ObjectId(req.params.postID);
   const post = await PostModel.findOne({ _id: postID });
   if (!post) return res.status(404).json({ message: "Post not found" });
-  console.log(req.user);
   if (post.communityID) {
     const userCommunities = req.user.profile.communities.map(
       (commID: Types.ObjectId) => {
