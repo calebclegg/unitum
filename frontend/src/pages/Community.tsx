@@ -42,7 +42,7 @@ const Community = () => {
   const sendJoinRequest = async () => {
     try {
       setSendingJoinRequest(true);
-      const { data } = await API.post(`community/${comm_id}/join`, {
+      const { data } = await API.post(`community/${comm_id}/join`, undefined, {
         headers: {
           Authorization: `Bearer ${token}`
         }
