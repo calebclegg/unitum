@@ -39,7 +39,6 @@ export const chatHandler = async (io: Server, socket: any) => {
         messageObj = { ...newMessage.toObject(), from: "recipient" };
       }
       delete messageObj.to;
-
       io.to(newMessage.chatID.toString()).emit("new message", messageObj);
     } catch (error) {
       callback({
