@@ -101,7 +101,7 @@ export const getChats = async (req: any, res: Response) => {
   const chatList: any = [];
   for (const chat of chats) {
     const recipient = chat.participant.filter((userObj) => {
-      return userObj._id.toString() === user._id.toString();
+      return userObj._id.toString() !== user._id.toString();
     })[0];
     let lastMessage = {};
     if (chat.messages) {
