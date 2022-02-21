@@ -369,4 +369,13 @@ Content-Type: application/json
 
 GET http://localhost:5000/api/chat
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NTE4MTU0NywiZXhwIjoxNjQ1MTgyMTQ3fQ.QeifLHke3OJQBa7TcjDhMiqSgDcMm_l6ks-bi8IVP-U
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NTQzOTU4OSwiZXhwIjoxNjQ1NDQwMTg5fQ.rphPI3hsC-mNOcjW8LK3E2JzaE2Gvv6c479wv3hhtYY
+
+###
+POST http://localhost:5000/api/chat/62134a54b4eb26767db2d2b5
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NTQzOTU4OSwiZXhwIjoxNjQ1NDQwMTg5fQ.rphPI3hsC-mNOcjW8LK3E2JzaE2Gvv6c479wv3hhtYY
+
+{
+    "text": "Hi Bunny"
+}

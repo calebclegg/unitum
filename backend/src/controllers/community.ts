@@ -79,7 +79,7 @@ export const editCommunity = async (req: any, res: Response) => {
     user: dbCommunity.admin._id,
     community: dbCommunity._id
   };
-  await sendNotification(req.socket, notification, dbCommunity._id);
+  await sendNotification(notification, dbCommunity._id);
 };
 
 export const viewCommunity = async (req: any, res: Response) => {
@@ -213,7 +213,7 @@ export const addMember = async (req: any, res: Response) => {
     community: community._id,
     userID: user._id
   };
-  await sendNotification(req.socket, notification, user._id);
+  await sendNotification(notification, user._id);
 };
 
 export const removeMember = async (req: any, res: Response) => {
