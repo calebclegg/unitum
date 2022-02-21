@@ -21,7 +21,6 @@ const About = () => {
       <Stack
         id="about-us"
         component="section"
-        minHeight="50vh"
         direction={tabletUp ? "row" : "column"}
         spacing={3}
         alignItems="center"
