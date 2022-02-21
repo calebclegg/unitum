@@ -23,34 +23,6 @@ import { alpha } from "@mui/material/styles";
 import { useDisplaySize } from "../hooks";
 import { useRef, useState } from "react";
 
-const navLinks = [
-  {
-    path: "/feed",
-    label: "Feed",
-    icon: <Feed />
-  },
-  {
-    path: "/chat",
-    label: "Chat",
-    icon: <QuestionAnswer />
-  },
-  {
-    path: "/profile?tab=my-posts",
-    label: "My Posts",
-    icon: <Person />
-  },
-  {
-    path: "/profile?tab=saved-posts",
-    label: "Saved Posts",
-    icon: <Bookmarks />
-  },
-  {
-    path: "/communities",
-    label: "Communities",
-    icon: <Group />
-  }
-];
-
 interface IProps {
   open: boolean;
   handleClose: () => void;
@@ -62,6 +34,36 @@ const Sidebar = ({ open, handleClose }: IProps) => {
   const anchorRef = useRef<HTMLDivElement>(null);
   const desktopUp = useDisplaySize("lg");
   const [isCreateMenuOpened, setIsCreateMenuOpened] = useState(false);
+
+  const navLinks = [
+    {
+      path: "/feed",
+      label: "Feed",
+      icon: <Feed />
+    },
+    {
+      get path() {
+        return desktopUp ? "#chat" : "/chat";
+      },
+      label: "Chat",
+      icon: <QuestionAnswer />
+    },
+    {
+      path: "/profile?tab=my-posts",
+      label: "My Posts",
+      icon: <Person />
+    },
+    {
+      path: "/profile?tab=saved-posts",
+      label: "Saved Posts",
+      icon: <Bookmarks />
+    },
+    {
+      path: "/communities",
+      label: "Communities",
+      icon: <Group />
+    }
+  ];
 
   const handleToggle = () => setIsCreateMenuOpened(!isCreateMenuOpened);
 
