@@ -1,4 +1,4 @@
-const normalizeGoogleData = async (data: any) => {
+export const normalizeGoogleData = async (data: any) => {
   return {
     email: data.email,
     fullName: data.name,
@@ -8,4 +8,10 @@ const normalizeGoogleData = async (data: any) => {
   };
 };
 
-export { normalizeGoogleData };
+export const normalizeFacebookData = async (data: Record<string, any>) => {
+  return {
+    fullName: data.name,
+    authProvider: String(data.graphDomain).toUpperCase(),
+    email: data.email
+  };
+};
