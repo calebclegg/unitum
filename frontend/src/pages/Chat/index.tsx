@@ -1,4 +1,10 @@
-import { Link, Route, Routes, useNavigate } from "react-router-dom";
+import {
+  Link,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate
+} from "react-router-dom";
 import Helmet from "react-helmet";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import Avatar from "@mui/material/Avatar";
@@ -7,7 +13,7 @@ import Dialog from "@mui/material/Dialog";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { Theme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import ChatsList from "./ChatsList";
 import ChatMessages from "./ChatMessages";
 import { useData } from "../../hooks";
@@ -33,39 +39,43 @@ export interface IChat {
 }
 
 const Chat = () => {
+  const { breakpoints } = useTheme();
+  const { state } = useLocation();
   const navigate = useNavigate();
   const [chatID, setChatID] = useState("");
   const { data: chats } = useData<IChat[]>("chat");
   const currentChat = chats?.find((chat) => chat.chatID === chatID);
-  const tabletLaptop = useMediaQuery(({ breakpoints }: Theme) =>
-    breakpoints.between("sm", "lg")
-  );
-  const laptopUp = useMediaQuery(({ breakpoints }: Theme) =>
-    breakpoints.up("lg")
-  );
-
-  if (laptopUp) navigate("/feed#chat", { replace: true });
+  const tabletLaptop = useMediaQuery(breakpoints.between("sm", "lg"));
+  const laptopUp = useMediaQuery(breakpoints.up("lg"));
 
   const numberOfMessages = chats?.reduce(
     (acc, curr) => acc + curr.numberOfUnreadMessages,
     0
   );
 
-  const handleResize = () => {
+  useEffect(() => {
     if (laptopUp) {
       const param = new URLSearchParams();
       param.set("chat_id", chatID);
+      const navigationState = state as { previousPage: string } | undefined;
 
-      navigate(chatID ? `/feed?${param.toString()}#chat` : "/feed#chat", {
-        replace: true
-      });
+      const previousPage = navigationState
+        ? new URL(navigationState.previousPage)
+        : null;
+
+      const newPath =
+        previousPage?.origin === window.location.origin
+          ? previousPage?.pathname
+          : "/feed";
+
+      navigate(
+        chatID ? `${newPath}?${param.toString()}#chat` : `${newPath}#chat`,
+        {
+          replace: true
+        }
+      );
     }
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [laptopUp]);
 
   const goBack = (event: React.MouseEvent<HTMLAnchorElement>) => {
     const previousURL = new URL(document.referrer);
