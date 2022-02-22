@@ -37,7 +37,7 @@ export const getUnreadMessages = async (req: any, res: Response) => {
 
 export const markAsRead = async (req: any, res: Response) => {
   const user = req.user;
-  const messageIDs = req.query.msgIDs;
+  const messageIDs = req.body.msgIDs;
   if (Array.isArray(messageIDs)) {
     await Message.updateMany(
       { _id: { $in: messageIDs }, to: user._id, read: false },

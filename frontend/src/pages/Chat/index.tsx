@@ -93,6 +93,7 @@ const Chat = () => {
         PaperProps={{
           sx: {
             p: 0,
+            overflow: "hidden",
             bgcolor: chatID || tabletLaptop ? "background.default" : undefined
           }
         }}
