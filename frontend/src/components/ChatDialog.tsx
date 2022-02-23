@@ -55,16 +55,14 @@ const ChatDialog = () => {
     navigate(pathname);
   };
 
-  const handleResize = () => {
-    if (!laptopUp) {
-      navigate(chatID ? `/chat/${chatID}` : "/chat", { replace: true });
-    }
-  };
-
   useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    if (!laptopUp) {
+      navigate(chatID ? `/chat/${chatID}` : "/chat", {
+        replace: true,
+        state: { previousPage: window.location.href }
+      });
+    }
+  }, [laptopUp]);
 
   const goBack = (event: React.MouseEvent<HTMLAnchorElement>) => {
     const previousURL = new URL(document.referrer);
@@ -86,7 +84,7 @@ const ChatDialog = () => {
           bottom: 0,
           right: "15%",
           width: 400,
-          maxHeight: "65%",
+          height: "65vh",
           position: "absolute",
           borderBottomLeftRadius: 0,
           borderBottomRightRadius: 0,
@@ -130,7 +128,10 @@ const ChatDialog = () => {
       </DialogTitle>
       <DialogContent sx={{ p: 0 }}>
         {chatID ? (
-          <ChatMessages numberOfUnreadMessages={numberOfMessages || 0} />
+          <ChatMessages
+            recipientID={currentChat?.recipient._id || ""}
+            numberOfUnreadMessages={numberOfMessages || 0}
+          />
         ) : (
           <ChatsList selected={currentChat?.chatID} />
         )}

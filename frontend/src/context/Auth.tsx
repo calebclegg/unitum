@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import { createContext, useContext } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { API } from "../lib";
 import { getRefreshToken, getUrl, saveRefreshToken } from "../utils";
 import useSWR from "swr";
@@ -15,6 +15,10 @@ const fetcher = async (endpoint: string, token?: string) => {
   return data;
 };
 
+interface IProviderProps {
+  children: React.ReactNode;
+}
+
 interface IContextProps {
   token?: string;
   updateToken: () => void;
@@ -22,7 +26,7 @@ interface IContextProps {
 
 const AuthContext = createContext<IContextProps | null>(null);
 
-const AuthProvider = () => {
+const AuthProvider = ({ children }: IProviderProps) => {
   const navigate = useNavigate();
   const isOnAuthPage = ["/register", "/login"].includes(
     window.location.pathname
@@ -72,7 +76,7 @@ const AuthProvider = () => {
     <AuthContext.Provider
       value={{ token: data?.accessToken, updateToken: mutate }}
     >
-      <Outlet />
+      {children}
     </AuthContext.Provider>
   );
 };

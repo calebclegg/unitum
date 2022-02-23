@@ -32,7 +32,7 @@ const ChatsList = ({ selected }: Partial<{ selected: string }>) => {
       variant="outlined"
       sx={({ breakpoints }) => ({
         p: 0,
-        height: "100vh",
+        height: laptopUp ? "100%" : "100vh",
         overflowY: "hidden",
 
         [breakpoints.up("sm")]: {

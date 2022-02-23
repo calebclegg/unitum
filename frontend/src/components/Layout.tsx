@@ -8,7 +8,6 @@ import Stack from "@mui/material/Stack";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import BottomNav from "./BottomNav";
 import TopBar from "./TopBar";
-import SocketProvider from "../context/Socket";
 import CommunitiesBrief from "./CommunitiesBrief";
 import AboutCommunity from "./AboutCommunity";
 
@@ -35,7 +34,7 @@ const Layout = () => {
   const closeDrawer = () => setIsDrawerOpened(false);
 
   return (
-    <SocketProvider>
+    <>
       <TopBar openDrawer={openDrawer} />
       <Stack direction="row" spacing={4}>
         <Suspense fallback={<div />}>
@@ -84,7 +83,7 @@ const Layout = () => {
       <Suspense fallback={<div />}>
         <ChatDialog />
       </Suspense>
-    </SocketProvider>
+    </>
   );
 };
 
