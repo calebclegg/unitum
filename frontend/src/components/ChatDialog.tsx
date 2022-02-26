@@ -8,7 +8,7 @@ import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { Theme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import {
   Link,
   useLocation,
@@ -39,10 +39,8 @@ const ChatDialog = () => {
   const chatID = searchParams.get("chat_id");
   const { hash, pathname } = useLocation();
   const { data: chats } = useData<IChat[]>("chat");
-
-  const laptopUp = useMediaQuery(({ breakpoints }: Theme) =>
-    breakpoints.up("lg")
-  );
+  const { breakpoints } = useTheme();
+  const laptopDown = useMediaQuery(breakpoints.down("lg"));
 
   const currentChat = chats?.find((chat) => chat.chatID === chatID);
 
@@ -56,13 +54,13 @@ const ChatDialog = () => {
   };
 
   useEffect(() => {
-    if (!laptopUp) {
+    if (laptopDown) {
       navigate(chatID ? `/chat/${chatID}` : "/chat", {
         replace: true,
         state: { previousPage: window.location.href }
       });
     }
-  }, [laptopUp]);
+  }, [laptopDown]);
 
   const goBack = (event: React.MouseEvent<HTMLAnchorElement>) => {
     const previousURL = new URL(document.referrer);
