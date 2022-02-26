@@ -165,12 +165,7 @@ const CreatePost = () => {
       fullScreen={!tabletUp}
       TransitionComponent={tabletUp ? undefined : Transition}
     >
-      <form
-        method="post"
-        action="#"
-        encType="multipart/form-data"
-        onSubmit={createPost}
-      >
+      <form method="post" action="#" onSubmit={createPost}>
         <Stack>
           <DialogTitle>Create new post</DialogTitle>
           <DialogContent>

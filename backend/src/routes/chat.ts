@@ -7,8 +7,11 @@ const router = Router();
 
 router.get("/:chatID", getUser, use(controller.getChatMessages));
 
+router.post("/:chatID", getUser, use(controller.sendMessage));
+
 router.get("/messages/unread", getUser, use(controller.getUnreadMessages));
 
 router.patch("/messages/read", getUser, use(controller.markAsRead));
+router.get("/", getUser, use(controller.getChats));
 
 export default router;

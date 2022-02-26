@@ -12,8 +12,11 @@ export interface ICommunity {
   description: string;
   numberOfMembers: number;
   createdAt: string;
+  admin: {
+    _id: string;
+  };
   members: {
-    info: any;
+    info: IUser;
     role: string;
   }[];
 }

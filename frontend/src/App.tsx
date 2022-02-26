@@ -9,6 +9,7 @@ import Landing from "./pages/Landing";
 import Layout from "./components/Layout";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import SocketProvider from "./context/Socket";
 
 const Chat = lazy(() => import("./pages/Chat"));
 const Feed = lazy(() => import("./pages/Feed"));
@@ -58,20 +59,22 @@ function App() {
             path="/*"
             element={
               <Auth>
-                <Layout />
+                <SocketProvider />
               </Auth>
             }
           >
-            <Route path="chat" element={<Chat />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="feed" element={<Feed />} />
-            <Route path="posts/:post_id" element={<Post />} />
-            <Route path="communities">
-              <Route index element={<Communities />} />
-              <Route path=":comm_id" element={<Community />} />
+            <Route path="/*" element={<Layout />}>
+              <Route path="profile" element={<Profile />} />
+              <Route path="feed" element={<Feed />} />
+              <Route path="posts/:post_id" element={<Post />} />
+              <Route path="communities">
+                <Route index element={<Communities />} />
+                <Route path=":comm_id" element={<Community />} />
+              </Route>
+              <Route path="search" element={<Search />} />
+              <Route path="notifications" element={<Notification />} />
             </Route>
-            <Route path="search" element={<Search />} />
-            <Route path="notifications" element={<Notification />} />
+            <Route path="chat/*" element={<Chat />} />
           </Route>
           <Route path="login/*" element={<Login />} />
           <Route path="register/*" element={<Register />} />

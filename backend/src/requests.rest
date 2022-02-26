@@ -130,7 +130,7 @@ GET http://localhost:5000/api/auth/token
 Content-Type: application/json
 
 {
-    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjI5MzM3MywiZXhwIjoxNjQyODk4MTczfQ._SvnyzCDK-omh4kL4qepkum9F0yh4PNHKah68sXr354"
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NTE3Njk3OSwiZXhwIjoxNjQ1NzgxNzc5fQ.fpH9DxMxoIqKB30_RBlmtPQ4lrrbOdyeDxbzSIjOMds"
 }
 
 ###
@@ -363,4 +363,19 @@ Content-Type: application/json
     "email": "kyeisamuel931@gmail.com",
     "name": "Kyei Samuel",
     "message": "Hi, Broke Boys😁😂"
+}
+
+###
+
+GET http://localhost:5000/api/chat
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NTQzOTU4OSwiZXhwIjoxNjQ1NDQwMTg5fQ.rphPI3hsC-mNOcjW8LK3E2JzaE2Gvv6c479wv3hhtYY
+
+###
+POST http://localhost:5000/api/chat/62134a54b4eb26767db2d2b5
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NTQzOTU4OSwiZXhwIjoxNjQ1NDQwMTg5fQ.rphPI3hsC-mNOcjW8LK3E2JzaE2Gvv6c479wv3hhtYY
+
+{
+    "text": "Hi Bunny"
 }

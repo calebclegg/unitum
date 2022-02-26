@@ -43,7 +43,7 @@ const Contact = () => {
       direction="row"
       alignItems="flex-end"
       justifyContent="space-between"
-      minHeight="100vh"
+      marginTop={10}
     >
       <Stack gap={2} width={tabletUp ? "52%" : "100%"}>
         <Typography
