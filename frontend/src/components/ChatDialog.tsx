@@ -20,7 +20,7 @@ import { IChat } from "../pages/Chat";
 import ChatMessages from "../pages/Chat/ChatMessages";
 import ChatsList from "../pages/Chat/ChatsList";
 import ArrowBack from "@mui/icons-material/ArrowBack";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 function PaperComponent(props: PaperProps) {
   return (
@@ -40,6 +40,7 @@ const ChatDialog = () => {
   const { hash, pathname } = useLocation();
   const { data: chats } = useData<IChat[]>("chat");
   const { breakpoints } = useTheme();
+  const open = useMemo(() => hash === "#chat", [hash]);
   const laptopDown = useMediaQuery(breakpoints.down("lg"));
 
   const currentChat = chats?.find((chat) => chat.chatID === chatID);
@@ -54,13 +55,13 @@ const ChatDialog = () => {
   };
 
   useEffect(() => {
-    if (laptopDown) {
+    if (open && laptopDown) {
       navigate(chatID ? `/chat/${chatID}` : "/chat", {
         replace: true,
         state: { previousPage: window.location.href }
       });
     }
-  }, [laptopDown]);
+  }, [open, laptopDown]);
 
   const goBack = (event: React.MouseEvent<HTMLAnchorElement>) => {
     const previousURL = new URL(document.referrer);
@@ -72,7 +73,7 @@ const ChatDialog = () => {
 
   return (
     <Dialog
-      open={hash === "#chat"}
+      open={open}
       onClose={handleClose}
       PaperComponent={PaperComponent}
       PaperProps={{
