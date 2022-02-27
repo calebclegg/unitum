@@ -8,7 +8,7 @@ import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { Theme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import {
   Link,
   useLocation,
@@ -20,7 +20,7 @@ import { IChat } from "../pages/Chat";
 import ChatMessages from "../pages/Chat/ChatMessages";
 import ChatsList from "../pages/Chat/ChatsList";
 import ArrowBack from "@mui/icons-material/ArrowBack";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 function PaperComponent(props: PaperProps) {
   return (
@@ -39,10 +39,9 @@ const ChatDialog = () => {
   const chatID = searchParams.get("chat_id");
   const { hash, pathname } = useLocation();
   const { data: chats } = useData<IChat[]>("chat");
-
-  const laptopUp = useMediaQuery(({ breakpoints }: Theme) =>
-    breakpoints.up("lg")
-  );
+  const { breakpoints } = useTheme();
+  const open = useMemo(() => hash === "#chat", [hash]);
+  const laptopDown = useMediaQuery(breakpoints.down("lg"));
 
   const currentChat = chats?.find((chat) => chat.chatID === chatID);
 
@@ -56,13 +55,13 @@ const ChatDialog = () => {
   };
 
   useEffect(() => {
-    if (!laptopUp) {
+    if (open && laptopDown) {
       navigate(chatID ? `/chat/${chatID}` : "/chat", {
         replace: true,
         state: { previousPage: window.location.href }
       });
     }
-  }, [laptopUp]);
+  }, [open, laptopDown]);
 
   const goBack = (event: React.MouseEvent<HTMLAnchorElement>) => {
     const previousURL = new URL(document.referrer);
@@ -74,7 +73,7 @@ const ChatDialog = () => {
 
   return (
     <Dialog
-      open={hash === "#chat"}
+      open={open}
       onClose={handleClose}
       PaperComponent={PaperComponent}
       PaperProps={{
