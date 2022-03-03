@@ -369,8 +369,18 @@ Content-Type: application/json
 
 GET http://localhost:5000/api/chat
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NTQzOTU4OSwiZXhwIjoxNjQ1NDQwMTg5fQ.rphPI3hsC-mNOcjW8LK3E2JzaE2Gvv6c479wv3hhtYY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NjMwNTc2MywiZXhwIjoxNjQ2MzA2MzYzfQ.spNXF1FmrNGCoQSIRmYCJSAoPsrPv_wY6KvvNbxRpOI
 
+###
+
+POST http://localhost:5000/api/chat
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NjMwNTc2MywiZXhwIjoxNjQ2MzA2MzYzfQ.spNXF1FmrNGCoQSIRmYCJSAoPsrPv_wY6KvvNbxRpOI
+
+{
+    "to": "62134a52b4eb26767db2d297",
+    "text": "New Chat"
+}
 ###
 POST http://localhost:5000/api/chat/62134a54b4eb26767db2d2b5
 Content-Type: application/json

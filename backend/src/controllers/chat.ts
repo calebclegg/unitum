@@ -1,8 +1,14 @@
 import { Response } from "express";
 import { Chat } from "../models/Chat";
 import { Message } from "../models/Chat";
-import { validateMessageData } from "../validators/message.validator";
+import {
+  validateMessageData,
+  validateNewChat
+} from "../validators/message.validator";
 import { Types } from "mongoose";
+import { IMessage } from "../types/message";
+import { IChat } from "../types/chat";
+import { Document } from "mongoose";
 
 export const getUnreadMessages = async (req: any, res: Response) => {
   const user = req.user;
@@ -174,4 +180,50 @@ export const sendMessage = async (req: any, res: Response) => {
   delete messageObj.to;
 
   res.status(201).json(messageObj);
+};
+
+export const newChat = async (req: any, res: Response) => {
+  const user = req.user;
+  const { value, error } = await validateNewChat(req.body);
+  let errors;
+  if (error) {
+    errors = error.details.map((err) => ({
+      label: err.context?.label,
+      message: err.message
+    }));
+    return res.status(400).json(errors);
+  }
+  let chat: (IChat & Document) | null;
+  chat = await Chat.findOne({
+    participant: { $in: [user._id, value.to] }
+  });
+
+  if (!chat) {
+    chat = await new Chat({
+      participant: [user.id, new Types.ObjectId(value.to)]
+    }).save();
+  }
+  const recipient = chat.participant.filter((userID: Types.ObjectId) => {
+    return userID._id.toString() !== user._id.toString();
+  })[0];
+
+  const newMessage = await new Message({
+    ...value,
+    chatID: chat._id,
+    from: user._id,
+    to: recipient
+  }).save();
+
+  chat.messages?.push(newMessage._id);
+  await chat.save();
+
+  let messageObj: any = {};
+  if (newMessage.from.toString() === user._id.toString()) {
+    messageObj = { ...newMessage.toObject(), from: "me" };
+  } else {
+    messageObj = { ...newMessage.toObject(), from: "recipient" };
+  }
+  delete messageObj.to;
+
+  return res.status(201).json(messageObj);
 };
