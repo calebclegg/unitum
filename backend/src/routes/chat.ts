@@ -5,6 +5,8 @@ import { use } from "../utils/use";
 
 const router = Router();
 
+router.post("/new", getUser, use(controller.newChat));
+
 router.get("/:chatID", getUser, use(controller.getChatMessages));
 
 router.post("/:chatID", getUser, use(controller.sendMessage));
