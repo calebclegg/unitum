@@ -369,17 +369,17 @@ Content-Type: application/json
 
 GET http://localhost:5000/api/chat
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NjMwNTc2MywiZXhwIjoxNjQ2MzA2MzYzfQ.spNXF1FmrNGCoQSIRmYCJSAoPsrPv_wY6KvvNbxRpOI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NjQ2ODMzMCwiZXhwIjoxNjQ2NDY4OTMwfQ.IPIZ4Bu9U7XvJVjSQr3WOqV2hTe6yiw0x7RNbQn_X-4
 
 ###
 
-POST http://localhost:5000/api/chat
+POST http://localhost:5000/api/chat/new
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NjMwNTc2MywiZXhwIjoxNjQ2MzA2MzYzfQ.spNXF1FmrNGCoQSIRmYCJSAoPsrPv_wY6KvvNbxRpOI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NjQ2NzYwOSwiZXhwIjoxNjQ2NDY4MjA5fQ.tLXMt9Z2Q1OpnCoXtMxWfZjVrpOIthe9z2COLcr3NYY
 
 {
-    "to": "62134a52b4eb26767db2d297",
-    "text": "New Chat"
+    "to": "62138c2a340560118a8d923a",
+    "text": "Yo Barnes"
 }
 ###
 POST http://localhost:5000/api/chat/62134a54b4eb26767db2d2b5
@@ -389,3 +389,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 {
     "text": "Hi Bunny"
 }
+
+###
+GET http://localhost:5000/api/chat/62134a54b4eb26767db2d2b5
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NjQ2ODMzMCwiZXhwIjoxNjQ2NDY4OTMwfQ.IPIZ4Bu9U7XvJVjSQr3WOqV2hTe6yiw0x7RNbQn_X-4

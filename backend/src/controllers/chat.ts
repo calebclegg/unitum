@@ -88,7 +88,7 @@ export const getChatMessages = async (req: any, res: Response) => {
     delete messageObj.to;
     messageList.push(messageObj);
   }
-  return res.json(messageList);
+  return res.json(messageList.reverse());
 };
 
 export const getChats = async (req: any, res: Response) => {
@@ -112,7 +112,7 @@ export const getChats = async (req: any, res: Response) => {
     let lastMessage = {};
     if (chat.messages) {
       let message: any = chat.messages[0];
-      if (message.from.toString() !== user._id.toString()) {
+      if (message.from.toString() === user._id.toString()) {
         message = { ...message.toObject(), from: "me" };
       } else {
         message = { ...message.toObject(), from: "recipient" };
@@ -134,7 +134,7 @@ export const getChats = async (req: any, res: Response) => {
     };
     chatList.push(chatObj);
   }
-  return res.json(chatList);
+  return res.json(chatList.reverse());
 };
 
 export const sendMessage = async (req: any, res: Response) => {
@@ -195,12 +195,12 @@ export const newChat = async (req: any, res: Response) => {
   }
   let chat: (IChat & Document) | null;
   chat = await Chat.findOne({
-    participant: { $in: [user._id, value.to] }
+    participant: { $all: [user._id, value.to] }
   });
 
   if (!chat) {
     chat = await new Chat({
-      participant: [user.id, new Types.ObjectId(value.to)]
+      participant: [user.id, value.to]
     }).save();
   }
   const recipient = chat.participant.filter((userID: Types.ObjectId) => {
@@ -224,6 +224,20 @@ export const newChat = async (req: any, res: Response) => {
     messageObj = { ...newMessage.toObject(), from: "recipient" };
   }
   delete messageObj.to;
+  let lastMessage = {};
+  lastMessage = messageObj;
+  const unreadMessagesCount = await Message.find({
+    to: user._id,
+    chatID: chat._id,
+    read: false
+  }).count();
+  const chatObj = {
+    chatID: chat._id?.toString(),
+    recipient: recipient,
+    createdAt: chat.createdAt,
+    lastMessage: lastMessage,
+    numberOfUnreadMessages: unreadMessagesCount
+  };
 
-  return res.status(201).json(messageObj);
+  return res.status(201).json(chatObj);
 };
