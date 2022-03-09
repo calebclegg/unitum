@@ -3,7 +3,7 @@ import Link from "@mui/material/Link";
 import CssBaseline from "@mui/material/CssBaseline";
 import { visuallyHidden } from "@mui/utils";
 import { lazy, Suspense, useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import Auth from "./context/Auth";
 import Landing from "./pages/Landing";
 import Layout from "./components/Layout";
@@ -23,6 +23,24 @@ const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 
 function App() {
+  const { pathname, hash, key } = useLocation();
+
+  useEffect(() => {
+    // if not a hash link, scroll to top
+    if (hash === "") {
+      window.scrollTo(0, 0);
+    }
+    // else scroll to id
+    else {
+      setTimeout(() => {
+        const id = hash.replace("#", "");
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView();
+        }
+      }, 0);
+    }
+  }, [pathname, hash, key]); // do this on route change
   useEffect(() => {
     AOS.init();
   });
