@@ -99,10 +99,12 @@ export const getChats = async (req: any, res: Response) => {
       participant: { $in: [user._id] }
     },
     { messages: { $slice: -1 } }
-  ).populate([
-    { path: "participant", select: "profile.fullName profile.picture" },
-    { path: "messages", select: "-updatedAt -__v", limit: 1 }
-  ]);
+  )
+    .populate([
+      { path: "participant", select: "profile.fullName profile.picture" },
+      { path: "messages", select: "-updatedAt -__v", limit: 1 }
+    ])
+    .sort({ updatedAt: -1 });
 
   const chatList: any = [];
   for (const chat of chats) {
