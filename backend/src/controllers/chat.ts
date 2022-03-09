@@ -82,7 +82,7 @@ export const getChatMessages = async (req: any, res: Response) => {
     delete messageObj.to;
     messageList.push(messageObj);
   }
-  return res.json(messageList);
+  return res.json(messageList.reverse());
 };
 
 export const getChats = async (req: any, res: Response) => {
@@ -93,10 +93,12 @@ export const getChats = async (req: any, res: Response) => {
       participant: { $in: [user._id] }
     },
     { messages: { $slice: -1 } }
-  ).populate([
-    { path: "participant", select: "profile.fullName profile.picture" },
-    { path: "messages", select: "-updatedAt -__v", limit: 1 }
-  ]);
+  )
+    .populate([
+      { path: "participant", select: "profile.fullName profile.picture" },
+      { path: "messages", select: "-updatedAt -__v", limit: 1 }
+    ])
+    .sort({ updatedAt: -1 });
 
   const chatList: any = [];
   for (const chat of chats) {
