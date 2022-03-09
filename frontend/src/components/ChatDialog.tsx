@@ -8,7 +8,7 @@ import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { Theme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import {
   Link,
   useLocation,
@@ -20,7 +20,7 @@ import { IChat } from "../pages/Chat";
 import ChatMessages from "../pages/Chat/ChatMessages";
 import ChatsList from "../pages/Chat/ChatsList";
 import ArrowBack from "@mui/icons-material/ArrowBack";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 function PaperComponent(props: PaperProps) {
   return (
@@ -39,10 +39,9 @@ const ChatDialog = () => {
   const chatID = searchParams.get("chat_id");
   const { hash, pathname } = useLocation();
   const { data: chats } = useData<IChat[]>("chat");
-
-  const laptopUp = useMediaQuery(({ breakpoints }: Theme) =>
-    breakpoints.up("lg")
-  );
+  const { breakpoints } = useTheme();
+  const open = useMemo(() => hash === "#chat", [hash]);
+  const laptopDown = useMediaQuery(breakpoints.down("lg"));
 
   const currentChat = chats?.find((chat) => chat.chatID === chatID);
 
@@ -55,16 +54,14 @@ const ChatDialog = () => {
     navigate(pathname);
   };
 
-  const handleResize = () => {
-    if (!laptopUp) {
-      navigate(chatID ? `/chat/${chatID}` : "/chat", { replace: true });
-    }
-  };
-
   useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    if (open && laptopDown) {
+      navigate(chatID ? `/chat/${chatID}` : "/chat", {
+        replace: true,
+        state: { previousPage: window.location.href }
+      });
+    }
+  }, [open, laptopDown]);
 
   const goBack = (event: React.MouseEvent<HTMLAnchorElement>) => {
     const previousURL = new URL(document.referrer);
@@ -76,7 +73,7 @@ const ChatDialog = () => {
 
   return (
     <Dialog
-      open={hash === "#chat"}
+      open={open}
       onClose={handleClose}
       PaperComponent={PaperComponent}
       PaperProps={{
@@ -86,7 +83,7 @@ const ChatDialog = () => {
           bottom: 0,
           right: "15%",
           width: 400,
-          maxHeight: "65%",
+          height: "65vh",
           position: "absolute",
           borderBottomLeftRadius: 0,
           borderBottomRightRadius: 0,
@@ -130,7 +127,10 @@ const ChatDialog = () => {
       </DialogTitle>
       <DialogContent sx={{ p: 0 }}>
         {chatID ? (
-          <ChatMessages numberOfUnreadMessages={numberOfMessages || 0} />
+          <ChatMessages
+            recipientID={currentChat?.recipient._id || ""}
+            numberOfUnreadMessages={numberOfMessages || 0}
+          />
         ) : (
           <ChatsList selected={currentChat?.chatID} />
         )}

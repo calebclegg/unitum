@@ -1,11 +1,8 @@
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { createContext, useContext, useEffect, useState } from "react";
+import { Outlet } from "react-router-dom";
 import { io, Socket } from "socket.io-client";
 import { useAuth } from "./Auth";
-
-interface IProviderProps {
-  children: React.ReactNode;
-}
 
 interface IContextProps {
   socket: Socket<DefaultEventsMap, DefaultEventsMap> | null;
@@ -13,7 +10,7 @@ interface IContextProps {
 
 const SocketContext = createContext<IContextProps | null>(null);
 
-const SocketProvider = ({ children }: IProviderProps) => {
+const SocketProvider = () => {
   const { token } = useAuth();
   const [socket, setSocket] = useState<Socket<
     DefaultEventsMap,
@@ -34,7 +31,7 @@ const SocketProvider = ({ children }: IProviderProps) => {
 
   return (
     <SocketContext.Provider value={{ socket }}>
-      {children}
+      <Outlet />
     </SocketContext.Provider>
   );
 };

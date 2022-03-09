@@ -10,14 +10,17 @@ import { useRef, useState } from "react";
 import { API } from "../lib";
 import { useAuth } from "../context/Auth";
 import { KeyedMutator } from "swr";
+import { SxProps, Theme } from "@mui/material";
 
 interface IProps {
-  src: string;
+  src?: string;
+  alt?: string;
+  styles?: SxProps<Theme>;
   endpoint: string;
   revalidate: KeyedMutator<any>;
 }
 
-const EditableAvatar = ({ src, endpoint, revalidate }: IProps) => {
+const EditableAvatar = ({ src, alt, endpoint, styles, revalidate }: IProps) => {
   const uploadFileRef = useRef<HTMLInputElement>(null);
   const { token } = useAuth();
   const [uploading, setUploading] = useState(false);
@@ -66,18 +69,18 @@ const EditableAvatar = ({ src, endpoint, revalidate }: IProps) => {
         }
       });
 
-      // Update community
-      const { data } = await API.patch(
-        endpoint,
-        {
-          picture: imageURL
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
+      const payload = endpoint.includes("community")
+        ? {
+            picture: imageURL
           }
+        : { profile: { picture: imageURL } };
+
+      // Send update request
+      const { data } = await API.patch(endpoint, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`
         }
-      );
+      });
 
       console.log({ data });
       await revalidate();
@@ -109,7 +112,8 @@ const EditableAvatar = ({ src, endpoint, revalidate }: IProps) => {
           "& .MuiAvatar-root": {
             opacity: 0.15
           }
-        }
+        },
+        ...(styles || {})
       }}
     >
       {uploading ? (
@@ -184,7 +188,7 @@ const EditableAvatar = ({ src, endpoint, revalidate }: IProps) => {
       <Avatar
         variant="rounded"
         src={preview?.toString() || src}
-        alt=""
+        alt={alt || ""}
         sx={{
           width: "inherit",
           height: "inherit",
@@ -193,6 +197,7 @@ const EditableAvatar = ({ src, endpoint, revalidate }: IProps) => {
               duration: transitions.duration.shortest
             })
         }}
+        imgProps={{ alt: "" }}
       />
     </Box>
   );

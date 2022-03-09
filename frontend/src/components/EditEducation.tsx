@@ -1,6 +1,6 @@
-// import AdapterDateFns from "@mui/lab/AdapterDateFns";
-// import LocalizationProvider from "@mui/lab/LocalizationProvider";
-// import DatePicker from "@mui/lab/DatePicker";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DatePicker from "@mui/lab/DatePicker";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -11,12 +11,14 @@ import Stack from "@mui/material/Stack";
 import Slide from "@mui/material/Slide";
 import TextField from "@mui/material/TextField";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { useLocation, useNavigate } from "react-router-dom";
-import { getUrl } from "../utils";
-import { forwardRef, useState } from "react";
-import { TransitionProps } from "@mui/material/transitions";
 import { Theme } from "@mui/material/styles";
+import { TransitionProps } from "@mui/material/transitions";
+import { forwardRef, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { API } from "../lib";
+import { getUrl } from "../utils";
 import { useUser } from "../hooks";
+import { useAuth } from "../context/Auth";
 
 const Transition = forwardRef(function Transition(
   props: TransitionProps & {
@@ -27,26 +29,63 @@ const Transition = forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-interface IProps {
-  updating: boolean;
-  update: (event: React.FormEvent<HTMLFormElement>) => void;
-}
-
-const EditEducation = ({ update, updating }: IProps) => {
-  const { user } = useUser();
+const EditEducation = () => {
+  const { token } = useAuth();
+  const { user, updateUser } = useUser();
   const { hash } = useLocation();
   const navigate = useNavigate();
   const [endDate, setEndDate] = useState<Date | null>(new Date());
   const [startDate, setStartDate] = useState<Date | null>(new Date());
+  const [updating, setUpdating] = useState(false);
+  const open = hash === "#edit-education";
 
   const tabletUp = useMediaQuery(({ breakpoints }: Theme) =>
     breakpoints.up("sm")
   );
 
-  const open = hash === "#edit-education";
+  useEffect(() => {
+    const education = user?.profile.education;
+
+    if (education) {
+      education.endDate && setEndDate(new Date(education.endDate));
+      education.startDate && setStartDate(new Date(education.startDate));
+    }
+  }, [user?.profile.education]);
 
   const handleClose = () => {
     navigate(getUrl().replace(hash, ""));
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const requestBody = Object.fromEntries(formData.entries());
+
+    try {
+      setUpdating(true);
+
+      await API.patch(
+        "users/me",
+        {
+          ...requestBody,
+          startDate,
+          endDate
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      updateUser();
+      handleClose();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setUpdating(false);
+    }
   };
 
   return (
@@ -62,7 +101,7 @@ const EditEducation = ({ update, updating }: IProps) => {
       fullScreen={!tabletUp}
       TransitionComponent={tabletUp ? undefined : Transition}
     >
-      <form method="post" action="#" onSubmit={update}>
+      <form method="post" action="#" onSubmit={handleSubmit}>
         <Stack>
           <DialogTitle>Update Education Info</DialogTitle>
           <DialogContent>
@@ -74,14 +113,16 @@ const EditEducation = ({ update, updating }: IProps) => {
               label="School Name"
               name="schoolName"
               margin="normal"
+              defaultValue={user?.profile.education.school.name}
             />
             <TextField
               id="school-site"
               fullWidth
               type="url"
-              name="website"
+              name="url"
               label="Website"
               margin="normal"
+              defaultValue={user?.profile.education.school.url}
             />
             <TextField
               fullWidth
@@ -89,13 +130,7 @@ const EditEducation = ({ update, updating }: IProps) => {
               name="fieldOfStudy"
               label="Field Of Study"
               margin="normal"
-            />
-            <TextField
-              fullWidth
-              id="bachelor"
-              name="bachelor"
-              label="Bachelor"
-              margin="normal"
+              defaultValue={user?.profile.education.fieldOfStudy}
             />
             <TextField
               fullWidth
@@ -103,8 +138,9 @@ const EditEducation = ({ update, updating }: IProps) => {
               name="grade"
               label="Grade"
               margin="normal"
+              defaultValue={user?.profile.education.grade}
             />
-            {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
                 label="Start Date"
                 value={startDate}
@@ -127,7 +163,7 @@ const EditEducation = ({ update, updating }: IProps) => {
                   <TextField {...params} fullWidth margin="normal" />
                 )}
               />
-            </LocalizationProvider> */}
+            </LocalizationProvider>
           </DialogContent>
         </Stack>
         <DialogActions>

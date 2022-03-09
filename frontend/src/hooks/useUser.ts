@@ -79,5 +79,5 @@ export const useUser = () => {
     }
   );
 
-  return { user, notifications, logout };
+  return { user, updateUser, notifications, logout };
 };
