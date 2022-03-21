@@ -26,6 +26,7 @@ interface IProfile {
 }
 
 interface IUser {
+  _id?: Types.ObjectId;
   fullName: string;
   password?: string;
   role?: Role;

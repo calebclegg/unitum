@@ -17,6 +17,7 @@ import {
 } from "../validators/user.validator";
 import { PostModel } from "../models/Post";
 import { SavedPost } from "../models/SavedPost";
+import { ConfigurationServicePlaceholders } from "aws-sdk/lib/config_service_placeholders";
 
 export const userInfo = async (req: Request, res: Response) => {
   const customRequest = req as IReq;
@@ -48,7 +49,7 @@ export const updateUserInfo = async (req: Request, res: Response) => {
   }
 
   Object.entries(valData.value.profile).forEach(([key, value]) => {
-    let field = key as string;
+    const field = key as string;
     if (typeof value === "object") {
       Object.entries(value as Record<string, any>).forEach(([key, value]) => {
         ((user.profile as Record<string, any>)[field] as Record<string, any>)[
@@ -101,30 +102,43 @@ export const updateUserInfo = async (req: Request, res: Response) => {
 //   return res.status(201).json(newEducation);
 // };
 
-// export const editEducation = async (req: any, res: Response) => {
-//   const valData = await validateEducationEditData(req.body);
-//   const edID = new Types.ObjectId(req.params.edID);
-//   let errors;
-//   if (valData.error) {
-//     errors = valData.error.details.map((error: any) => ({
-//       label: error.context?.label,
-//       message: error.message
-//     }));
-//     return res
-//       .status(400)
-//       .json({ message: "Some fields are invalid/required", errors: errors });
-//   }
-//   const updatedEducation = await Education.findOneAndUpdate(
-//     { _id: edID, user: req.user._id },
-//     valData.value,
-//     { new: true }
-//   );
-//   if (!updatedEducation)
-//     return res.status(404).json({
-//       message: "Couldn't find education details tha belonged to you"
-//     });
-//   return res.sendStatus(200);
-// };
+export const editEducation = async (req: any, res: Response) => {
+  const user = req.user;
+  console.log(req.body);
+  const valData = await validateEducationEditData(req.body);
+  console.log(valData.value);
+  let errors;
+  if (valData.error) {
+    errors = valData.error.details.map((error: any) => ({
+      label: error.context?.label,
+      message: error.message
+    }));
+    return res
+      .status(400)
+      .json({ message: "Some fields are invalid/required", errors: errors });
+  }
+
+  Object.entries(valData.value).forEach(([key, value]) => {
+    const field = key as string;
+    if (typeof value === "object") {
+      Object.entries(value as Record<string, any>).forEach(([key, value]) => {
+        (
+          (user.profile.education as Record<string, any>)[field] as Record<
+            string,
+            any
+          >
+        )[key] = value;
+      });
+    } else {
+      (user.profile.education as Record<string, any>)[key] = value;
+    }
+  });
+
+  console.log(user);
+  await user.save();
+
+  return res.sendStatus(200);
+};
 
 // export const deleteEducation = async (req: any, res: Response) => {
 //   const edID = new Types.ObjectId(req.params.edID);
@@ -242,19 +256,18 @@ export const getUnreadNotifications = async (req: any, res: Response) => {
 
 export const deleteNotification = async (req: any, res: Response) => {
   const user = req.user;
-  const notificationIDs = req.query.notIDs;
+  const notificationID = req.params.notID;
+  await Notification.findByIdAndDelete({
+    _id: notificationID,
+    userID: user._id
+  });
 
-  if (Array.isArray(notificationIDs)) {
-    await Notification.findByIdAndDelete({
-      _id: { $in: notificationIDs },
-      userID: user._id
-    });
-  } else {
-    await Notification.findByIdAndDelete({
-      _id: notificationIDs,
-      userID: user._id
-    });
-  }
+  return res.sendStatus(200);
+};
+
+export const markAllAsRead = async (req: any, res: Response) => {
+  const user = req.user;
+  await Notification.deleteMany({ userID: user._id });
   return res.sendStatus(200);
 };
 

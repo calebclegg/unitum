@@ -36,6 +36,7 @@ export const login = async (req: any, res: Response) => {
   const accessToken = await createToken(user);
   const refreshToken = await createRefreshToken(user);
   await saveRefreshToken(user.email, refreshToken);
+  console.log(accessToken);
   return res.status(200).json({ accessToken, refreshToken });
 };
 
