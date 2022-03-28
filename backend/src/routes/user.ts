@@ -45,11 +45,18 @@ router.get(
 );
 
 router.delete(
-  "/me/notifications/delete",
+  "/me/notifications/:notID/delete",
   getUser,
   use(controller.deleteNotification)
 );
 
+router.delete(
+  "/me/notifications/delete",
+  getUser,
+  use(controller.markAllAsRead)
+);
+
+router.patch("/me/education", getUser, use(controller.editEducation));
 router.get("/me/savedPosts", getUser, use(sveController.getSavedPosts));
 
 router.post("/me/savedPosts", getUser, use(sveController.saveAPost));

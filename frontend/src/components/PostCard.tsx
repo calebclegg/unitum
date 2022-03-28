@@ -14,6 +14,8 @@ import IconButton from "@mui/material/IconButton";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Theme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
+import { truncatePostBody } from "../utils/tunc-text";
+import { CardMedia } from "@mui/material";
 
 export interface IProps {
   _id: string;
@@ -28,6 +30,7 @@ export interface IProps {
     name: string;
   };
   author: {
+    _id: string;
     profile: {
       _id: string;
       picture: string;
@@ -46,6 +49,7 @@ const PostCard = ({
   saved,
   upvotes,
   body,
+  media,
   numberOfComments,
   communityID,
   createdAt,
@@ -85,25 +89,30 @@ const PostCard = ({
             {saved ? <Bookmark /> : <BookmarkOutlined />}
           </IconButton>
         }
-        title={author?.profile.fullName}
+        title={
+          <MuiLink
+            component={Link}
+            to={`/communities/${communityID?._id}`}
+            color="textPrimary"
+            underline="none"
+            fontSize={18}
+          >
+            {author?.profile.fullName}
+          </MuiLink>
+        }
         subheader={
           <>
             {communityID?.name && (
               <>
-                <span
-                  style={
-                    tabletUp
-                      ? undefined
-                      : {
-                          width: 80,
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis"
-                        }
-                  }
+                <MuiLink
+                  component={Link}
+                  to={`/communities/${communityID._id}`}
+                  color="textSecondary"
+                  underline="none"
+                  fontSize={13}
                 >
                   {communityID.name}
-                </span>
+                </MuiLink>
                 <span>&bull;</span>
               </>
             )}
@@ -135,17 +144,24 @@ const PostCard = ({
             <Forward fontSize="small" transform="rotate(90)" />
           </IconButton>
         </Stack>
-        <div>
-          <CardContent sx={{ py: 0.5 }}>
-            <MuiLink
-              component={Link}
-              to={`/posts/${_id}`}
-              color="textSecondary"
-              underline="none"
-            >
-              {body}
-            </MuiLink>
-          </CardContent>
+        <div style={{ width: "100%" }}>
+          <MuiLink
+            component={Link}
+            to={`/posts/${_id}`}
+            color="textPrimary"
+            underline="none"
+          >
+            <CardContent sx={{ py: 0.5 }}>{truncatePostBody(body)}</CardContent>
+            {media && media?.length > 0 && (
+              <CardMedia
+                component="img"
+                height="194"
+                sx={{ width: "100%" }}
+                image={media[0]}
+                alt="Paella dish"
+              />
+            )}
+          </MuiLink>
           <CardActions>
             <Button
               variant="text"

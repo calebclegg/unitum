@@ -136,7 +136,7 @@ export const getChats = async (req: any, res: Response) => {
     };
     chatList.push(chatObj);
   }
-  return res.json(chatList.reverse());
+  return res.json(chatList);
 };
 
 export const sendMessage = async (req: any, res: Response) => {

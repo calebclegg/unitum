@@ -3,7 +3,7 @@ import { IPost, IComment } from "../types/post";
 
 export const validatePostCreateData = async (data: IPost) => {
   const Schema = Joi.object<IPost>({
-    body: Joi.string().min(2).max(300).required(),
+    body: Joi.string().min(2).required(),
     media: Joi.array().items(Joi.string()),
     communityID: Joi.string().min(24).max(24)
   });
@@ -12,7 +12,7 @@ export const validatePostCreateData = async (data: IPost) => {
 
 export const validatePostEditData = async (data: IPost) => {
   const Schema = Joi.object<IPost>({
-    body: Joi.string().min(2).max(300),
+    body: Joi.string().min(2),
     media: Joi.array().items(Joi.string())
   });
   return Schema.validate(data);

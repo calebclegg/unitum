@@ -20,8 +20,10 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { alpha, styled, Theme } from "@mui/material/styles";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/Auth";
-import { useData } from "../hooks";
+import { useData, useUser } from "../hooks";
 import { API } from "../lib";
+import Edit from "@mui/icons-material/Edit";
+import ImageListDisplay from "./ImageList";
 
 const Form = styled("form")(({ theme }) => ({
   width: "98%",
@@ -72,6 +74,8 @@ const PostDetails = ({ id }: IProps) => {
   );
 
   const sortedComments = laptopUp ? [...(comments || [])].reverse() : comments;
+
+  const { user } = useUser();
 
   useEffect(() => {
     if (post) {
@@ -141,11 +145,19 @@ const PostDetails = ({ id }: IProps) => {
               alt={post?.author.profile.fullName}
             />
           }
+          action={
+            post?.author._id === user?._id && (
+              <IconButton aria-label="settings">
+                <Edit fontSize="small" />
+              </IconButton>
+            )
+          }
           title={post?.author.profile.fullName}
           subheader={post && new Date(post.createdAt).toDateString()}
         />
         <CardContent>
           <Typography>{post?.body}</Typography>
+          <ImageListDisplay media={post?.media} />
         </CardContent>
         <CardActions>
           <Stack direction="row" alignItems="center" spacing={1}>
