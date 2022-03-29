@@ -44,7 +44,7 @@ const EditEducation = () => {
   );
 
   useEffect(() => {
-    const education = user?.profile.education;
+    const education = user?.profile?.education;
 
     if (education) {
       education.endDate && setEndDate(new Date(education.endDate));
@@ -136,7 +136,7 @@ const EditEducation = () => {
               label="School Name"
               name="schoolName"
               margin="normal"
-              defaultValue={user?.profile.education.school.name}
+              defaultValue={user?.profile?.education?.school.name}
             />
             <TextField
               id="school-site"
@@ -145,7 +145,7 @@ const EditEducation = () => {
               name="url"
               label="Website"
               margin="normal"
-              defaultValue={user?.profile.education.school.url}
+              defaultValue={user?.profile.education?.school.url}
             />
             <TextField
               fullWidth
@@ -153,7 +153,7 @@ const EditEducation = () => {
               name="degree"
               label="Degree"
               margin="normal"
-              defaultValue={user?.profile.education.degree}
+              defaultValue={user?.profile.education?.degree}
             />
             <TextField
               fullWidth
@@ -161,7 +161,7 @@ const EditEducation = () => {
               name="fieldOfStudy"
               label="Field Of Study"
               margin="normal"
-              defaultValue={user?.profile.education.fieldOfStudy}
+              defaultValue={user?.profile.education?.fieldOfStudy}
             />
             <TextField
               fullWidth
@@ -169,7 +169,7 @@ const EditEducation = () => {
               name="grade"
               label="Grade"
               margin="normal"
-              defaultValue={user?.profile.education.grade}
+              defaultValue={user?.profile.education?.grade}
             />
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker

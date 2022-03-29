@@ -32,6 +32,7 @@ export interface IProps {
     picture: string;
   };
   author: {
+    _id: string;
     profile: {
       picture: string;
       fullName: string;
