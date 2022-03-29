@@ -61,16 +61,39 @@ const EditEducation = () => {
 
     const formData = new FormData(event.currentTarget);
     const requestBody = Object.fromEntries(formData.entries());
+    const data: Record<string, any> = {};
+    if (requestBody.schoolName) {
+      data["school"] = {
+        name: requestBody.schoolName
+      };
+    }
+    if (requestBody.url) {
+      data["school"] = {
+        ...data.school,
+        url: requestBody.url
+      };
+    }
 
+    console.log({
+      ...data,
+      startDate,
+      endDate,
+      fieldOfStudy: requestBody.fieldOfStudy,
+      degree: requestBody.degree,
+      grade: requestBody.grade
+    });
     try {
       setUpdating(true);
 
       await API.patch(
-        "users/me",
+        "users/me/education",
         {
-          ...requestBody,
+          ...data,
           startDate,
-          endDate
+          endDate,
+          fieldOfStudy: requestBody.fieldOfStudy,
+          degree: requestBody.degree,
+          grade: requestBody.grade
         },
         {
           headers: {
@@ -123,6 +146,14 @@ const EditEducation = () => {
               label="Website"
               margin="normal"
               defaultValue={user?.profile.education.school.url}
+            />
+            <TextField
+              fullWidth
+              id="degree"
+              name="degree"
+              label="Degree"
+              margin="normal"
+              defaultValue={user?.profile.education.degree}
             />
             <TextField
               fullWidth

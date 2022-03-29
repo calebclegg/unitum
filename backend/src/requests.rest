@@ -151,14 +151,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 
 ###
 
-POST http://localhost:5000/api/community/620036d7f5ddd13572603ee2/join HTTP/1.1
+POST http://localhost:5000/api/community/62134a52b4eb26767db2d2a4/join HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NDIyOTQzMiwiZXhwIjoxNjQ0MjMwMDMyfQ.qVXeUBEiuOKPgjsbuHQBaXablJvC5-aXqyB1wacJdBI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEY2hvbGVAZ21haWwuY29tIiwiaXNzIjoidW5pdHVtOnBsYXRmb3JtIiwiaWF0IjoxNjQ3NzI2NzMzLCJleHAiOjE2NDc3MjczMzN9.lVdSJ8hfzbRkh4qem4f2ly9f17u7_ir1ETVNgBy5wtw
 
 ###
-GET http://localhost:5000/api/community/620036d7f5ddd13572603ee2/requests HTTP/1.1
+GET http://localhost:5000/api/community/62134a52b4eb26767db2d2a4/requests HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NDk2NDg1NSwiZXhwIjoxNjQ0OTY1NDU1fQ.txekPDwilFi_TYo-xJxVnRGTUG7ALC-3M7vjvO4mFek
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NzcyNjk1NSwiZXhwIjoxNjQ3NzI3NTU1fQ.7ZGUbCZTScvbYlSIMVr23Hwaj_mA8M5xgdAJpog57nI
 
 ###
 PATCH http://localhost:5000/api/community/62012198a708a6f13627af32

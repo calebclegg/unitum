@@ -20,6 +20,7 @@ const educationEditSchema = Joi.object({
   degree: Joi.string(),
   fieldOfStudy: Joi.string(),
   startDate: Joi.date(),
+  endDate: Joi.date(),
   grade: Joi.number()
 }).options({ abortEarly: false });
 

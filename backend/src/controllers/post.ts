@@ -127,15 +127,17 @@ export const getPosts = async (req: any, res: Response) => {
         return commID.equals(post.communityID._id);
       });
       if (inc) return post;
+    } else if (!post.communityID) {
+      return post;
     }
     return;
   });
 
-  const wallPosts = posts.filter((post: IPost) => {
-    if (!post.communityID) return post;
-  });
+  // const wallPosts = posts.filter((post: IPost) => {
+  //   if (!post.communityID) return post;
+  // });
 
-  return res.status(200).json([...wallPosts, ...commPosts]);
+  return res.status(200).json([...commPosts]);
 };
 
 // get post details

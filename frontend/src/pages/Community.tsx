@@ -75,17 +75,19 @@ const Community = () => {
         variant="outlined"
         sx={{ mb: 4, p: 4, position: "relative" }}
       >
-        <IconButton
-          href="#edit-community"
-          size="small"
-          sx={{
-            position: "absolute",
-            top: ({ spacing }) => spacing(2),
-            right: ({ spacing }) => spacing(2)
-          }}
-        >
-          <Edit fontSize="small" />
-        </IconButton>
+        {community?.admin._id === user?._id && (
+          <IconButton
+            href="#edit-community"
+            size="small"
+            sx={{
+              position: "absolute",
+              top: ({ spacing }) => spacing(2),
+              right: ({ spacing }) => spacing(2)
+            }}
+          >
+            <Edit fontSize="small" />
+          </IconButton>
+        )}
         <Grid container spacing={2}>
           <Grid
             item
