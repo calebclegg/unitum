@@ -30,6 +30,7 @@ const Profile = () => {
   const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
+    console.log(user);
     setNewName(user?.profile.fullName || "");
   }, [user?.profile.fullName]);
 

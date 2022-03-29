@@ -47,7 +47,7 @@ POST http://localhost:5000/api/auth/login
 Content-Type: application/json
 
 {
-   "email": "rexosei111@gmail.com",
+   "email": "kyeisamuel9@gmail.com",
    "password": "rexosei111"
 }
 
@@ -281,8 +281,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 ###
 GET http://localhost:5000/api/posts
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NTA1MDM3OSwiZXhwIjoxNjQ1MDUwOTc5fQ.nEH88Ssh_uE0Lnriig2aoCpZJY-sQTKT7hNcfP8TMBo
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJreWVpc2FtdWVsOUBnbWFpbC5jb20iLCJpc3MiOiJ1bml0dW06cGxhdGZvcm0iLCJpYXQiOjE2NDg1MTg0MTgsImV4cCI6MTY0ODUxOTAxOH0.YEO6GhiFliLpBkf9rRimH6KqPFyxNvleTADR_Ic_9dg
 ###
 
 POST http://localhost:5000/api/posts
@@ -298,8 +297,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEY2hvbGVAZ
 
 PATCH http://localhost:5000/api/posts/61e548336a7bd80d43e3f79f
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0MjQxODQ3NCwiZXhwIjoxNjQyNDE5MDc0fQ.hn78LL0K6-sFz5S-g6uaEOg2G4KpvmHluz0hfjhAC04
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJreWVpc2FtdWVsOUBnbWFpbC5jb20iLCJpc3MiOiJ1bml0dW06cGxhdGZvcm0iLCJpYXQiOjE2NDg1MTg0MTgsImV4cCI6MTY0ODUxOTAxOH0.YEO6GhiFliLpBkf9rRimH6KqPFyxNvleTADR_Ic_9dg
 {
     "body": "This is the first post for testing"
 }
@@ -312,10 +310,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpM
 
 ###
 
-GET http://localhost:5000/api/posts/61ff1d37102af04a498c5a02
+GET http://localhost:5000/api/posts/62363becfaee5fade9da038a
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NDE1MDYyNCwiZXhwIjoxNjQ0MTUxMjI0fQ.37bsATrjioFC8NfOBGp4gYlWs-cSEnpTAZUVLuoyCbQ
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJreWVpc2FtdWVsOUBnbWFpbC5jb20iLCJpc3MiOiJ1bml0dW06cGxhdGZvcm0iLCJpYXQiOjE2NDg1MTg0MTgsImV4cCI6MTY0ODUxOTAxOH0.YEO6GhiFliLpBkf9rRimH6KqPFyxNvleTADR_Ic_9dg
 ###
 
 DELETE http://localhost:5000/api/posts/61e548336a7bd80d43e3f79f

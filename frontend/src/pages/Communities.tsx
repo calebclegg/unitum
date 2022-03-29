@@ -25,6 +25,8 @@ const Communities = () => {
 
   const { user } = useUser();
   const { data: posts, mutate } = useData<IPost[]>("community/posts");
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  //@ts-ignore
   const { toggleSave, toggleVote } = usePostsActions(posts, mutate);
 
   return (

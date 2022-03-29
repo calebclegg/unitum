@@ -32,7 +32,6 @@ export interface IProps {
   author: {
     _id: string;
     profile: {
-      _id: string;
       picture: string;
       fullName: string;
     };

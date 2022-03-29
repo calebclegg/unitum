@@ -130,7 +130,7 @@ export const editEducation = async (req: any, res: Response) => {
         )[key] = value;
       });
     } else {
-      (user.profile.education as Record<string, any>)[key] = value;
+      (user.profile?.education as Record<string, any>)[key] = value;
     }
   });
 

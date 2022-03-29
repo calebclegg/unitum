@@ -61,12 +61,12 @@ export const Hero = () => {
           </Typography>
           <div>
             <Button
-              to="/about"
+              to="/register"
               component={Link}
               color="secondary"
               sx={{ textTransform: "uppercase" }}
             >
-              Learn More
+              Get Started
             </Button>
           </div>
           <Stack spacing={1.5} direction="row">

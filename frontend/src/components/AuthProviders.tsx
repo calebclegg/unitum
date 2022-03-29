@@ -48,6 +48,7 @@ const AuthProviders = ({ formType, setMessage }: IProps) => {
   };
 
   const responseFacebook = async (response: Record<string, any>) => {
+    console.log(response);
     if (response.accessToken) {
       const { profileObj } = response;
       try {
@@ -102,7 +103,7 @@ const AuthProviders = ({ formType, setMessage }: IProps) => {
             appId="479876153580321"
             autoLoad
             callback={responseFacebook}
-            scope="email,public_profile"
+            scope="email public_profile"
             render={(renderProps: Record<string, any>) => (
               <Button
                 onClick={renderProps.onClick}
