@@ -47,8 +47,8 @@ POST http://localhost:5000/api/auth/login
 Content-Type: application/json
 
 {
-   "email": "kyeisamuel9@gmail.com",
-   "password": "rexosei111"
+   "email": "john@example.com",
+   "password": "123456"
 }
 
 ###
@@ -64,22 +64,23 @@ Content-Type: application/json
 
 GET http://localhost:5000/api/users/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NTA1MDM3OSwiZXhwIjoxNjQ1MDUwOTc5fQ.nEH88Ssh_uE0Lnriig2aoCpZJY-sQTKT7hNcfP8TMBo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaXNzIjoidW5pdHVtOnBsYXRmb3JtIiwiaWF0IjoxNjQ4NzI1OTYyLCJleHAiOjE2NDg3MjY1NjJ9.xLviWlH-6sZ8JjW_0Yxu-bl5cceDw65bSbHwAshSXM0
 
 ###
 
 PATCH http://localhost:5000/api/users/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEY2hvbGVAZ21haWwuY29tIiwiaXNzIjoidW5pdHVtOnBsYXRmb3JtIiwiaWF0IjoxNjQ0MTYxMjgwLCJleHAiOjE2NDQxNjE4ODB9.kEPgvDILhObc6tjLAVYWty6XwTBTcoObQI3AkHyN6Ds
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaXNzIjoidW5pdHVtOnBsYXRmb3JtIiwiaWF0IjoxNjQ4NzI1OTYyLCJleHAiOjE2NDg3MjY1NjJ9.xLviWlH-6sZ8JjW_0Yxu-bl5cceDw65bSbHwAshSXM0
 
 {
-   "profile": {    
-    "picture": "https://liel2c.deta.dev/images/BTa8GQJQJV6VXdmFyqpDCc.png",
+   "profile": {
     "education": {
         "school": {
             "name": "University of Mines",
             "url": "http://localhost:3000/sja"
-        }
+        },
+        "fieldOfStudy": "Computer Science and Engineering",
+        "startDate": "2019-04-08"
     }
    } 
 }
