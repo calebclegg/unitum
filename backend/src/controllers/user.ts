@@ -28,7 +28,9 @@ export const userInfo = async (req: Request, res: Response) => {
         path: "profile.schoolWork",
         select: "-__v -userID -updatedAt"
       },
-      { path: "profile.communities", select: "-__v -updatedAt -members" }
+      { path: "profile.communities", select: "-__v -updatedAt -members" },
+      { path: "profile.followers", select: "fullname picture" },
+      { path: "profile.following", select: "fullname picture" }
     ]);
   return res.status(200).json(user);
 };
@@ -64,6 +66,54 @@ export const updateUserInfo = async (req: Request, res: Response) => {
   console.log(user);
   await user.save();
 
+  return res.sendStatus(200);
+};
+
+export const unfollowUser = async (req: any, res: Response) => {
+  const userID = req.params.userID;
+  console.log(userID);
+  const user = await User.findOne({ id: userID });
+  if (!user) return res.status(404).json({ message: "User not found" });
+  const following = user.profile?.followers?.some((id: Types.ObjectId) => {
+    return id.equals(req.user._id);
+  });
+  if (!following) return res.sendStatus(200);
+  const newFollowersList = user.profile.followers?.filter(
+    (id: Types.ObjectId) => {
+      return id.toString() !== req.user._id.toString();
+    }
+  );
+  user.profile.followers = newFollowersList;
+  user.profile.followersCount = newFollowersList.length;
+  user.save();
+  const user1 = req.user;
+  const newFollowingList = user1.profile.following?.filter(
+    (id: Types.ObjectId) => {
+      return id.toString() !== user?._id.toString();
+    }
+  );
+  user1.profile.followingCount = newFollowingList.length;
+  user1.save();
+  return res.sendStatus(200);
+};
+
+export const followUser = async (req: any, res: Response) => {
+  const userID = req.params.userID;
+  console.log(userID);
+
+  const user = await User.findOne({ id: userID });
+  if (!user) return res.status(404).json({ message: "User not found" });
+  const following = user.profile?.followers?.some((id: Types.ObjectId) => {
+    return id.equals(req.user._id);
+  });
+  if (following) return res.sendStatus(200);
+  user.profile?.followers?.push(req.user._id);
+  user.profile.followersCount += 1;
+  user.save();
+  const user1 = req.user;
+  user1.profile.following.push(user._id);
+  user1.profile.followingCount += 1;
+  user1.save();
   return res.sendStatus(200);
 };
 

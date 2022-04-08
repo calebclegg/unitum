@@ -20,6 +20,10 @@ interface IProfile {
   picture?: string;
   dob?: Date;
   education?: IEducation;
+  followers: Types.ObjectId[];
+  following: Types.ObjectId[];
+  followingCount: number;
+  followersCount: number;
   communities?: Types.ObjectId[];
   schoolWork?: Types.ObjectId[];
   unicoyn: number;
@@ -33,7 +37,7 @@ interface IUser {
   picture?: string;
   authProvider: string;
   email?: string;
-  profile?: IProfile;
+  profile: IProfile;
   number?: number[];
   verifyPassword(password: string): boolean;
 }

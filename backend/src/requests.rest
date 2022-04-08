@@ -47,7 +47,7 @@ POST http://localhost:5000/api/auth/login
 Content-Type: application/json
 
 {
-   "email": "kyeisamuel9@gmail.com",
+   "email": "rexosei111@gmail.com",
    "password": "rexosei111"
 }
 
@@ -63,11 +63,22 @@ Content-Type: application/json
 ###
 
 GET http://localhost:5000/api/users/me
+
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0NTA1MDM3OSwiZXhwIjoxNjQ1MDUwOTc5fQ.nEH88Ssh_uE0Lnriig2aoCpZJY-sQTKT7hNcfP8TMBo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0OTQxODYzOCwiZXhwIjoxNjQ5NDE5MjM4fQ.iN3nXM8hP0M0J9AfgRzIqS9UUDxpyC8eQY5uwgU2NDM
 
 ###
+POST http://localhost:5000/api/users/me/follow/625021be74f7349176886eb0
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0OTQxODYzOCwiZXhwIjoxNjQ5NDE5MjM4fQ.iN3nXM8hP0M0J9AfgRzIqS9UUDxpyC8eQY5uwgU2NDM
 
+
+###
+PATCH http://localhost:5000/api/users/me/unfollow/625021be74f7349176886eb0
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY0OTQxODYzOCwiZXhwIjoxNjQ5NDE5MjM4fQ.iN3nXM8hP0M0J9AfgRzIqS9UUDxpyC8eQY5uwgU2NDM
+
+###
 PATCH http://localhost:5000/api/users/me
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEY2hvbGVAZ21haWwuY29tIiwiaXNzIjoidW5pdHVtOnBsYXRmb3JtIiwiaWF0IjoxNjQ0MTYxMjgwLCJleHAiOjE2NDQxNjE4ODB9.kEPgvDILhObc6tjLAVYWty6XwTBTcoObQI3AkHyN6Ds
