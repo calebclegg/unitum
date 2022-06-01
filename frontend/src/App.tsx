@@ -10,6 +10,8 @@ import Layout from "./components/Layout";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import SocketProvider from "./context/Socket";
+import { Box } from "@mui/system";
+import { CircularProgress } from "@mui/material";
 
 const Chat = lazy(() => import("./pages/Chat"));
 const Feed = lazy(() => import("./pages/Feed"));
@@ -70,7 +72,19 @@ function App() {
       >
         Skip to main content
       </Link>
-      <Suspense fallback="Loading">
+      <Suspense
+        fallback={
+          <Box
+            width="100%"
+            height="100vh"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <CircularProgress />
+          </Box>
+        }
+      >
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route

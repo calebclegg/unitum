@@ -19,10 +19,13 @@ import { useAuth } from "../context/Auth";
 import UserPosts from "../components/UserPosts";
 import EditableAvatar from "../components/EditableAvatar";
 import { API } from "../lib";
+import { useParams } from "react-router-dom";
+import { Avatar } from "@mui/material";
 
 const EditEducation = lazy(() => import("../components/EditEducation"));
 
 const Profile = () => {
+  const { user_id } = useParams<{ user_id: string }>();
   const { token } = useAuth();
   const { user, updateUser } = useUser();
   const [newName, setNewName] = useState("");
@@ -79,13 +82,30 @@ const Profile = () => {
         marginTop={2}
       >
         <Grid xs item>
-          <EditableAvatar
-            src={user?.profile.picture}
-            alt={user?.profile.fullName}
-            endpoint="users/me"
-            revalidate={updateUser}
-            styles={{ width: 100, height: 100, position: "relative" }}
-          />
+          {user_id ? (
+            user_id !== user?._id ? (
+              <Avatar
+                src={user?.profile.picture}
+                alt={user?.profile.fullName}
+              />
+            ) : (
+              <EditableAvatar
+                src={user?.profile.picture}
+                alt={user?.profile.fullName}
+                endpoint="users/me"
+                revalidate={updateUser}
+                styles={{ width: 100, height: 100, position: "relative" }}
+              />
+            )
+          ) : (
+            <EditableAvatar
+              src={user?.profile.picture}
+              alt={user?.profile.fullName}
+              endpoint="users/me"
+              revalidate={updateUser}
+              styles={{ width: 100, height: 100, position: "relative" }}
+            />
+          )}
         </Grid>
         <Grid
           item

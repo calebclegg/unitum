@@ -23,7 +23,13 @@ const User = ({ result, query }: { result: IUser; query: string }) => {
         />
       </ListItemAvatar>
       <ListItemText
-        primary={highlight(result.profile.fullName, query)}
+        primary={
+          <Typography
+            dangerouslySetInnerHTML={{
+              __html: highlight(result.profile.fullName, query)
+            }}
+          />
+        }
         secondary={<Tag type="user" />}
       />
     </ListItem>

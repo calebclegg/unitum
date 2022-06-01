@@ -10,40 +10,32 @@ function srcset(image: string, size: number, rows = 1, cols = 1) {
 }
 
 function ImageListDisplay({ media }: { media: string[] }) {
-  const newImages = media?.map((item, index) => {
+  const newImages = media?.map((item) => {
     return {
       img: item,
-      rows: index === 0 ? 3 : 1,
-      cols: index === 0 ? 3 : 1
+      rows: 1,
+      cols: 1
     };
   });
 
   return (
     <>
-      {media?.length > 1 ? (
-        <ImageList
-          sx={{ maxWidth: 500, maxHeight: 450 }}
-          variant="quilted"
-          cols={4}
-          rowHeight={80}
-        >
-          {newImages?.map((item) => (
-            <ImageListItem
-              key={item.img}
-              cols={item.cols || 1}
-              rows={item.rows || 1}
-            >
-              <img
-                {...srcset(item.img, 121, item.rows, item.cols)}
-                alt={""}
-                loading="lazy"
-              />
-            </ImageListItem>
-          ))}
-        </ImageList>
-      ) : (
-        <img src={media && media[0]} style={{ width: "90%" }} />
-      )}
+      <ImageList variant="standard" cols={media?.length}>
+        {newImages?.map((item) => (
+          <ImageListItem
+            key={item.img}
+            cols={item.cols || 1}
+            rows={item.rows || 1}
+          >
+            <img
+              {...srcset(item.img, 121, item.rows, item.cols)}
+              alt={""}
+              loading="lazy"
+              // style={{ maxHeight: "50vh" }}
+            />
+          </ImageListItem>
+        ))}
+      </ImageList>
     </>
   );
 }
