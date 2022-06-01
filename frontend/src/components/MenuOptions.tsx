@@ -15,11 +15,6 @@ const menuItems = [
     path: "/profile",
     label: "My Profile",
     icon: <Person />
-  },
-  {
-    path: "/account-setting",
-    label: "Account Setting",
-    icon: <ManageAccounts />
   }
 ];
 

@@ -138,7 +138,7 @@ const ChatMessages = ({ numberOfUnreadMessages, setChatID }: TProps) => {
             {numberOfUnreadMessages} unread Messages
           </Typography>
         </Fade>
-        {unreadMessages?.map(({ _id, from, text, createdAt }) => (
+        {unreadMessages?.reverse()?.map(({ _id, from, text, createdAt }) => (
           <MessageBubble
             key={_id}
             from={from}

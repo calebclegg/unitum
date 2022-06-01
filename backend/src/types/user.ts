@@ -3,7 +3,6 @@ import { Types } from "mongoose";
 type Role = "admin" | "active";
 
 interface IEducation {
-  user: Types.ObjectId;
   school: {
     name: string;
     url?: string;

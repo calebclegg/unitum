@@ -24,6 +24,7 @@ import { useData, useUser } from "../hooks";
 import { API } from "../lib";
 import Edit from "@mui/icons-material/Edit";
 import ImageListDisplay from "./ImageList";
+import Age from "./Age";
 
 const Form = styled("form")(({ theme }) => ({
   width: "98%",
@@ -153,7 +154,7 @@ const PostDetails = ({ id }: IProps) => {
             )
           }
           title={post?.author.profile.fullName}
-          subheader={post && new Date(post.createdAt).toDateString()}
+          subheader={post && <span>{<Age date={post.createdAt} />}</span>}
         />
         <CardContent>
           <Typography>{post?.body}</Typography>
@@ -246,7 +247,7 @@ const PostDetails = ({ id }: IProps) => {
               justifyContent="flex-end"
             >
               <Typography variant="caption">
-                {new Date(comment.createdAt).toDateString()}
+                {<span>{<Age date={comment.createdAt} />}</span>}
               </Typography>
             </Stack>
           </ListItem>
