@@ -10,6 +10,8 @@ import { notification } from "../types/notification";
 import { sendNotification } from "../utils/notification";
 import { ICommunity } from "../types/community";
 import { JoinCommunity } from "../models/CommRequest";
+import { PostModel } from "../models/Post";
+import { JoinRequest } from "../types/joinCommunity";
 
 export const createCommunity = async (req: any, res: Response) => {
   const user = req.user;
@@ -100,7 +102,13 @@ export const viewCommunity = async (req: any, res: Response) => {
   if (!dbCommunity)
     return res.status(404).json({ message: "Community not found" });
 
-  return res.status(200).json(dbCommunity);
+  const communityPostCount = await PostModel.find({
+    communityID: dbCommunity._id
+  }).count();
+
+  return res
+    .status(200)
+    .json({ ...dbCommunity.toObject(), postCount: communityPostCount });
 };
 
 export const deleteCommunity = async (req: any, res: Response) => {
@@ -169,26 +177,36 @@ export const getCommunityMembers = async (req: any, res: Response) => {
 
 export const addMember = async (req: any, res: Response) => {
   const commID = req.params.commID;
-  const userID = req.body.userID;
-  if (!userID) {
-    return res.status(400).json({ message: "userID is required" });
+  const requestID = req.body.requestID;
+  const action: "accept" | "reject" = req.query.action;
+  if (!requestID) {
+    return res.status(400).json({ message: "requestID is required" });
   }
 
-  const user = await User.findOne({ _id: userID });
-  if (!user)
-    return res.status(404).json({ message: "User with this Id not found" });
+  if (action === "reject") {
+    await JoinCommunity.findOneAndDelete({ _id: requestID });
+    return res.sendStatus(200);
+  }
+  const request: JoinRequest = await JoinCommunity.findOne({
+    _id: requestID
+  }).populate({
+    path: "community",
+    select: "name admin"
+  });
+  if (!request)
+    return res.status(404).json({ message: "request with this Id not found" });
 
   const community = await CommunityModel.findOne({ _id: commID });
   if (!community)
     return res.status(404).json({ message: "Community not found" });
 
-  if (community.admin.toString() !== req.user._id.toString())
-    return res
-      .status(401)
-      .json({ message: "You are unauthorized to add user to this community" });
+  if (request.community.admin.toString() !== req.user._id.toString())
+    return res.status(401).json({
+      message: "You are unauthorized to add user to this community"
+    });
 
   const isMember = community.members?.some((member) => {
-    return member?.info?.equals(userID);
+    return member?.info?.equals(requestID);
   });
 
   if (isMember)
@@ -196,11 +214,17 @@ export const addMember = async (req: any, res: Response) => {
       .status(200)
       .json({ message: "User is already a member of this community" });
 
+  const user = await User.findById(request.user._id);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
   user.profile?.communities?.push(community._id);
-  community.members?.push({ info: userID, role: "member" });
+  community.members?.push({ info: requestID, role: "member" });
   community.numberOfMembers! += 1;
   user.save();
   community.save();
+
+  await request.delete();
   res.status(200).json({ message: "New Member has been added successfully" });
 
   const admin = await User.findOne({ _id: community.admin._id }).select(
@@ -308,6 +332,7 @@ export const getJoinRequests = async (req: any, res: Response) => {
     { path: "community", select: "name picture description" },
     { path: "user", select: "profile.fullName profile.picture" }
   ]);
+  console.log(requests);
   return res.json(requests);
 };
 
@@ -327,9 +352,13 @@ export const joinCommunity = async (req: any, res: Response) => {
       .status(200)
       .json({ message: "You are member of this community" });
 
-  const join = await new JoinCommunity({
+  await new JoinCommunity({
     community: community._id,
     user: user._id
   }).save();
   return res.sendStatus(200);
+};
+
+export const getOtherCommunities = async (req: any, res: Response) => {
+  const user = req.user;
 };

@@ -11,6 +11,7 @@ export interface ICommunity {
   picture: string;
   description: string;
   numberOfMembers: number;
+  postCount: number;
   createdAt: string;
   admin: {
     _id: string;
@@ -51,7 +52,8 @@ export interface IUser {
 export interface INotification {
   _id: string;
   createdAt: string;
-  post: IPost;
+  post?: IPost;
+  community?: ICommunity;
   type: "like" | "comment" | "post";
   user: IUser;
 }
@@ -79,5 +81,5 @@ export const useUser = () => {
     }
   );
 
-  return { user, notifications, logout };
+  return { user, updateUser, notifications, logout };
 };

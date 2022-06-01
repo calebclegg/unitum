@@ -22,11 +22,11 @@ import Footer from "../components/Footer";
 const navLinks = [
   {
     label: "About Unitum",
-    path: "/about"
+    path: "#about-us"
   },
   {
     label: "Contact Us",
-    path: "/contact"
+    path: "#contact-us"
   }
 ];
 

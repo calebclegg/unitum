@@ -1,6 +1,8 @@
+import { Container } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import CreatePost from "./CreatePostCard";
 
 interface IProps {
   title: string;
@@ -9,13 +11,12 @@ interface IProps {
 
 const FeedLayout = ({ title, children }: IProps) => {
   return (
-    <>
+    <Container>
       <Paper
-        square
-        variant="outlined"
         sx={{
           px: 3,
           py: 1.5,
+          mb: 2,
           width: "100%"
         }}
       >
@@ -33,9 +34,10 @@ const FeedLayout = ({ title, children }: IProps) => {
           }
         }}
       >
+        <CreatePost />
         {children}
       </Stack>
-    </>
+    </Container>
   );
 };
 

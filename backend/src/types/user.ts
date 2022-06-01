@@ -3,7 +3,6 @@ import { Types } from "mongoose";
 type Role = "admin" | "active";
 
 interface IEducation {
-  user: Types.ObjectId;
   school: {
     name: string;
     url?: string;
@@ -20,19 +19,24 @@ interface IProfile {
   picture?: string;
   dob?: Date;
   education?: IEducation;
+  followers: Types.ObjectId[];
+  following: Types.ObjectId[];
+  followingCount: number;
+  followersCount: number;
   communities?: Types.ObjectId[];
   schoolWork?: Types.ObjectId[];
   unicoyn: number;
 }
 
 interface IUser {
+  _id?: Types.ObjectId;
   fullName: string;
   password?: string;
   role?: Role;
   picture?: string;
   authProvider: string;
   email?: string;
-  profile?: IProfile;
+  profile: IProfile;
   number?: number[];
   verifyPassword(password: string): boolean;
 }

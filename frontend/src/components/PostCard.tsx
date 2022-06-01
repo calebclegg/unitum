@@ -1,8 +1,9 @@
-import Bookmark from "@mui/icons-material/Bookmark";
-import Forward from "@mui/icons-material/Forward";
-import BookmarkOutlined from "@mui/icons-material/BookmarkBorderOutlined";
+import Pin from "@mui/icons-material/PushPin";
+import ThumbUp from "@mui/icons-material/ThumbUpOutlined";
+import PinOutlined from "@mui/icons-material/PushPinOutlined";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
+import Calendar from "@mui/icons-material/CalendarTodayOutlined";
+import Comment from "@mui/icons-material/ChatBubbleOutlineOutlined";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
@@ -14,6 +15,10 @@ import IconButton from "@mui/material/IconButton";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Theme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
+import { truncatePostBody } from "../utils/tunc-text";
+import { CardMedia } from "@mui/material";
+import Age from "./Age";
+import { orange } from "@mui/material/colors";
 
 export interface IProps {
   _id: string;
@@ -28,8 +33,8 @@ export interface IProps {
     name: string;
   };
   author: {
+    _id: string;
     profile: {
-      _id: string;
       picture: string;
       fullName: string;
     };
@@ -46,6 +51,7 @@ const PostCard = ({
   saved,
   upvotes,
   body,
+  media,
   numberOfComments,
   communityID,
   createdAt,
@@ -67,7 +73,7 @@ const PostCard = ({
   };
 
   return (
-    <Card square variant="outlined" sx={{ p: tabletUp ? 1 : 0 }}>
+    <Card sx={{ p: 2 }}>
       <CardHeader
         avatar={
           <Avatar
@@ -77,87 +83,102 @@ const PostCard = ({
           />
         }
         action={
-          <IconButton
-            sx={{ color: ({ customPalette }) => customPalette.navyBlue }}
-            aria-label={saved ? "remove post from saved" : "save post"}
-            onClick={() => _id && toggleSave(_id)}
+          <Stack
+            direction="row"
+            alignItems="center"
+            sx={{ color: orange[500] }}
           >
-            {saved ? <Bookmark /> : <BookmarkOutlined />}
-          </IconButton>
+            <Calendar fontSize="small" />
+            &nbsp;
+            <Typography variant="caption" sx={{ color: orange[500] }}>
+              {createdAt && <Age date={createdAt} />}
+            </Typography>
+          </Stack>
         }
-        title={author?.profile.fullName}
+        title={
+          <MuiLink
+            component={Link}
+            to={`/communities/${communityID?._id}`}
+            color="textPrimary"
+            underline="none"
+            fontSize={18}
+          >
+            {author?.profile.fullName}
+          </MuiLink>
+        }
         subheader={
           <>
             {communityID?.name && (
               <>
-                <span
-                  style={
-                    tabletUp
-                      ? undefined
-                      : {
-                          width: 80,
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis"
-                        }
-                  }
+                <MuiLink
+                  component={Link}
+                  to={`/communities/${communityID._id}`}
+                  color="textSecondary"
+                  underline="none"
+                  fontSize={13}
                 >
                   {communityID.name}
-                </span>
+                </MuiLink>
                 <span>&bull;</span>
               </>
             )}
-            <span>{createdAt && new Date(createdAt).toDateString()}</span>
           </>
         }
         titleTypographyProps={{ fontWeight: 500, variant: "h6" }}
         subheaderTypographyProps={{ sx: { display: "flex", gap: 1 } }}
       />
       <Stack direction="row" ml={2}>
-        <Stack alignItems="center">
-          <IconButton
-            size="small"
-            color={upvoted ? "secondary" : "default"}
-            aria-label="up vote"
-            data-action="upvote"
-            onClick={addVote}
+        <div style={{ width: "100%" }}>
+          <MuiLink
+            component={Link}
+            to={`/posts/${_id}`}
+            color="textPrimary"
+            underline="none"
           >
-            <Forward fontSize="small" transform="rotate(-90)" />
-          </IconButton>
-          <Typography variant="caption">{upvotes}</Typography>
-          <IconButton
-            size="small"
-            color={downvoted ? "secondary" : "default"}
-            aria-label="down vote"
-            data-action="downvote"
-            onClick={addVote}
-          >
-            <Forward fontSize="small" transform="rotate(90)" />
-          </IconButton>
-        </Stack>
-        <div>
-          <CardContent sx={{ py: 0.5 }}>
-            <MuiLink
-              component={Link}
-              to={`/posts/${_id}`}
-              color="textSecondary"
-              underline="none"
-            >
-              {body}
-            </MuiLink>
-          </CardContent>
+            <CardContent sx={{ py: 0.5 }}>{truncatePostBody(body)}</CardContent>
+            {media && media?.length > 0 && (
+              <CardMedia
+                component="img"
+                height="500"
+                sx={{
+                  width: "100%"
+                }}
+                image={media[0]}
+                alt="Paella dish"
+              />
+            )}
+          </MuiLink>
           <CardActions>
-            <Button
-              variant="text"
-              component={Link}
-              to={`/posts/${_id}#comments`}
-            >
-              {numberOfComments ? (
-                <>Comments ({numberOfComments})</>
-              ) : (
-                <>No comments yet</>
-              )}
-            </Button>
+            <Stack direction="row" alignItems="center">
+              <IconButton
+                size="small"
+                color={upvoted ? "secondary" : "default"}
+                aria-label="up vote"
+                data-action="upvote"
+                onClick={addVote}
+              >
+                <ThumbUp fontSize="small" />
+              </IconButton>
+              <Typography variant="caption">{upvotes}</Typography>
+              <IconButton component={Link} to={`/posts/${_id}#comments`}>
+                <Comment fontSize="small" />
+              </IconButton>
+              <Typography variant="caption">
+                {" "}
+                {numberOfComments ? <>{numberOfComments}</> : <>0</>}
+              </Typography>
+              <IconButton
+                sx={{ color: ({ customPalette }) => customPalette.navyBlue }}
+                aria-label={saved ? "remove post from saved" : "save post"}
+                onClick={() => _id && toggleSave(_id)}
+              >
+                {saved ? (
+                  <Pin fontSize="small" transform="rotate(45)" />
+                ) : (
+                  <PinOutlined fontSize="small" transform="rotate(45)" />
+                )}
+              </IconButton>
+            </Stack>
           </CardActions>
         </div>
       </Stack>

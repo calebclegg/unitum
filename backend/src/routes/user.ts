@@ -6,54 +6,48 @@ import { use } from "../utils/use";
 
 const router = Router();
 
-router.get("/me", getUser, use(controller.userInfo));
+router.post("/follow/:userID", getUser, use(controller.followUser));
+router.patch("/unfollow/:userID", getUser, use(controller.unfollowUser));
 
-router.patch("/me", getUser, use(controller.updateUserInfo));
+router.get("/", getUser, use(controller.userInfo));
 
-router.get("/me/posts", getUser, use(controller.getUserPosts));
+router.patch("/", getUser, use(controller.updateUserInfo));
 
-router.get("/me/communities", getUser, use(controller.getUserCommunities));
+router.get("/posts", getUser, use(controller.getUserPosts));
 
-// router.get("/me/education/:edID", getUser, use(controller.getEducation));
+router.get("/communities", getUser, use(controller.getUserCommunities));
 
-// router.post("/me/education", getUser, use(controller.addNewEducation));
+// router.get("/education/:edID", getUser, use(controller.getEducation));
 
-// router.patch("/me/education/:edID", getUser, use(controller.editEducation));
+// router.post("/education", getUser, use(controller.addNewEducation));
 
-// router.delete("/me/education/:edID", getUser, use(controller.deleteEducation));
+// router.patch("/education/:edID", getUser, use(controller.editEducation));
 
-router.post("/me/schoolWork", getUser, use(controller.newSchoolWork));
+// router.delete("/education/:edID", getUser, use(controller.deleteEducation));
 
-router.get("/me/schoolWork", getUser, use(controller.getUserSchoolWork));
+router.post("/schoolWork", getUser, use(controller.newSchoolWork));
 
-router.patch(
-  "/me/schoolWork/:workID",
-  getUser,
-  use(controller.updateSchoolwork)
-);
+router.get("/schoolWork", getUser, use(controller.getUserSchoolWork));
 
-router.delete(
-  "/me/schoolWork/:workID",
-  getUser,
-  use(controller.deleteSchoolwork)
-);
+router.patch("/schoolWork/:workID", getUser, use(controller.updateSchoolwork));
 
-router.get(
-  "/me/notifications",
-  getUser,
-  use(controller.getUnreadNotifications)
-);
+router.delete("/schoolWork/:workID", getUser, use(controller.deleteSchoolwork));
+
+router.get("/notifications", getUser, use(controller.getUnreadNotifications));
 
 router.delete(
-  "/me/notifications/delete",
+  "/notifications/:notID/delete",
   getUser,
   use(controller.deleteNotification)
 );
 
-router.get("/me/savedPosts", getUser, use(sveController.getSavedPosts));
+router.delete("/notifications/delete", getUser, use(controller.markAllAsRead));
 
-router.post("/me/savedPosts", getUser, use(sveController.saveAPost));
+router.patch("/education", getUser, use(controller.editEducation));
+router.get("/savedPosts", getUser, use(sveController.getSavedPosts));
 
-router.delete("/me/savedPosts/:postID", getUser, use(sveController.unsavePost));
+router.post("/savedPosts", getUser, use(sveController.saveAPost));
+
+router.delete("/savedPosts/:postID", getUser, use(sveController.unsavePost));
 
 export default router;

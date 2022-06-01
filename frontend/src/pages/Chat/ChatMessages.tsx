@@ -2,18 +2,21 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import AttachFile from "@mui/icons-material/AttachFile";
 import Stack from "@mui/material/Stack";
 import Divider from "@mui/material/Divider";
+import Fade from "@mui/material/Fade";
+import Grow from "@mui/material/Grow";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Typography from "@mui/material/Typography";
-import Box from "@mui/system/Box";
-import { useEffect, useRef, useState } from "react";
+import Box from "@mui/material/Box";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useData } from "../../hooks";
 import { useParams, useSearchParams } from "react-router-dom";
 import { IChat } from ".";
 import MessageBubble from "../../components/MessageBubble";
-import { useSocket } from "../../context/Socket";
+import { API } from "../../lib";
+import { useAuth } from "../../context/Auth";
 
 export interface IMessage {
   _id: string;
@@ -28,18 +31,24 @@ type TProps = Pick<IChat, "numberOfUnreadMessages"> & {
   setChatID?: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const ChatMessages = ({
-  numberOfUnreadMessages,
-  recipientID,
-  setChatID
-}: TProps) => {
+const ChatMessages = ({ numberOfUnreadMessages, setChatID }: TProps) => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const { socket } = useSocket();
+  const { token } = useAuth();
   const { chat_id } = useParams<{ chat_id: string }>();
   const [searchParams] = useSearchParams();
   const [sending, setSending] = useState(false);
-  const { data: messages, mutate } = useData<IMessage[]>(
-    chat_id ? `chat/${chat_id}` : `chat/${searchParams.get("chat_id")}`
+  const chatID = chat_id
+    ? `chat/${chat_id}`
+    : `chat/${searchParams.get("chat_id")}`;
+  const { data: messages, mutate: updateMessages } = useData<IMessage[]>(
+    chatID,
+    { refreshInterval: 500 }
+  );
+
+  const readMessages = messages?.filter(({ read }) => read);
+  const unreadMessages = useMemo(
+    () => messages?.filter(({ read }) => !read),
+    [messages]
   );
 
   useEffect(() => {
@@ -48,37 +57,52 @@ const ChatMessages = ({
   }, [chat_id]);
 
   useEffect(() => {
-    socket?.on("new message", (newMessage) => {
-      setSending(false);
-      mutate([...(messages || []), newMessage]);
-    });
-  }, [socket]);
-
-  const readMessages = messages?.filter(({ read }) => read);
-  const unreadMessages = messages?.filter(({ read }) => !read);
+    if (unreadMessages) {
+      API.patch(
+        "chat/messages/read",
+        { msgIDs: unreadMessages.map((msg) => msg._id) },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      ).then(() => updateMessages());
+    }
+  }, [unreadMessages]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-
+    const text = formData.get("message");
     try {
       setSending(true);
-      const res = socket?.emit("message:send", {
-        to: recipientID,
-        chatID: chat_id,
-        text: formData.get("message")
-      });
+
+      if (text) {
+        await API.post(
+          chatID,
+          { text },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+      }
 
       (event.target as HTMLFormElement).reset();
     } catch (error) {
       console.log(error);
+    } finally {
       setSending(false);
     }
   };
 
   return (
     <Box
-      mb={8}
+      pb={8}
+      mb={!chat_id ? 0 : 8}
+      height={!chat_id ? undefined : "80vh"}
+      overflow="auto"
       ref={sectionRef}
       width="100%"
       minHeight="100vh"
@@ -93,24 +117,28 @@ const ChatMessages = ({
             time={createdAt}
           />
         ))}
-        <Divider variant="middle" color="red" sx={{ my: 2 }} />
-        <Typography
-          align="center"
-          sx={{
-            bgcolor: "primary.light",
-            px: 2,
-            py: 1,
-            width: "fit-content",
-            borderRadius: 4,
-            mx: "auto",
-            mb: 4
-          }}
-          variant="body2"
-          component="div"
-        >
-          {numberOfUnreadMessages} unread Messages
-        </Typography>
-        {unreadMessages?.map(({ _id, from, text, createdAt }) => (
+        <Grow in={Boolean(unreadMessages?.length)} mountOnEnter unmountOnExit>
+          <Divider variant="middle" color="red" sx={{ my: 2 }} />
+        </Grow>
+        <Fade in={Boolean(unreadMessages?.length)} mountOnEnter unmountOnExit>
+          <Typography
+            align="center"
+            sx={{
+              bgcolor: "primary.light",
+              px: 2,
+              py: 1,
+              width: "fit-content",
+              borderRadius: 4,
+              mx: "auto",
+              mb: 4
+            }}
+            variant="body2"
+            component="div"
+          >
+            {numberOfUnreadMessages} unread Messages
+          </Typography>
+        </Fade>
+        {unreadMessages?.reverse()?.map(({ _id, from, text, createdAt }) => (
           <MessageBubble
             key={_id}
             from={from}

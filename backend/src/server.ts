@@ -76,7 +76,7 @@ app.use(helmet());
 app.use(morgan("dev"));
 
 app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
+app.use("/api/users/me", userRoutes);
 app.use("/api/community", communityRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api", searchRouter);

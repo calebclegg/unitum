@@ -7,19 +7,23 @@ import { alpha } from "@mui/material/styles";
 
 interface IProps {
   type: "like" | "comment" | "post";
+  notificationId: string;
   username: string;
-  post: string;
-  community: string;
+  post?: string;
+  community?: string;
   createdAt: string;
+  markAsRead: (notificationId: string) => void;
 }
 
 const NotificationType = ({
   type,
   username,
+  notificationId,
+  markAsRead,
   post,
   createdAt,
   community
-}: Partial<IProps>) => {
+}: IProps) => {
   if (!type) return null;
 
   const typeMessage = {
@@ -42,6 +46,13 @@ const NotificationType = ({
         <strong>{username}</strong> posted &ldquo;
         <strong>{post}</strong>
         &rdquo; {community ? `in ${community}` : null}
+      </>
+    ),
+    community: (
+      <>
+        <strong>{username}</strong> added you to &ldquo;
+        <strong>{community}</strong>&ldquo;
+        {/* &rdquo; {community ? `in ${community}` : null} */}
       </>
     )
   };
@@ -78,7 +89,13 @@ const NotificationType = ({
             <Typography variant="caption" color="grey.600">
               {createdAt}
             </Typography>
-            <Button variant="text" size="small">
+            <Button
+              variant="text"
+              size="small"
+              onClick={() => {
+                markAsRead(notificationId);
+              }}
+            >
               Mark as read
             </Button>
           </Stack>

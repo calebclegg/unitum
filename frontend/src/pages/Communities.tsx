@@ -8,7 +8,11 @@ import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Theme } from "@mui/material/styles";
 import { useData, useUser, usePostsActions } from "../hooks";
-import PostCard, { IProps as IPost } from "../components/PostCard";
+// import PostCard, { IProps as IPost } from "../components/PostCard";
+import CommunityPostCard, {
+  IProps as IPost
+} from "../components/CommunityPostCard";
+
 import FeedLayout from "../components/FeedLayout";
 import { lazy, Suspense } from "react";
 
@@ -21,15 +25,17 @@ const Communities = () => {
 
   const { user } = useUser();
   const { data: posts, mutate } = useData<IPost[]>("community/posts");
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  //@ts-ignore
   const { toggleSave, toggleVote } = usePostsActions(posts, mutate);
 
   return (
     <>
       {tabletUp ? (
         <>
-          <FeedLayout title="Communities Activities">
+          <FeedLayout title="Recent Activities">
             {posts?.map((post) => (
-              <PostCard
+              <CommunityPostCard
                 {...post}
                 key={post._id}
                 toggleSave={toggleSave}

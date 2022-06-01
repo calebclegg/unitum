@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import { Document, Types } from "mongoose";
 import { SchoolWork } from "../models/schoolWork";
 import User from "../models/User";
-import { Education } from "../models/User";
-import { IUser } from "../types/user";
+
+import { IUser, IEducation } from "../types/user";
 import { IReq } from "../types/request";
 import { Notification } from "../models/Notification";
 import {
@@ -11,7 +11,6 @@ import {
   validateSchoolWorkData
 } from "../validators/schoolWork.validator";
 import {
-  validateEducationData,
   validateEducationEditData,
   validateUserUpdate
 } from "../validators/user.validator";
@@ -27,7 +26,9 @@ export const userInfo = async (req: Request, res: Response) => {
         path: "profile.schoolWork",
         select: "-__v -userID -updatedAt"
       },
-      { path: "profile.communities", select: "-__v -updatedAt -members" }
+      { path: "profile.communities", select: "-__v -updatedAt -members" },
+      { path: "profile.followers", select: "fullname picture" },
+      { path: "profile.following", select: "fullname picture" }
     ]);
   return res.status(200).json(user);
 };
@@ -48,7 +49,7 @@ export const updateUserInfo = async (req: Request, res: Response) => {
   }
 
   Object.entries(valData.value.profile).forEach(([key, value]) => {
-    let field = key as string;
+    const field = key as string;
     if (typeof value === "object") {
       Object.entries(value as Record<string, any>).forEach(([key, value]) => {
         ((user.profile as Record<string, any>)[field] as Record<string, any>)[
@@ -63,6 +64,54 @@ export const updateUserInfo = async (req: Request, res: Response) => {
   console.log(user);
   await user.save();
 
+  return res.sendStatus(200);
+};
+
+export const unfollowUser = async (req: any, res: Response) => {
+  const userID = req.params.userID;
+  console.log(userID);
+  const user = await User.findOne({ id: userID });
+  if (!user) return res.status(404).json({ message: "User not found" });
+  const following = user.profile?.followers?.some((id: Types.ObjectId) => {
+    return id.equals(req.user._id);
+  });
+  if (!following) return res.sendStatus(200);
+  const newFollowersList = user.profile.followers?.filter(
+    (id: Types.ObjectId) => {
+      return id.toString() !== req.user._id.toString();
+    }
+  );
+  user.profile.followers = newFollowersList;
+  user.profile.followersCount = newFollowersList.length;
+  user.save();
+  const user1 = req.user;
+  const newFollowingList = user1.profile.following?.filter(
+    (id: Types.ObjectId) => {
+      return id.toString() !== user?._id.toString();
+    }
+  );
+  user1.profile.followingCount = newFollowingList.length;
+  user1.save();
+  return res.sendStatus(200);
+};
+
+export const followUser = async (req: any, res: Response) => {
+  const userID = req.params.userID;
+  console.log(userID);
+
+  const user = await User.findOne({ id: userID });
+  if (!user) return res.status(404).json({ message: "User not found" });
+  const following = user.profile?.followers?.some((id: Types.ObjectId) => {
+    return id.equals(req.user._id);
+  });
+  if (following) return res.sendStatus(200);
+  user.profile?.followers?.push(req.user._id);
+  user.profile.followersCount += 1;
+  user.save();
+  const user1 = req.user;
+  user1.profile.following.push(user._id);
+  user1.profile.followingCount += 1;
+  user1.save();
   return res.sendStatus(200);
 };
 
@@ -101,30 +150,58 @@ export const updateUserInfo = async (req: Request, res: Response) => {
 //   return res.status(201).json(newEducation);
 // };
 
-// export const editEducation = async (req: any, res: Response) => {
-//   const valData = await validateEducationEditData(req.body);
-//   const edID = new Types.ObjectId(req.params.edID);
-//   let errors;
-//   if (valData.error) {
-//     errors = valData.error.details.map((error: any) => ({
-//       label: error.context?.label,
-//       message: error.message
-//     }));
-//     return res
-//       .status(400)
-//       .json({ message: "Some fields are invalid/required", errors: errors });
-//   }
-//   const updatedEducation = await Education.findOneAndUpdate(
-//     { _id: edID, user: req.user._id },
-//     valData.value,
-//     { new: true }
-//   );
-//   if (!updatedEducation)
-//     return res.status(404).json({
-//       message: "Couldn't find education details tha belonged to you"
-//     });
-//   return res.sendStatus(200);
-// };
+export const editEducation = async (req: any, res: Response) => {
+  const user = req.user;
+  console.log(req.body);
+  const valData = await validateEducationEditData(req.body);
+  console.log(valData.value);
+  let errors;
+
+  if (!user?.profile?.education) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    user.profile.education! = {
+      school: {
+        name: "",
+        url: ""
+      },
+      degree: "",
+      fieldOfStudy: "",
+      startDate: new Date(),
+      endDate: new Date(),
+      grade: 0
+    };
+  }
+  if (valData.error) {
+    errors = valData.error.details.map((error: any) => ({
+      label: error.context?.label,
+      message: error.message
+    }));
+    return res
+      .status(400)
+      .json({ message: "Some fields are invalid/required", errors: errors });
+  }
+
+  Object.entries(valData.value).forEach(([key, value]) => {
+    const field = key as string;
+    if (typeof value === "object") {
+      Object.entries(value as Record<string, any>).forEach(([key, value]) => {
+        (
+          (user.profile?.education as Record<string, any>)[field] as Record<
+            string,
+            any
+          >
+        )[key] = value;
+      });
+    } else {
+      (user.profile?.education as Record<string, any>)[key] = value;
+    }
+  });
+
+  console.log(user);
+  await user.save();
+
+  return res.sendStatus(200);
+};
 
 // export const deleteEducation = async (req: any, res: Response) => {
 //   const edID = new Types.ObjectId(req.params.edID);
@@ -242,19 +319,18 @@ export const getUnreadNotifications = async (req: any, res: Response) => {
 
 export const deleteNotification = async (req: any, res: Response) => {
   const user = req.user;
-  const notificationIDs = req.query.notIDs;
+  const notificationID = req.params.notID;
+  await Notification.findByIdAndDelete({
+    _id: notificationID,
+    userID: user._id
+  });
 
-  if (Array.isArray(notificationIDs)) {
-    await Notification.findByIdAndDelete({
-      _id: { $in: notificationIDs },
-      userID: user._id
-    });
-  } else {
-    await Notification.findByIdAndDelete({
-      _id: notificationIDs,
-      userID: user._id
-    });
-  }
+  return res.sendStatus(200);
+};
+
+export const markAllAsRead = async (req: any, res: Response) => {
+  const user = req.user;
+  await Notification.deleteMany({ userID: user._id });
   return res.sendStatus(200);
 };
 

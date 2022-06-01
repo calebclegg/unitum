@@ -28,7 +28,7 @@ const Footer = () => {
             <Stack direction="row" gap={tabletUp ? 4 : 2}>
               <MuiLink
                 component={Link}
-                to="/about"
+                to="#about-us"
                 variant="h6"
                 color="grey.100"
               >
@@ -41,7 +41,7 @@ const Footer = () => {
               />
               <MuiLink
                 component={Link}
-                to="/contact"
+                to="#contact-us"
                 variant="h6"
                 color="grey.100"
               >

@@ -8,35 +8,63 @@ import Chip from "@mui/material/Chip";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
-import Avatar from "@mui/material/Avatar";
 import Box from "@mui/system/Box";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import InputAdornment from "@mui/material/InputAdornment";
-import { lazy, Suspense, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { useUser } from "../hooks";
+import { useAuth } from "../context/Auth";
 import UserPosts from "../components/UserPosts";
+import EditableAvatar from "../components/EditableAvatar";
+import { API } from "../lib";
+import { useParams } from "react-router-dom";
+import { Avatar } from "@mui/material";
 
 const EditEducation = lazy(() => import("../components/EditEducation"));
 
 const Profile = () => {
-  const avatarRef = useRef<HTMLDivElement>(null);
-  const { user } = useUser();
+  const { user_id } = useParams<{ user_id: string }>();
+  const { token } = useAuth();
+  const { user, updateUser } = useUser();
+  const [newName, setNewName] = useState("");
   const [updating, setUpdating] = useState(false);
   const [editMode, setEditMode] = useState(false);
 
+  useEffect(() => {
+    console.log(user);
+    setNewName(user?.profile.fullName || "");
+  }, [user?.profile.fullName]);
+
   const toggleMode = () => setEditMode(!editMode);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewName(event.target.value);
+  };
 
   const update = async () => {
     try {
       setUpdating(true);
-      console.log("trying");
+
+      if (newName !== user?.profile.fullName) {
+        // Send update request
+        await API.patch(
+          "users/me",
+          { profile: { fullName: newName } },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+      }
+
+      updateUser();
       toggleMode();
     } catch (error) {
       console.log(error);
     } finally {
-      console.log("done");
       setUpdating(false);
     }
   };
@@ -46,24 +74,41 @@ const Profile = () => {
       <Helmet>
         <title>{`${user?.profile.fullName} | Profile`}</title>
       </Helmet>
-      <Grid container spacing={2} alignItems="center" marginTop={"1rem"}>
-        <Grid item flexGrow="0 !important" width="fit-content" xs>
-          <Avatar
-            ref={avatarRef}
-            variant="rounded"
-            src={user?.profile.picture}
-            alt={user?.profile.fullName}
-            sx={{
-              width: 100,
-              height: avatarRef.current?.getBoundingClientRect().width,
-              borderRadius: 3,
-              minHeight: 100
-            }}
-          />
+      <Grid
+        container
+        spacing={2}
+        flexWrap="nowrap"
+        alignItems="center"
+        marginTop={2}
+      >
+        <Grid xs item>
+          {user_id ? (
+            user_id !== user?._id ? (
+              <Avatar
+                src={user?.profile.picture}
+                alt={user?.profile.fullName}
+              />
+            ) : (
+              <EditableAvatar
+                src={user?.profile.picture}
+                alt={user?.profile.fullName}
+                endpoint="users/me"
+                revalidate={updateUser}
+                styles={{ width: 100, height: 100, position: "relative" }}
+              />
+            )
+          ) : (
+            <EditableAvatar
+              src={user?.profile.picture}
+              alt={user?.profile.fullName}
+              endpoint="users/me"
+              revalidate={updateUser}
+              styles={{ width: 100, height: 100, position: "relative" }}
+            />
+          )}
         </Grid>
         <Grid
           item
-          xs
           container
           alignItems="flex-start"
           justifyContent="space-between"
@@ -73,13 +118,16 @@ const Profile = () => {
               <TextField
                 name="fullName"
                 label="Full Name"
-                value={user?.profile.fullName}
+                value={newName}
+                disabled={updating}
+                onChange={handleChange}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
                         size="small"
                         aria-label="cancel"
+                        disabled={updating}
                         onClick={toggleMode}
                       >
                         <Close fontSize="small" />
@@ -89,6 +137,7 @@ const Profile = () => {
                         color="success"
                         aria-label="save"
                         onClick={update}
+                        disabled={!newName || updating}
                       >
                         <Check fontSize="small" />
                       </IconButton>
@@ -220,7 +269,7 @@ const Profile = () => {
       </Box>
       <UserPosts />
       <Suspense fallback={<div />}>
-        <EditEducation updating={updating} update={update} />
+        <EditEducation />
       </Suspense>
     </>
   );

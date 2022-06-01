@@ -1,8 +1,14 @@
 import { Response } from "express";
 import { Chat } from "../models/Chat";
 import { Message } from "../models/Chat";
-import { validateMessageData } from "../validators/message.validator";
+import {
+  validateMessageData,
+  validateNewChat
+} from "../validators/message.validator";
 import { Types } from "mongoose";
+import { IMessage } from "../types/message";
+import { IChat } from "../types/chat";
+import { Document } from "mongoose";
 
 export const getUnreadMessages = async (req: any, res: Response) => {
   const user = req.user;
@@ -37,7 +43,7 @@ export const getUnreadMessages = async (req: any, res: Response) => {
 
 export const markAsRead = async (req: any, res: Response) => {
   const user = req.user;
-  const messageIDs = req.query.msgIDs;
+  const messageIDs = req.body.msgIDs;
   if (Array.isArray(messageIDs)) {
     await Message.updateMany(
       { _id: { $in: messageIDs }, to: user._id, read: false },
@@ -82,7 +88,7 @@ export const getChatMessages = async (req: any, res: Response) => {
     delete messageObj.to;
     messageList.push(messageObj);
   }
-  return res.json(messageList);
+  return res.json(messageList.reverse());
 };
 
 export const getChats = async (req: any, res: Response) => {
@@ -93,10 +99,12 @@ export const getChats = async (req: any, res: Response) => {
       participant: { $in: [user._id] }
     },
     { messages: { $slice: -1 } }
-  ).populate([
-    { path: "participant", select: "profile.fullName profile.picture" },
-    { path: "messages", select: "-updatedAt -__v", limit: 1 }
-  ]);
+  )
+    .populate([
+      { path: "participant", select: "profile.fullName profile.picture" },
+      { path: "messages", select: "-updatedAt -__v", limit: 1 }
+    ])
+    .sort({ updatedAt: -1 });
 
   const chatList: any = [];
   for (const chat of chats) {
@@ -106,7 +114,7 @@ export const getChats = async (req: any, res: Response) => {
     let lastMessage = {};
     if (chat.messages) {
       let message: any = chat.messages[0];
-      if (message.from.toString() !== user._id.toString()) {
+      if (message.from.toString() === user._id.toString()) {
         message = { ...message.toObject(), from: "me" };
       } else {
         message = { ...message.toObject(), from: "recipient" };
@@ -174,4 +182,64 @@ export const sendMessage = async (req: any, res: Response) => {
   delete messageObj.to;
 
   res.status(201).json(messageObj);
+};
+
+export const newChat = async (req: any, res: Response) => {
+  const user = req.user;
+  const { value, error } = await validateNewChat(req.body);
+  let errors;
+  if (error) {
+    errors = error.details.map((err) => ({
+      label: err.context?.label,
+      message: err.message
+    }));
+    return res.status(400).json(errors);
+  }
+  let chat: (IChat & Document) | null;
+  chat = await Chat.findOne({
+    participant: { $all: [user._id, value.to] }
+  });
+
+  if (!chat) {
+    chat = await new Chat({
+      participant: [user.id, value.to]
+    }).save();
+  }
+  const recipient = chat.participant.filter((userID: Types.ObjectId) => {
+    return userID._id.toString() !== user._id.toString();
+  })[0];
+
+  const newMessage = await new Message({
+    ...value,
+    chatID: chat._id,
+    from: user._id,
+    to: recipient
+  }).save();
+
+  chat.messages?.push(newMessage._id);
+  await chat.save();
+
+  let messageObj: any = {};
+  if (newMessage.from.toString() === user._id.toString()) {
+    messageObj = { ...newMessage.toObject(), from: "me" };
+  } else {
+    messageObj = { ...newMessage.toObject(), from: "recipient" };
+  }
+  delete messageObj.to;
+  let lastMessage = {};
+  lastMessage = messageObj;
+  const unreadMessagesCount = await Message.find({
+    to: user._id,
+    chatID: chat._id,
+    read: false
+  }).count();
+  const chatObj = {
+    chatID: chat._id?.toString(),
+    recipient: recipient,
+    createdAt: chat.createdAt,
+    lastMessage: lastMessage,
+    numberOfUnreadMessages: unreadMessagesCount
+  };
+
+  return res.status(201).json(chatObj);
 };

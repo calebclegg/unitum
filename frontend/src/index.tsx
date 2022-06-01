@@ -5,12 +5,7 @@ import reportWebVitals from "./reportWebVitals";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./lib/theme";
 import { BrowserRouter } from "react-router-dom";
-
-if (process.env.NODE_ENV !== "production") {
-  import("@axe-core/react").then(({ default: axe }) =>
-    axe(React, ReactDOM, 1000)
-  );
-}
+import "./globals.css";
 
 ReactDOM.render(
   <React.StrictMode>
