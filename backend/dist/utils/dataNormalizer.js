@@ -9,15 +9,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.normalizeGoogleData = void 0;
+exports.normalizeFacebookData = exports.normalizeGoogleData = void 0;
 const normalizeGoogleData = (data) => __awaiter(void 0, void 0, void 0, function* () {
     return {
         email: data.email,
-        firstname: data.given_name,
-        lastname: data.family_name,
-        picture: data.picture || null,
-        authProvider: data.authProvider,
+        fullName: data.name,
+        picture: data.imageUrl || null,
+        authProvider: data.googleId && "GOOGLE",
         role: data.role
     };
 });
 exports.normalizeGoogleData = normalizeGoogleData;
+const normalizeFacebookData = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    return {
+        fullName: data.name,
+        authProvider: String(data.graphDomain).toUpperCase(),
+        email: data.email
+    };
+});
+exports.normalizeFacebookData = normalizeFacebookData;
