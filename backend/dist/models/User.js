@@ -20,11 +20,11 @@ const schoolSchema = new mongoose_1.Schema({
     url: String
 });
 const educationSchema = new mongoose_1.Schema({
-    user: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: "User",
-        required: true
-    },
+    // user: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: "User",
+    //   required: true
+    // },
     school: {
         type: schoolSchema,
         required: true
@@ -48,12 +48,29 @@ const profileSchema = new mongoose_1.Schema({
     picture: String,
     dob: Date,
     education: {
-        type: [mongoose_1.Types.ObjectId],
-        ref: "Education"
+        type: educationSchema
     },
     communities: {
         type: [mongoose_1.Types.ObjectId],
         ref: "Community"
+    },
+    followers: {
+        type: [mongoose_1.Types.ObjectId],
+        ref: "User",
+        default: []
+    },
+    followersCount: {
+        type: Number,
+        default: 0
+    },
+    following: {
+        type: [mongoose_1.Types.ObjectId],
+        ref: "User",
+        default: []
+    },
+    followingCount: {
+        type: Number,
+        default: 0
     },
     schoolWork: {
         type: [mongoose_1.Types.ObjectId],

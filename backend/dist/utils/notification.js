@@ -11,14 +11,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendNotification = void 0;
 const Notification_1 = require("../models/Notification");
-const sendNotification = (socket, content, to) => __awaiter(void 0, void 0, void 0, function* () {
+const server_1 = require("../server");
+const sendNotification = (content, to) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const newNotification = yield new Notification_1.Notification(content).save();
-        socket.to(to).emit("new notification", newNotification.populate({
+        server_1.io.to(to).emit("new notification", newNotification.populate({
             path: "user",
-            select: "profile.fullName -profile.picture -__v -updatedAt"
+            select: "profile.fullName profile.picture"
         }));
     }
-    catch (e) { }
+    catch (e) {
+        console.log(e);
+    }
 });
 exports.sendNotification = sendNotification;

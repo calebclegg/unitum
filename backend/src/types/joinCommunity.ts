@@ -12,5 +12,5 @@ export interface JoinRequest {
   _id: Types.ObjectId;
   community: ICommunity;
   user: IUser;
-  delete: async () => void;
+  delete: () => void;
 }

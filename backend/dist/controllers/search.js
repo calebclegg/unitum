@@ -20,15 +20,18 @@ const User_1 = __importDefault(require("../models/User"));
 const match_sorter_1 = require("match-sorter");
 const search = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const queryTypes = Object.keys(req.query).filter((key) => {
-        return key !== "search";
+        return key !== "keyword";
     });
-    const searchString = req.query.search;
+    const searchString = req.query.keyword;
     const dbqueries = {
         user: User_1.default.find({
             $or: [{ "profile.fullName": { $regex: searchString, $options: "i" } }]
         }).select("-__v -createdAt -updatedAt -profile.education +profile.picture -profile.dob -email -fullName -role -profile.communities"),
         community: Community_1.default.find({
-            $or: [{ name: { $regex: searchString, $options: "i" } }]
+            $or: [
+                { name: { $regex: searchString, $options: "i" } },
+                { description: { $regex: searchString, $options: "i" } }
+            ]
         })
             .select("-__v -updatedAt -members")
             .populate({ path: "admin", select: "profile.fullName profile.picture" }),
@@ -54,20 +57,15 @@ const search = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     else {
         types = queryTypes;
     }
-    try {
-        let dbData = new Array();
-        for (const type of types) {
-            let items = yield dbqueries[type];
-            items = items.map((item) => (Object.assign(Object.assign({}, item.toObject()), { type: type })));
-            dbData.push(...items);
-        }
-        (0, match_sorter_1.matchSorter)(dbData, searchString === null || searchString === void 0 ? void 0 : searchString.toString(), {
-            keys: ["profile.fullName", "name", "body", "title", "description"]
-        });
-        return res.status(200).json(dbData);
+    let dbData = new Array();
+    for (const type of types) {
+        let items = yield dbqueries[type];
+        items = items.map((item) => (Object.assign(Object.assign({}, item.toObject()), { type: type })));
+        dbData.push(...items);
     }
-    catch (error) {
-        return res.sendStatus(500);
-    }
+    (0, match_sorter_1.matchSorter)(dbData, searchString === null || searchString === void 0 ? void 0 : searchString.toString(), {
+        keys: ["profile.fullName", "name", "body", "title", "description"]
+    });
+    return res.status(200).json(dbData);
 });
 exports.search = search;

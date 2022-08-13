@@ -32,6 +32,7 @@ const educationEditSchema = joi_1.default.object({
     degree: joi_1.default.string(),
     fieldOfStudy: joi_1.default.string(),
     startDate: joi_1.default.date(),
+    endDate: joi_1.default.date(),
     grade: joi_1.default.number()
 }).options({ abortEarly: false });
 const validateEducationData = (data) => __awaiter(void 0, void 0, void 0, function* () {
@@ -47,13 +48,13 @@ const profileSchema = joi_1.default.object({
     picture: joi_1.default.string(),
     dob: joi_1.default.date(),
     education: educationSchema,
-    communities: joi_1.default.array(),
-    unicoyn: joi_1.default.number()
+    communities: joi_1.default.array()
 });
 const profileUpdateSchema = joi_1.default.object({
     fullName: joi_1.default.string().min(2).max(20),
     picture: joi_1.default.string(),
-    dob: joi_1.default.date()
+    dob: joi_1.default.date(),
+    education: educationEditSchema
 }).options({ abortEarly: false });
 function validateRegUser(data) {
     const userSchema = joi_1.default.object({

@@ -22,20 +22,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const controller = __importStar(require("../controllers/community"));
 const user_middleware_1 = require("../middlewares/user.middleware");
+const use_1 = require("../utils/use");
+const post_1 = require("../controllers/post");
 const router = (0, express_1.Router)();
+router.get("/posts", user_middleware_1.getUser, (0, use_1.use)(post_1.getPostWithCommID));
 // get a specify community
-router.get("/:commID", user_middleware_1.getUser, controller.viewCommunity);
 // search for community
-router.get("/", user_middleware_1.getUser, controller.searchCommunity);
+router.get("/", user_middleware_1.getUser, (0, use_1.use)(controller.searchCommunity));
+router.get("/:commID", user_middleware_1.getUser, (0, use_1.use)(controller.viewCommunity));
 // get edit a community
-router.patch("/:commID", user_middleware_1.getUser, controller.editCommunity);
+router.patch("/:commID", user_middleware_1.getUser, (0, use_1.use)(controller.editCommunity));
 // create a community
-router.post("/", user_middleware_1.getUser, controller.createCommunity);
+router.post("/", user_middleware_1.getUser, (0, use_1.use)(controller.createCommunity));
 // delete a community
-router.delete("/:commID", user_middleware_1.getUser, controller.deleteCommunity);
-router.post("/:commID/add", user_middleware_1.getUser, controller.addMember);
-router.delete("/:commID/remove", user_middleware_1.getUser, controller.removeMember);
-router.delete("/:commID/leave", user_middleware_1.getUser, controller.leaveCommunity);
+router.delete("/:commID", user_middleware_1.getUser, (0, use_1.use)(controller.deleteCommunity));
+router.get("/:commID/members", user_middleware_1.getUser, (0, use_1.use)(controller.getCommunityMembers));
+router.post("/:commID/add", user_middleware_1.getUser, (0, use_1.use)(controller.addMember));
+router.delete("/:commID/remove", user_middleware_1.getUser, (0, use_1.use)(controller.removeMember));
+router.delete("/:commID/leave", user_middleware_1.getUser, (0, use_1.use)(controller.leaveCommunity));
+router.post("/:commID/join", user_middleware_1.getUser, (0, use_1.use)(controller.joinCommunity));
+router.get("/:commID/requests", user_middleware_1.getUser, (0, use_1.use)(controller.getJoinRequests));
 // delete a community
-router.delete("/:commID", user_middleware_1.getUser, controller.deleteCommunity);
+router.delete("/:commID", user_middleware_1.getUser, (0, use_1.use)(controller.deleteCommunity));
 exports.default = router;

@@ -16,21 +16,17 @@ exports.validateCommentCreateData = exports.validatePostEditData = exports.valid
 const joi_1 = __importDefault(require("joi"));
 const validatePostCreateData = (data) => __awaiter(void 0, void 0, void 0, function* () {
     const Schema = joi_1.default.object({
-        body: joi_1.default.string().min(2).max(300).required(),
-        media: joi_1.default.string(),
-        communityID: joi_1.default.string().min(24).max(24),
-        comments: joi_1.default.array().items(joi_1.default.object({
-            text: joi_1.default.string().required(),
-            postID: joi_1.default.string().max(24)
-        }))
+        body: joi_1.default.string().min(2).required(),
+        media: joi_1.default.array().items(joi_1.default.string()),
+        communityID: joi_1.default.string().min(24).max(24)
     });
     return Schema.validate(data);
 });
 exports.validatePostCreateData = validatePostCreateData;
 const validatePostEditData = (data) => __awaiter(void 0, void 0, void 0, function* () {
     const Schema = joi_1.default.object({
-        body: joi_1.default.string().min(2).max(300),
-        media: joi_1.default.string()
+        body: joi_1.default.string().min(2),
+        media: joi_1.default.array().items(joi_1.default.string())
     });
     return Schema.validate(data);
 });

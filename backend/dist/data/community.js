@@ -19,5 +19,5 @@ exports.communities = [
         name: "Typescript v2",
         description: "The all new Typescript",
         members: []
-    },
+    }
 ];
