@@ -1,6 +1,7 @@
 import { model, Schema, Types } from "mongoose";
 import { IEducation, IProfile, IUser } from "../types/user";
 import bcrypt from "bcryptjs";
+import { required } from "joi";
 
 const schoolSchema = new Schema({
   name: String,
@@ -14,18 +15,15 @@ const educationSchema = new Schema<IEducation>({
   //   required: true
   // },
   school: {
-    type: schoolSchema,
-    required: true
+    type: schoolSchema
   },
   degree: String,
 
   fieldOfStudy: {
-    type: String,
-    required: true
+    type: String
   },
   startDate: {
-    type: Date,
-    required: true
+    type: Date
   },
   endDate: Date,
   grade: {
@@ -37,7 +35,8 @@ const profileSchema = new Schema<IProfile>({
   picture: String,
   dob: Date,
   education: {
-    type: educationSchema
+    type: educationSchema,
+    default: {}
   },
   communities: {
     type: [Types.ObjectId],

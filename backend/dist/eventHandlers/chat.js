@@ -44,11 +44,16 @@ const chatHandler = (io, socket) => __awaiter(void 0, void 0, void 0, function* 
                     status: "401",
                     message: "You are not a participant of this chat"
                 });
-            const newMessage = yield (yield new Chat_1.Message(Object.assign({}, valData.value)).save()).populate({
-                path: "from",
-                select: "profile.fullName profile.picture"
-            });
-            socket.to(newMessage.chatID.toString()).emit("new message", newMessage);
+            const newMessage = yield new Chat_1.Message(Object.assign({}, valData.value)).save();
+            let messageObj = {};
+            if (newMessage.from.toString() === socket.user._id.toString()) {
+                messageObj = Object.assign(Object.assign({}, newMessage.toObject()), { from: "me" });
+            }
+            else {
+                messageObj = Object.assign(Object.assign({}, newMessage.toObject()), { from: "recipient" });
+            }
+            delete messageObj.to;
+            io.to(newMessage.chatID.toString()).emit("new message", messageObj);
         }
         catch (error) {
             callback({
@@ -67,7 +72,7 @@ const chatHandler = (io, socket) => __awaiter(void 0, void 0, void 0, function* 
                 {
                     path: "messages",
                     select: "-__v -createdAt",
-                    options: { limit: 1, sort: { updatedAt: 1 } }
+                    options: { limit: 1, sort: { updatedAt: -1 } }
                 },
                 {
                     path: "participant",
@@ -77,7 +82,7 @@ const chatHandler = (io, socket) => __awaiter(void 0, void 0, void 0, function* 
             chats.forEach((chat) => {
                 socket.join(chat._id.toString());
             });
-            socket.to(user._id).emit("all chats", chats);
+            io.to(user._id).emit("all chats", chats);
         }
         catch (error) {
             return callback({
@@ -145,7 +150,7 @@ const chatHandler = (io, socket) => __awaiter(void 0, void 0, void 0, function* 
                 .sort({ updatedAt: 1 })
                 .skip(skip)
                 .limit(limit);
-            socket.to(user._id.toString()).emit("chat messages", messages);
+            io.to(user._id.toString()).emit("chat messages", messages);
             return callback({
                 status: "200"
             });

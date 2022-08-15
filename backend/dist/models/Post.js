@@ -32,7 +32,7 @@ exports.postSchema = new mongoose_1.Schema({
         required: true
     },
     media: {
-        type: String
+        type: [String]
     },
     numberOfComments: {
         type: Number,
@@ -47,7 +47,21 @@ exports.postSchema = new mongoose_1.Schema({
         required: false,
         default: 0
     },
+    downvotes: {
+        type: Number,
+        required: false,
+        default: 0
+    },
     upvoteBy: {
+        type: [mongoose_1.Schema.Types.ObjectId],
+        ref: "User"
+    },
+    nextCoyn: {
+        type: Number,
+        default: 100,
+        select: false
+    },
+    downVoteBy: {
         type: [mongoose_1.Schema.Types.ObjectId],
         ref: "User"
     }

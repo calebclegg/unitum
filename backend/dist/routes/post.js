@@ -22,20 +22,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const controller = __importStar(require("../controllers/post"));
 const express_1 = require("express");
 const user_middleware_1 = require("../middlewares/user.middleware");
+const use_1 = require("../utils/use");
 const router = (0, express_1.Router)();
 // create a post
-router.post("/", user_middleware_1.getUser, controller.createPost);
+router.post("/", user_middleware_1.getUser, (0, use_1.use)(controller.createPost));
 // get posts
-router.get("/", user_middleware_1.getUser, controller.getPosts);
+router.get("/", user_middleware_1.getUser, (0, use_1.use)(controller.getPosts));
 // get post details
-router.get("/:postID", user_middleware_1.getUser, controller.getPostDetails);
+router.get("/:postID", user_middleware_1.getUser, (0, use_1.use)(controller.getPostDetails));
 // delete a post
-router.delete("/:postID", user_middleware_1.getUser, controller.deletePost);
+router.delete("/:postID", user_middleware_1.getUser, (0, use_1.use)(controller.deletePost));
 // update a post
-router.patch("/:postID", user_middleware_1.getUser, controller.updatePost);
-router.get("/:postID/comments", user_middleware_1.getUser, controller.getPostComments);
-router.post("/:postID/comments", user_middleware_1.getUser, controller.addPostComment);
-router.patch("/:postID/upvote", user_middleware_1.getUser, controller.postUpVote);
-router.patch("/:postID/downvote", user_middleware_1.getUser, controller.postDownVote);
-router.delete("/comments/:commentID", user_middleware_1.getUser, controller.deleteComment);
+router.patch("/:postID", user_middleware_1.getUser, (0, use_1.use)(controller.updatePost));
+router.get("/:postID/comments", user_middleware_1.getUser, (0, use_1.use)(controller.getPostComments));
+router.post("/:postID/comments", user_middleware_1.getUser, (0, use_1.use)(controller.addPostComment));
+router.patch("/:postID/upvote", user_middleware_1.getUser, (0, use_1.use)(controller.postUpVote));
+router.patch("/:postID/downvote", user_middleware_1.getUser, (0, use_1.use)(controller.postDownVote));
+router.delete("/comments/:commentID", user_middleware_1.getUser, (0, use_1.use)(controller.deleteComment));
 exports.default = router;
