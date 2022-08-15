@@ -55,16 +55,17 @@ io.on("connection", onConnection);
 
 connectDB();
 redisConnect();
-
-if (process.env.NODE_ENV === "production") {
-  // Serve any static files
-  app.use(express.static(path.join(__dirname, "../../frontendv2/build")));
-  // Handle React routing, return all requests to React app
-  app.get("/", function (req, res) {
-    res.sendFile(path.join(__dirname, "../../frontendv2/build", "index.html"));
-  });
-}
 //Body parser setup
+// if (process.env.NODE_ENV === "production") {
+// Serve any static files
+// Handle React routing, return all requests to React app
+// }
+// if (process.env.NODE_ENV === "production") {
+//   app.use(express.static(path.join(__dirname, "./build")));
+//   app.get("/", function (req, res) {
+//     res.sendFile(path.join(__dirname, "./build", "index.html"));
+//   });
+// }
 app.use(express.json());
 
 app.use(
