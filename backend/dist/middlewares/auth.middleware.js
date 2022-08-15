@@ -20,9 +20,12 @@ function validateUserRegData(req, res, next) {
         const valData = (0, user_validator_1.validateRegUser)(req.body);
         let errors;
         if (valData.error) {
-            errors = valData.error.details.map(error => {
+            errors = valData.error.details.map((error) => {
                 var _a;
-                return ({ label: (_a = error.context) === null || _a === void 0 ? void 0 : _a.label, message: error.message });
+                return ({
+                    label: (_a = error.context) === null || _a === void 0 ? void 0 : _a.label,
+                    message: error.message
+                });
             });
             return res
                 .status(400)
@@ -41,9 +44,12 @@ function validateUserLogData(req, res, next) {
         const valData = (0, user_validator_1.validateLogUser)(req.body);
         let errors;
         if (valData.error) {
-            errors = valData.error.details.map(error => {
+            errors = valData.error.details.map((error) => {
                 var _a;
-                return ({ label: (_a = error.context) === null || _a === void 0 ? void 0 : _a.label, message: error.message });
+                return ({
+                    label: (_a = error.context) === null || _a === void 0 ? void 0 : _a.label,
+                    message: error.message
+                });
             });
             return res
                 .status(400)

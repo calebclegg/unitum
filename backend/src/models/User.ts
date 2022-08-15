@@ -42,6 +42,24 @@ const profileSchema = new Schema<IProfile>({
     type: [Types.ObjectId],
     ref: "Community"
   },
+  followers: {
+    type: [Types.ObjectId],
+    ref: "User",
+    default: []
+  },
+  followersCount: {
+    type: Number,
+    default: 0
+  },
+  following: {
+    type: [Types.ObjectId],
+    ref: "User",
+    default: []
+  },
+  followingCount: {
+    type: Number,
+    default: 0
+  },
   schoolWork: {
     type: [Types.ObjectId],
     ref: "SchoolWork"

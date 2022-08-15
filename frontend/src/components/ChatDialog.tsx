@@ -117,7 +117,6 @@ const ChatDialog = () => {
                 {currentChat.recipient.profile.fullName}
               </Typography>
               <Avatar
-                variant="rounded"
                 src={currentChat.recipient.profile.picture}
                 alt={currentChat.recipient.profile.fullName}
               />

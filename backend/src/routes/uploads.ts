@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import dotenv from "dotenv-flow";
-dotenv.config();
-import express, { Request, Response } from "express";
+// import dotenv from "dotenv-flow";
+// dotenv.config();
+import express from "express";
 import path from "path";
 import multer, { FileFilterCallback } from "multer";
 import aws from "aws-sdk";
 import multerS3 from "multer-s3";
 const router = express.Router();
+
+console.log(process.env.BUCKET);
 
 type FileNameCallback = (error: Error | null, filename: string) => void;
 type RequestWithFile = Express.Request & {

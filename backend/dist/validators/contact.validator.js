@@ -8,16 +8,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.notificationHandler = void 0;
-const Notification_1 = require("../models/Notification");
-const notificationHandler = (io, socket) => __awaiter(void 0, void 0, void 0, function* () {
-    const deleteNotification = (notificationID) => __awaiter(void 0, void 0, void 0, function* () {
-        try {
-            yield Notification_1.Notification.findOneAndDelete({ _id: notificationID });
-        }
-        catch (e) { }
-    });
-    socket.on("notification:delete", deleteNotification);
+exports.validateContactCreateData = void 0;
+const joi_1 = __importDefault(require("joi"));
+const validateContactCreateData = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    const schema = joi_1.default.object({
+        email: joi_1.default.string().email().required(),
+        name: joi_1.default.string().required(),
+        message: joi_1.default.string().required().max(300)
+    }).options({ abortEarly: false, allowUnknown: true });
+    return schema.validate(data);
 });
-exports.notificationHandler = notificationHandler;
+exports.validateContactCreateData = validateContactCreateData;

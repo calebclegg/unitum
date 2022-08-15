@@ -26,6 +26,8 @@ const redisConnect = () => __awaiter(void 0, void 0, void 0, function* () {
                 yield (0, exports.redisConnect)();
                 console.log(limit);
             }
+            console.log("Couldn't connect to redis");
+            process.exit(1);
         }
     }
 });

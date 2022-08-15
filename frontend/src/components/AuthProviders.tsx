@@ -6,8 +6,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/system/Box";
 import facebook_square from "../images/facebook-logo_square.svg";
 import facebook from "../images/facebook-logo.svg";
-import twitter_square from "../images/twitter-logo_square.svg";
-import twitter from "../images/twitter-logo.svg";
+
 import google from "../images/google-logo.png";
 import {
   getRedirectUrlFromState,
@@ -138,14 +137,6 @@ const AuthProviders = ({ formType, setMessage }: IProps) => {
             onSuccess={responseGoogle}
             onFailure={responseGoogle}
           />
-          <Button
-            sx={{ bgcolor: "#1DA1F2" }}
-            startIcon={
-              <img src={twitter_square} alt="twitter" width="30" height="30" />
-            }
-          >
-            {kebabToRegular(formType)} with twitter
-          </Button>
         </Stack>
       ) : (
         <Stack direction="row" spacing={5} justifyContent="center">
@@ -154,9 +145,6 @@ const AuthProviders = ({ formType, setMessage }: IProps) => {
           </IconButton>
           <IconButton>
             <img src={google} alt="google" width="40" height="40" />
-          </IconButton>
-          <IconButton>
-            <img src={twitter} alt="twitter" width="40" height="40" />
           </IconButton>
         </Stack>
       )}

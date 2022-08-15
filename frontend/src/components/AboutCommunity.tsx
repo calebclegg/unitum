@@ -4,12 +4,13 @@ import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useParams } from "react-router-dom";
-import { ICommunity, useData } from "../hooks";
+import { ICommunity, useData, useUser } from "../hooks";
 import JoinRequest from "./JoinRequest";
 
 const AboutCommunity = () => {
   const { comm_id } = useParams<{ comm_id: string }>();
   const { data: community } = useData<ICommunity>(`community/${comm_id}`);
+  const { user } = useUser();
 
   return (
     <Container maxWidth="sm" disableGutters={true}>
@@ -64,8 +65,7 @@ const AboutCommunity = () => {
         </Stack>
       )}
       <Divider sx={{ my: 2 }} />
-
-      <JoinRequest />
+      {user?._id === community?.admin._id && <JoinRequest />}
     </Container>
   );
 };

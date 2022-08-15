@@ -23,6 +23,7 @@ import { Link, useLocation } from "react-router-dom";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { useSocket } from "../context/Socket";
 import { useUser } from "../hooks";
+import { orange } from "@mui/material/colors";
 
 const Search = lazy(() => import("./Search"));
 const MobileInput = lazy(() => import("./Search/MobileInput"));
@@ -113,11 +114,12 @@ const TopBar = ({ openDrawer }: IProps) => {
             bgcolor: ({ customPalette }) => customPalette.navyBlue
           }}
         >
-          <Container maxWidth="xl" disableGutters={!tabletUp}>
-            <Toolbar sx={{ justifyContent: "space-between", gap: 2 }}>
+          <>
+            <Toolbar sx={{ justifyContent: "space-between", gap: 2, px: 2 }}>
               {(!searchMode || tabletUp) && (
                 <Stack direction="row">
-                  {tabletLaptop && (
+                  <Logo full />
+                  {tablet && (
                     <IconButton
                       onClick={openDrawer}
                       aria-label="open sidebar"
@@ -126,7 +128,16 @@ const TopBar = ({ openDrawer }: IProps) => {
                       <Menu />
                     </IconButton>
                   )}
-                  <Logo full />
+                </Stack>
+              )}
+              {laptopUp && (
+                <Stack direction="row" gap={2}>
+                  <Link to="/feed" style={{ textDecoration: "none" }}>
+                    <Typography color="text.primary">Feed</Typography>
+                  </Link>
+                  <Link to="/communities" style={{ textDecoration: "none" }}>
+                    <Typography color="text.primary">Communities</Typography>
+                  </Link>
                 </Stack>
               )}
               {!searchMode && (
@@ -136,11 +147,7 @@ const TopBar = ({ openDrawer }: IProps) => {
                       <Search />
                     </Suspense>
                   )}
-                  <Stack
-                    direction="row"
-                    spacing={tabletUp ? 2 : 1}
-                    alignItems="center"
-                  >
+                  <Stack direction="row" spacing={1} alignItems="center">
                     {tablet && (
                       <IconButton
                         component={Link}
@@ -151,47 +158,71 @@ const TopBar = ({ openDrawer }: IProps) => {
                         <SearchIcon />
                       </IconButton>
                     )}
-                    <IconButton
-                      id="open-notifications"
-                      component={Link}
-                      aria-label="notifications"
-                      onClick={setAnchor}
-                      to={"/notifications"}
-                      sx={{ color: "text.secondary" }}
+                    <Avatar
+                      sx={{
+                        mx: 2,
+                        bgcolor: orange[500],
+                        width: "30px",
+                        height: "30px"
+                      }}
                     >
-                      <Badge
-                        color="error"
-                        variant="dot"
-                        overlap="circular"
-                        badgeContent={notifications?.length}
-                      >
-                        <NotificationsIcon />
-                      </Badge>
-                    </IconButton>
-                    {tabletUp && (
                       <IconButton
-                        id="open-messages"
-                        aria-label="messages"
+                        id="open-notifications"
                         component={Link}
+                        aria-label="notifications"
                         onClick={setAnchor}
-                        to={"/messages"}
+                        to={"/notifications"}
                         sx={{ color: "text.secondary" }}
                       >
                         <Badge
                           color="error"
                           variant="dot"
                           overlap="circular"
-                          badgeContent={messages?.length}
+                          badgeContent={notifications?.length}
                         >
-                          <Email />
+                          <NotificationsIcon fontSize="small" />
                         </Badge>
                       </IconButton>
+                    </Avatar>
+
+                    {tabletUp && (
+                      <Avatar
+                        sx={{
+                          mx: 2,
+                          bgcolor: orange[500],
+                          width: "30px",
+                          height: "30px"
+                        }}
+                      >
+                        <IconButton
+                          id="open-messages"
+                          aria-label="messages"
+                          component={Link}
+                          onClick={setAnchor}
+                          to={"/messages"}
+                          sx={{ color: "text.secondary" }}
+                        >
+                          <Badge
+                            color="error"
+                            variant="dot"
+                            overlap="circular"
+                            badgeContent={messages?.length}
+                          >
+                            <Email fontSize="small" />
+                          </Badge>
+                        </IconButton>
+                      </Avatar>
                     )}
                     {tabletUp ? (
                       <ButtonUnstyled component={MenuButton} onClick={openMenu}>
-                        <Grid container spacing={1.5} alignItems="center">
+                        <Stack
+                          spacing={1.5}
+                          direction="row"
+                          alignItems="center"
+                        >
                           <Grid item>
                             <Avatar
+                              sx={{ ml: 2, width: "30px", height: "30px" }}
                               src={user?.profile.picture}
                               alt={user?.profile.fullName}
                             />
@@ -205,7 +236,9 @@ const TopBar = ({ openDrawer }: IProps) => {
                             gap={0.25}
                           >
                             <Typography color="text.primary">
-                              {user?.profile.fullName}
+                              {user?.profile.fullName.split(" ")[0]}
+                              &nbsp;
+                              {user?.profile.fullName.split(" ")[1]}
                             </Typography>
                             <Chip
                               size="small"
@@ -218,12 +251,12 @@ const TopBar = ({ openDrawer }: IProps) => {
                               })}
                             />
                           </Grid>
-                        </Grid>
+                        </Stack>
                       </ButtonUnstyled>
                     ) : (
                       <IconButton aria-label="menu" onClick={openMenu}>
                         <Avatar
-                          sx={{ width: 50, height: 50 }}
+                          sx={{ width: "30px", height: "30px" }}
                           src={user?.profile.picture}
                           alt={user?.profile.fullName}
                         />
@@ -240,7 +273,7 @@ const TopBar = ({ openDrawer }: IProps) => {
                 </Suspense>
               )}
             </Toolbar>
-          </Container>
+          </>
           <Suspense fallback={<div />}>
             <Notifications
               anchorEl={notificationButton}

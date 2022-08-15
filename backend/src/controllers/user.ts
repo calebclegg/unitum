@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import { Document, Types } from "mongoose";
 import { SchoolWork } from "../models/schoolWork";
 import User from "../models/User";
-import { Education } from "../models/User";
-import { IUser } from "../types/user";
+
+import { IUser, IEducation } from "../types/user";
 import { IReq } from "../types/request";
 import { Notification } from "../models/Notification";
 import {
@@ -11,13 +11,11 @@ import {
   validateSchoolWorkData
 } from "../validators/schoolWork.validator";
 import {
-  validateEducationData,
   validateEducationEditData,
   validateUserUpdate
 } from "../validators/user.validator";
 import { PostModel } from "../models/Post";
 import { SavedPost } from "../models/SavedPost";
-import { ConfigurationServicePlaceholders } from "aws-sdk/lib/config_service_placeholders";
 
 export const userInfo = async (req: Request, res: Response) => {
   const customRequest = req as IReq;
@@ -28,7 +26,9 @@ export const userInfo = async (req: Request, res: Response) => {
         path: "profile.schoolWork",
         select: "-__v -userID -updatedAt"
       },
-      { path: "profile.communities", select: "-__v -updatedAt -members" }
+      { path: "profile.communities", select: "-__v -updatedAt -members" },
+      { path: "profile.followers", select: "fullname picture" },
+      { path: "profile.following", select: "fullname picture" }
     ]);
   return res.status(200).json(user);
 };
@@ -64,6 +64,54 @@ export const updateUserInfo = async (req: Request, res: Response) => {
   console.log(user);
   await user.save();
 
+  return res.sendStatus(200);
+};
+
+export const unfollowUser = async (req: any, res: Response) => {
+  const userID = req.params.userID;
+  console.log(userID);
+  const user = await User.findOne({ id: userID });
+  if (!user) return res.status(404).json({ message: "User not found" });
+  const following = user.profile?.followers?.some((id: Types.ObjectId) => {
+    return id.equals(req.user._id);
+  });
+  if (!following) return res.sendStatus(200);
+  const newFollowersList = user.profile.followers?.filter(
+    (id: Types.ObjectId) => {
+      return id.toString() !== req.user._id.toString();
+    }
+  );
+  user.profile.followers = newFollowersList;
+  user.profile.followersCount = newFollowersList.length;
+  user.save();
+  const user1 = req.user;
+  const newFollowingList = user1.profile.following?.filter(
+    (id: Types.ObjectId) => {
+      return id.toString() !== user?._id.toString();
+    }
+  );
+  user1.profile.followingCount = newFollowingList.length;
+  user1.save();
+  return res.sendStatus(200);
+};
+
+export const followUser = async (req: any, res: Response) => {
+  const userID = req.params.userID;
+  console.log(userID);
+
+  const user = await User.findOne({ id: userID });
+  if (!user) return res.status(404).json({ message: "User not found" });
+  const following = user.profile?.followers?.some((id: Types.ObjectId) => {
+    return id.equals(req.user._id);
+  });
+  if (following) return res.sendStatus(200);
+  user.profile?.followers?.push(req.user._id);
+  user.profile.followersCount += 1;
+  user.save();
+  const user1 = req.user;
+  user1.profile.following.push(user._id);
+  user1.profile.followingCount += 1;
+  user1.save();
   return res.sendStatus(200);
 };
 
@@ -108,6 +156,21 @@ export const editEducation = async (req: any, res: Response) => {
   const valData = await validateEducationEditData(req.body);
   console.log(valData.value);
   let errors;
+
+  if (!user?.profile?.education) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    user.profile.education! = {
+      school: {
+        name: "",
+        url: ""
+      },
+      degree: "",
+      fieldOfStudy: "",
+      startDate: new Date(),
+      endDate: new Date(),
+      grade: 0
+    };
+  }
   if (valData.error) {
     errors = valData.error.details.map((error: any) => ({
       label: error.context?.label,
@@ -123,7 +186,7 @@ export const editEducation = async (req: any, res: Response) => {
     if (typeof value === "object") {
       Object.entries(value as Record<string, any>).forEach(([key, value]) => {
         (
-          (user.profile.education as Record<string, any>)[field] as Record<
+          (user.profile?.education as Record<string, any>)[field] as Record<
             string,
             any
           >

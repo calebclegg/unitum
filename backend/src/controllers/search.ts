@@ -45,7 +45,7 @@ export const search = async (req: Request, res: Response) => {
   } else {
     types = queryTypes;
   }
-  let dbData = new Array();
+  const dbData = [];
   for (const type of types) {
     let items = await dbqueries[type];
     items = items.map((item: any) => ({

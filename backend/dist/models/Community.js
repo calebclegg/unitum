@@ -8,7 +8,8 @@ const membersSchema = new mongoose_1.Schema({
     },
     role: {
         type: String,
-        enum: ["admin", "moderator", "member"]
+        enum: ["admin", "moderator", "member"],
+        default: "member"
     }
 });
 const communitySchema = new mongoose_1.Schema({

@@ -36,15 +36,15 @@ const Layout = () => {
   return (
     <>
       <TopBar openDrawer={openDrawer} />
-      <Stack direction="row" spacing={4}>
+      <Stack direction="row" spacing={2}>
         <Suspense fallback={<div />}>
-          <Sidebar open={isDrawerOpened} handleClose={closeDrawer} />
+          <Sidebar />
         </Suspense>
         <Container
           component="main"
           id="main-content"
           disableGutters={desktopUp}
-          sx={{ pt: 11, width: "min(800px, 100%)", maxWidth: 800 }}
+          sx={{ py: 11, width: "100%" }}
         >
           <Outlet />
         </Container>
@@ -62,15 +62,14 @@ const Layout = () => {
             ml={tabletLaptop ? "0 !important" : undefined}
           >
             <Paper
-              square
               id={communityPage ? "about-community" : "communities"}
-              variant="outlined"
               component="aside"
               sx={{
                 mt: 11,
                 position: "sticky",
                 top: ({ spacing }) => spacing(11),
-                width: "max-content"
+
+                mr: 10
               }}
             >
               {communityPage ? <AboutCommunity /> : <CommunitiesBrief />}

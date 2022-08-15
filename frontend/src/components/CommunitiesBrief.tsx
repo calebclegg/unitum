@@ -18,9 +18,7 @@ const CommunitiesBrief = () => {
 
   return (
     <>
-      <Typography variant="h6" component="h2">
-        Communities
-      </Typography>
+      <Typography sx={{ fontWeight: "bold" }}>Communities</Typography>
       <List>
         {user?.profile.communities.map(({ _id, name, picture }) => (
           <ListItem
@@ -28,7 +26,7 @@ const CommunitiesBrief = () => {
             button
             component={Link}
             to={`/communities/${_id}`}
-            sx={{ my: 2 }}
+            sx={{ mb: 1 }}
           >
             <ListItemAvatar>
               <Avatar src={picture} alt={name} variant="rounded" />
@@ -36,7 +34,7 @@ const CommunitiesBrief = () => {
             <ListItemText
               primaryTypographyProps={{ sx: { whiteSpace: "nowrap" } }}
             >
-              {name}
+              <small>{name}</small>
             </ListItemText>
           </ListItem>
         ))}
