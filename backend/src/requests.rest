@@ -47,8 +47,9 @@ POST http://unitum-api-dev.us-east-1.elasticbeanstalk.com/api/auth/login
 Content-Type: application/json
 
 {
-   "email": "rexosei111@gmail.com",
-   "password": "rexosei111"
+   "email": "john@example.com",
+   "password": "123456"
+
 }
 
 ###
@@ -64,7 +65,9 @@ Content-Type: application/json
 
 GET http://unitum-api-dev.us-east-1.elasticbeanstalk.com/api/users/me
 Content-Type: application/json
+
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMTExQGdtYWlsLmNvbSIsImlzcyI6InVuaXR1bTpwbGF0Zm9ybSIsImlhdCI6MTY1Njg1ODc2NywiZXhwIjoxNjU2ODU5MzY3fQ.7RWmIcrxCMuMrAxyDyVZKrfNa6tlr7jIgRMTqiyFFM8
+
 
 ###
 POST http://unitum-api-dev.us-east-1.elasticbeanstalk.com/api/users/me/follow/625021be74f7349176886eb0
@@ -80,16 +83,17 @@ Authorization: Bearer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyZXhvc2VpMT
 ###
 PATCH http://unitum-api-dev.us-east-1.elasticbeanstalk.com/api/users/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEY2hvbGVAZ21haWwuY29tIiwiaXNzIjoidW5pdHVtOnBsYXRmb3JtIiwiaWF0IjoxNjQ0MTYxMjgwLCJleHAiOjE2NDQxNjE4ODB9.kEPgvDILhObc6tjLAVYWty6XwTBTcoObQI3AkHyN6Ds
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqb2huQGV4YW1wbGUuY29tIiwiaXNzIjoidW5pdHVtOnBsYXRmb3JtIiwiaWF0IjoxNjQ4NzI1OTYyLCJleHAiOjE2NDg3MjY1NjJ9.xLviWlH-6sZ8JjW_0Yxu-bl5cceDw65bSbHwAshSXM0
 
 {
-   "profile": {    
-    "picture": "https://liel2c.deta.dev/images/BTa8GQJQJV6VXdmFyqpDCc.png",
+   "profile": {
     "education": {
         "school": {
             "name": "University of Mines",
             "url": "http://localhost:3000/sja"
-        }
+        },
+        "fieldOfStudy": "Computer Science and Engineering",
+        "startDate": "2019-04-08"
     }
    } 
 }
