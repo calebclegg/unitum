@@ -1,5 +1,6 @@
-import express, { Response, NextFunction } from "express";
 import { config as dotenv } from "dotenv-flow";
+import express, { Response, NextFunction } from "express";
+dotenv();
 import authRoutes from "./routes/auth";
 import userRoutes from "./routes/user";
 import communityRoutes from "./routes/community";
@@ -19,7 +20,6 @@ import { chatHandler } from "./eventHandlers/chat";
 import searchRouter from "./routes/search";
 import path from "path";
 //dotenv conf
-dotenv();
 
 const wrap = (middleware: any) => (socket: Socket, next: any) =>
   middleware(socket.request, {}, next);
@@ -27,7 +27,7 @@ const app = express();
 const httpServer = createServer(app);
 export const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:3000"
+    origin: "*"
   }
 });
 
@@ -55,6 +55,7 @@ io.on("connection", onConnection);
 
 connectDB();
 redisConnect();
+<<<<<<< HEAD
 //Body parser setup
 // if (process.env.NODE_ENV === "production") {
 // Serve any static files
@@ -66,6 +67,11 @@ redisConnect();
 //     res.sendFile(path.join(__dirname, "./build", "index.html"));
 //   });
 // }
+=======
+
+//Body parser setup
+
+>>>>>>> 0b359215ba9023a0a4be37e8ba2adbf1b07a8f5f
 app.use(express.json());
 
 app.use(
@@ -85,10 +91,19 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/uploads", uploadsRoute);
 
-app.use((err: Error, req: any, res: Response, next: NextFunction) => {
-  console.log(err);
-  res.status(500).json({ message: "Something went wrong" });
-});
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "./build")));
+  // Handle React routing, return all requests to React app
+  app.get("*", function (req, res) {
+    res.sendFile(path.join(__dirname, "./build", "index.html"));
+  });
+  app.use((err: Error, req: any, res: Response, next: NextFunction) => {
+    console.log(err);
+    res.status(500).json({ message: "Something went wrong" });
+  });
+}
+// Serve any static files
+
 //Mount api routes here
 
 httpServer.listen(process.env.PORT, () => {
