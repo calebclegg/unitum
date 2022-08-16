@@ -55,7 +55,6 @@ io.on("connection", onConnection);
 
 connectDB();
 redisConnect();
-<<<<<<< HEAD
 //Body parser setup
 // if (process.env.NODE_ENV === "production") {
 // Serve any static files
@@ -67,11 +66,9 @@ redisConnect();
 //     res.sendFile(path.join(__dirname, "./build", "index.html"));
 //   });
 // }
-=======
 
 //Body parser setup
 
->>>>>>> 0b359215ba9023a0a4be37e8ba2adbf1b07a8f5f
 app.use(express.json());
 
 app.use(
